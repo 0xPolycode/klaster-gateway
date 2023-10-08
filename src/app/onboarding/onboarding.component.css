@@ -1,0 +1,3 @@
+.step-active-number {
+    @apply !bg-rose-700 !text-white
+}

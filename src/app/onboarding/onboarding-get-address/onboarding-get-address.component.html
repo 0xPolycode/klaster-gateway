@@ -1,0 +1,27 @@
+<div class="w-full h-full card-body">
+    <h1 class="card-header-title flex-rgic">
+        <div class="text-rose-100">🎉</div>
+        Congrats
+    </h1>
+    <p class="text-slate-500 mt-2 text-sm">
+        Your cross-chain address is calculated. Your contract can use this address on any supported blockchain to receive /
+        send ERC20 tokens & NFTs, execute transactions & much more. <a class="underline text-rose-700" href="">Read to learn more</a>
+    </p>
+    <div class="mt-4 bg-slate-50 rounded-md p-4 flex flex-row justify-between">
+        <div *ngIf="address$ | async as address" class="text-sm text-slate-500">{{address}}</div>
+        <div class="flex-rgic">
+            <app-address-icons-holder></app-address-icons-holder>
+        </div>
+    </div>
+    <div class="w-full flex flex-row justify-end">
+        <button routerLink="/app" class="app-button px-12 py-3 mt-4 text-sm flex-rgic">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z" clip-rule="evenodd" />
+              </svg>
+            <div class="!text-sm">
+                Go to app
+            </div>               
+        </button>
+    </div>
+    
+</div>
