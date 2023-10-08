@@ -12,6 +12,9 @@ import { AddressIconsHolderComponent } from './shared/components/address-icons-h
 import { ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
 import { InfoComponent } from './onboarding/info/info.component';
+import { ShortenPipe } from './shared/pipes/shorten.pipe';
+import { SessionQuery } from './shared/session.query';
+import { SessionStore } from './shared/session.store';
 
 @NgModule({
   declarations: [
@@ -23,14 +26,15 @@ import { InfoComponent } from './onboarding/info/info.component';
     OnboardingGetAddressComponent,
     AddressIconsHolderComponent,
     DashboardComponent,
-    InfoComponent
+    InfoComponent,
+    ShortenPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [SessionQuery, SessionStore],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

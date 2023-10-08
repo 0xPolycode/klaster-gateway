@@ -1,4 +1,20 @@
+@keyframes animatedBackground {
+    from {
+        background-position: 0 0;
+        background-size: 100%;
+    }
+
+    to {
+        background-position: 100% 0;
+        background-size: 150%;
+    }
+}
+
 .bg-pattern-klaster {
     background-image: url('../assets/bg.png');
     object-fit: cover;
+}
+
+.animate-bg {
+    animation: animatedBackground 30s linear infinite alternate;
 }

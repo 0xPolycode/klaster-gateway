@@ -14,9 +14,10 @@ export class OnboardingSelectTypeComponent implements OnInit {
   }
 
   selectClicked(type: ContractType) {
+    this.onboardingService.setContractType(type)
     this.onboardingService.advanceActiveStep()
   }
 
 }
 
-type ContractType = 'SAFE' | 'DAO' | 'OTHER'
+export type ContractType = 'SAFE' | 'DAO' | 'OTHER'

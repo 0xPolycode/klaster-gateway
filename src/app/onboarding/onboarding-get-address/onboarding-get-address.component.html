@@ -1,25 +1,36 @@
 <div class="w-full h-full card-body">
-    <h1 class="card-header-title flex-rgic">
-        <div class="text-rose-100">🎉</div>
-        Congrats
+    <h1 class="card-header-title flex flex-row justify-between items-center">
+        <div class="flex-rgic">
+            <div class="text-rose-100">🎉</div>
+            Congrats
+        </div>
+        
+        <div (click)="backClicked()" class="border rounded-md flex-rgic text-slate-700
+        text-xs uppercase font-semibold py-3 hover:bg-slate-100 cursor-pointer px-5 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+              </svg>     
+              <div>Go back</div>         
+        </div>
     </h1>
-    <p class="text-slate-500 mt-2 text-sm">
+    <p class="text-slate-500 mt-4 text-sm">
         Your cross-chain address is calculated. Your contract can use this address on any supported blockchain to receive /
         send ERC20 tokens & NFTs, execute transactions & much more. <a class="underline text-rose-700" href="">Read to learn more</a>
     </p>
-    <div class="mt-4 bg-slate-50 rounded-md p-4 flex flex-row justify-between">
-        <div *ngIf="address$ | async as address" class="text-sm text-slate-500">{{address}}</div>
+    <div class="mt-4 bg-[rgba(255,255,255,0.6)] border border-rose-100 rounded-md p-4 flex flex-row justify-between">
+        <div *ngIf="address$ | async as address" class="text-sm font-mono text-slate-500">{{address}}</div>
         <div class="flex-rgic">
             <app-address-icons-holder></app-address-icons-holder>
         </div>
     </div>
     <div class="w-full flex flex-row justify-end">
-        <button routerLink="/app" class="app-button px-12 py-3 mt-4 text-sm flex-rgic">
+        <button (click)="finishClicked()" class="app-button px-12 py-3 mt-4 text-sm flex-rgic">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
               </svg>
+              
             <div class="!text-sm">
-                Go to app
+                Save & finish
             </div>               
         </button>
     </div>

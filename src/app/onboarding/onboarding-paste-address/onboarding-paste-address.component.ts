@@ -21,4 +21,8 @@ export class OnboardingPasteAddressComponent implements OnInit {
     this.onboardingService.advanceActiveStep()
   }
 
+  backClicked() {
+    this.onboardingService.revertActiveStep()
+  }
+
 }

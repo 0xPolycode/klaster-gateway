@@ -1,0 +1,1 @@
+export const WALLETS_STORED_KEY = 'io.klaster.wallets-stored-key'
