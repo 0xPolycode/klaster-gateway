@@ -15,6 +15,7 @@ import { InfoComponent } from './onboarding/info/info.component';
 import { ShortenPipe } from './shared/pipes/shorten.pipe';
 import { SessionQuery } from './shared/session.query';
 import { SessionStore } from './shared/session.store';
+import { AddressOverviewComponent } from './app/address-overview/address-overview.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SessionStore } from './shared/session.store';
     AddressIconsHolderComponent,
     DashboardComponent,
     InfoComponent,
-    ShortenPipe
+    ShortenPipe,
+    AddressOverviewComponent
   ],
   imports: [
     BrowserModule,

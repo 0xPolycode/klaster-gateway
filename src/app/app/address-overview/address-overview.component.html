@@ -1,0 +1,31 @@
+<div class="mt-32 card-body flex flex-col items-center">
+    <div class="uppercase text-lg text-slate-700 font-semibold">
+        Controller wallet
+    </div>
+    <div class="text-slate-500 mt-3">
+        {{address}}
+    </div>
+</div>
+
+<ng-container *ngIf="derivedWallets$ | async as wallets">
+
+<div class="mt-8 flex flex-row items-center justify-between">
+    <div class="card-header-title">
+        Cross-chain accounts
+    </div>
+    <div (click)="addNewWallet(wallets)" class="app-button px-8 py-2 text-sm flex flex-row items-center cursor-pointer gap-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>        
+          <div>
+            Add new
+          </div>  
+    </div>
+</div>
+    <div *ngFor="let wallet of wallets" class="mt-2 card-body">
+
+        <div class="text-slate-500">
+            {{wallet | shorten:6:5}}
+        </div>
+    </div>
+</ng-container>

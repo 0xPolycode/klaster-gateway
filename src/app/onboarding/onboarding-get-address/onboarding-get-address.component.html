@@ -13,18 +13,35 @@
               <div>Go back</div>         
         </div>
     </h1>
-    <p class="text-slate-500 mt-4 text-sm">
-        Your cross-chain address is calculated. Your contract can use this address on any supported blockchain to receive /
-        send ERC20 tokens & NFTs, execute transactions & much more. <a class="underline text-rose-700" href="">Read to learn more</a>
-    </p>
-    <div class="mt-4 bg-[rgba(255,255,255,0.6)] border border-rose-100 rounded-md p-4 flex flex-row justify-between">
-        <div *ngIf="address$ | async as address" class="text-sm font-mono text-slate-500">{{address}}</div>
-        <div class="flex-rgic">
+    <div class="mt-4 gap-y-2 rounded-md flex flex-col justify-between">
+        
+        <div class="card-body flex flex-col justify-center items-center">
+            <div class="uppercase font-semibold text-sm text-slate-700">Your cross-chain account is</div>
+
+            <div class="flex-rgic gap-x-4 mt-2 text-slate-600">
+                <div *ngIf="address$ | async as address" class="text-lg ">{{address}}</div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                  </svg>
+                  
+            </div>
+    
+        </div>
+
+        <div class="flex flex-col">
+            <div class="uppercase font-semibold text-sm text-slate-700 mt-4 mb-2">Use this address to send & receive assets on the following networks</div>
             <app-address-icons-holder></app-address-icons-holder>
         </div>
     </div>
-    <div class="w-full flex flex-row justify-end">
-        <button (click)="finishClicked()" class="app-button px-12 py-3 mt-4 text-sm flex-rgic">
+
+    
+    <div class="w-full flex flex-row items-center justify-end gap-x-8 mt-8" >
+        <div class="h-full flex flex-col justify-center text-slate-500 hover:text-slate-700 
+            cursor-pointer uppercase font-semibold">
+            Cancel
+        </div>
+        <button (click)="finishClicked()" class="app-button px-12 py-3 text-sm flex-rgic">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
                 <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
               </svg>

@@ -1,0 +1,42 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
+import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
+import { SessionQuery } from 'src/app/shared/session.query';
+import { SessionStore } from 'src/app/shared/session.store';
+import { SessionService } from 'src/app/shared/storage/session.service';
+
+@Component({
+  selector: 'app-address-overview',
+  templateUrl: './address-overview.component.html',
+  styleUrls: ['./address-overview.component.css']
+})
+export class AddressOverviewComponent implements OnInit {
+
+  address = this.route.snapshot.params['address']
+
+  wallet$ = this.sessionQuery.wallets$.pipe(
+    map(wallets => wallets.filter(wallet => wallet.wallet === this.address).at(0))
+  )
+
+  derivedWallets$ = this.wallet$.pipe(
+    map(wallet => wallet?.derivedWallets)
+  )
+
+  constructor(private route: ActivatedRoute,
+    private sessionQuery: SessionQuery,
+    private sessionService: SessionService,
+    private blockchainService: BlockchainService) { }
+
+  ngOnInit(): void {
+  }
+
+  async addNewWallet(derivedWallets: string[]) {
+    const newWallet = await this.blockchainService.calculateAddress(
+      this.address,
+      derivedWallets.length.toString()
+    )
+    this.sessionService.addCrossChainAccount(this.address, newWallet)
+  }
+
+}

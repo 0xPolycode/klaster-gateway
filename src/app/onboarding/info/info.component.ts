@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OnboardingService } from '../onboarding.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-info',
@@ -7,6 +8,8 @@ import { OnboardingService } from '../onboarding.service';
   styleUrls: ['./info.component.css']
 })
 export class InfoComponent implements OnInit {
+
+  disclaimerCheckbox = new FormControl(false, [Validators.requiredTrue])
 
   constructor(private onboardingService: OnboardingService) { }
 

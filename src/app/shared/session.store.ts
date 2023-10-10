@@ -6,6 +6,7 @@ import { Wallet } from 'ethers';
 export type WalletStorage = {
     contractType: ContractType,
     wallet: string
+    derivedWallets: string[]
 }
 
 export interface SessionState {

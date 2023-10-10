@@ -4,6 +4,7 @@ import { ContractType } from './onboarding-select-type/onboarding-select-type.co
 import { WALLETS_STORED_KEY } from '../shared/constants';
 import { SessionStore } from '../shared/session.store';
 import { SessionService } from '../shared/storage/session.service';
+import { BlockchainService } from '../shared/blockchain/blockchain.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class OnboardingService {
   
   privateContractTypeSub = new BehaviorSubject<ContractType | null>(null)
   
-  constructor(private sessionService: SessionService) { }
+  constructor(private sessionService: SessionService, 
+    private blockchainService: BlockchainService) { }
 
   setAddress(address: string) {
     this.addressSub.next(address)
@@ -43,10 +45,17 @@ export class OnboardingService {
     this.activeStepSub.next({ value: 0 })
     const address = this.addressSub.value
     const type = this.privateContractTypeSub.value
+
+
     if(address && type) {
-      this.sessionService.addNewWallet({
-        contractType: type,
-        wallet: address
+      const derivedAddress = this.blockchainService.calculateAddress(address, '0').then(derived => {
+        this.sessionService.addNewWallet({
+          contractType: type,
+          wallet: address,
+          derivedWallets: [derived]
+        })
+      }).catch(err => {
+        alert("Saving address failed")
       })
     }
   }
