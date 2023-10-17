@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, from, map, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { WALLETS_STORED_KEY } from 'src/app/shared/constants';
@@ -17,10 +18,17 @@ export class DashboardComponent implements OnInit {
 
   constructor(private sessionQuery: SessionQuery, 
     private sessionService: SessionService,
+    private router: Router,
     private blockchainService: BlockchainService) { }
 
   ngOnInit(): void {
     this.contractAddressesSub.value
+  }
+
+  connectSafe() {
+    this.blockchainService.connectWallet().then(wallet => {
+      this.router.navigate(['address', wallet.at(0)?.accounts.at(0)])
+    })
   }
 
   deleteAccount(address: string) {

@@ -9,10 +9,6 @@
 
 <div class="mt-32 min-h-screen" *ngIf="derivedWallets$ | async as wallets">
 
-    <div (click)="connectWallet()" class="px-8 py-3 bg-rose-600 text-white text-center rounded-md cursor-pointer">
-        Connect
-    </div>
-
     <div class="grid grid-cols-12 gap-x-4">
         <div class="col-span-4 pb-4">
             <div class="card-body !p-5 h-full mt-4 text-slate-600">

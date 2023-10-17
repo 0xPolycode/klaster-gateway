@@ -89,9 +89,7 @@ export class BlockchainService {
   constructor() { }
 
   connectWallet() {
-    this.onboard.connectWallet().then(wall => {
-      
-    })
+    return this.onboard.connectWallet()
   }
 
   private getKlasterProxyFactory() {
