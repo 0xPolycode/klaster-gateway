@@ -11,12 +11,13 @@
     <p class="text-slate-500 text-sm">
         In this step, please select the type of contract for which you will be calculating its cross-chain address. This will give us useful feedback, as well as
         allow our app to customize your user experience.
+        
     </p>
 
-    <div class="w-full grid lg:grid-cols-2 mt-4 gap-4">
+    <div class="w-full grid lg:grid-cols-3 mt-4 gap-4">
 
         <!-- SAFE -->
-        <div class="card-body flex flex-col justify-between items-center text-slate-700">
+        <div class="card-body !p-4 flex flex-col justify-between items-center text-slate-700">
             <div class="flex flex-col gap-y-3">
                 <div class="h-8">
                     <img class="h-8" src="../../assets/safelogo.png" alt="" srcset="">    
@@ -45,21 +46,21 @@
         </div>
 
         <!-- DAO -->
-        <!-- <div class="card-body flex flex-col justify-between text-slate-700">
+        <div class="card-body !p-4 flex flex-col justify-between text-slate-700">
             <div class="flex flex-col gap-y-3">
-                <div class="text-rose-700">
+                <div class="text-rose-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
-                        <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z" clip-rule="evenodd" />
-                        <path d="M5.082 14.254a8.287 8.287 0 00-1.308 5.135 9.687 9.687 0 01-1.764-.44l-.115-.04a.563.563 0 01-.373-.487l-.01-.121a3.75 3.75 0 013.57-4.047zM20.226 19.389a8.287 8.287 0 00-1.308-5.135 3.75 3.75 0 013.57 4.047l-.01.121a.563.563 0 01-.373.486l-.115.04c-.567.2-1.156.349-1.764.441z" />
+                        <path d="M2.273 5.625A4.483 4.483 0 015.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 3H5.25a3 3 0 00-2.977 2.625zM2.273 8.625A4.483 4.483 0 015.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 6H5.25a3 3 0 00-2.977 2.625zM5.25 9a3 3 0 00-3 3v6a3 3 0 003 3h13.5a3 3 0 003-3v-6a3 3 0 00-3-3H15a.75.75 0 00-.75.75 2.25 2.25 0 01-4.5 0A.75.75 0 009 9H5.25z" />
                       </svg>
+                      
                          
                 </div>
                 <h2 class="font-bold uppercase">
-                    DAO
+                    Externally Owned Account
                 </h2>
                 <p class="text-slate-500 text-sm">
-                    Give your DAO the ability to send & receive assets on multiple blockchains & perform cross-chain governance. <br><br>
-                    Useful for DAOs who want governance from one chain to be able to execute transactions on other chains.
+                    Select this if you're using a non-smart contract wallet such as MetaMask, Rabby, Coinbase Wallet, etc... <br><br>
+                    Useful if you want to execute transactions on multiple chains, but pay for gas on only one.
                 </p>
             </div>
             <div class="h-8"></div>
@@ -72,12 +73,12 @@
                     Select
                 </div>                  
             </button>
-        </div> -->
+        </div>
 
          <!-- Other -->
-         <div class="card-body flex flex-col justify-between text-slate-700">
+         <div class="card-body !p-4 flex flex-col justify-between text-slate-700">
             <div class="flex flex-col gap-y-3">
-                <div class="text-fuchsia-700">
+                <div class="text-fuchsia-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
                         <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
                       </svg>
@@ -85,7 +86,7 @@
                          
                 </div>
                 <h2 class="font-bold uppercase">
-                    Other
+                    Other smart contract
                 </h2>
                 <p class="text-slate-500 text-sm">
                     Klaster cross-chain accounts work with any MutliSig, Smart Contract Wallet & even with generic EVM 

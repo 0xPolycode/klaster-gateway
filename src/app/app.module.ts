@@ -16,6 +16,7 @@ import { ShortenPipe } from './shared/pipes/shorten.pipe';
 import { SessionQuery } from './shared/session.query';
 import { SessionStore } from './shared/session.store';
 import { AddressOverviewComponent } from './app/address-overview/address-overview.component';
+import { CrossChainAccountContainerComponent } from './app/address-overview/cross-chain-account-container/cross-chain-account-container.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AddressOverviewComponent } from './app/address-overview/address-overvie
     DashboardComponent,
     InfoComponent,
     ShortenPipe,
-    AddressOverviewComponent
+    AddressOverviewComponent,
+    CrossChainAccountContainerComponent
   ],
   imports: [
     BrowserModule,

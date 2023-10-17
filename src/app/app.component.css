@@ -12,7 +12,7 @@
 
 .bg-pattern-klaster {
     background-image: url('../assets/bg.png');
-    object-fit: cover;
+    background-size: cover ;
 }
 
 .animate-bg {

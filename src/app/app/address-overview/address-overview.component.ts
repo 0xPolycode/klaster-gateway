@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { SessionQuery } from 'src/app/shared/session.query';
 import { SessionStore } from 'src/app/shared/session.store';
@@ -23,6 +23,9 @@ export class AddressOverviewComponent implements OnInit {
     map(wallet => wallet?.derivedWallets)
   )
 
+  walletTogglerVisibleSub = new BehaviorSubject(false)
+  walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()
+
   constructor(private route: ActivatedRoute,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
@@ -37,6 +40,14 @@ export class AddressOverviewComponent implements OnInit {
       derivedWallets.length.toString()
     )
     this.sessionService.addCrossChainAccount(this.address, newWallet)
+  }
+
+  toggleWalletToggler() {
+    this.walletTogglerVisibleSub.next(!this.walletTogglerVisibleSub.value)
+  }
+
+  connectWallet() {
+    this.blockchainService.connectWallet()
   }
 
 }

@@ -1,7 +1,7 @@
-<div class="w-full h-full mt-32 flex flex-col gap-y-4">
+<div class="w-full min-h-screen mt-32 flex flex-col gap-y-4">
 
-    <div class="card-body">
-        <div class="flex flex-row items-center justify-between mb-8">
+    <div class="mt-4">
+        <div class="flex flex-row items-center justify-between mb-4">
             <h1 class="card-header-title flex-rgic !gap-x-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-7 h-7 text-rose-600">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
@@ -11,24 +11,24 @@
                     Imported wallets
                 </div>              
             </h1>
-            <button routerLink="/onboarding" class="flex-rgic bg-rose-50 transition-all border-rose-200 px-8 hover:bg-rose-700 hover:text-white 
-            py-3 text-xs uppercase font-semibold rounded-md text-rose-700 cursor-pointer hover:border-transparent">
+            <button routerLink="/onboarding" class="flex-rgic bg-white transition-all border-rose-100 px-8 hover:bg-rose-700 hover:text-white 
+            py-3 text-sm border uppercase font-medium rounded-md text-rose-700 cursor-pointer hover:border-transparent">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                     <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd" />
                   </svg>
                   
-                <div>Add new</div> 
+                <div>Import new</div> 
             </button>
         </div>
         
         
 
-        <ng-container *ngIf="contractAddresses$ | async as contracts">
+        <div *ngIf="contractAddresses$ | async as contracts">
             <ng-container *ngIf="contracts.length > 0">
                 
                 <div *ngFor="let contract of contracts; let i = index" 
                     [class.bg-rose-50]="i % 2 === 0"
-                    class="grid grid-cols-12 border-rose-100 px-4
+                    class="grid card-body !py-2 !px-4 grid-cols-12 border-rose-100 mt-2
                      text-slate-500">
                      <div class="grid grid-cols-11 col-span-10 py-3 border-rose-100 ">
                         <div class="col-span-1">
@@ -90,7 +90,7 @@
                 No contracts or wallets added. 
             </div>
             
-        </ng-container>
+        </div>
         
        
     </div>
