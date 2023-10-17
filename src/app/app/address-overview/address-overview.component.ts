@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { SessionQuery } from 'src/app/shared/session.query';
-import { SessionStore } from 'src/app/shared/session.store';
+import { SessionStore, WalletStorage } from 'src/app/shared/session.store';
 import { SessionService } from 'src/app/shared/storage/session.service';
 
 @Component({
@@ -16,7 +16,25 @@ export class AddressOverviewComponent implements OnInit {
   address = this.route.snapshot.params['address']
 
   wallet$ = this.sessionQuery.wallets$.pipe(
-    map(wallets => wallets.filter(wallet => wallet.wallet === this.address).at(0))
+    map(wallets => {
+      const fetchedWallets = wallets
+        .filter(wallet => 
+          wallet.wallet === this.address)
+        .at(0)
+
+      if(fetchedWallets) {
+        return fetchedWallets
+      } else {
+        const walletStorage: WalletStorage = {
+          contractType: 'SAFE',
+          derivedWallets: [],
+          wallet: this.address
+        }
+        this.sessionService.addNewWallet(walletStorage)
+        this.addNewWallet(walletStorage.derivedWallets)
+        return walletStorage
+      }
+    })
   )
 
   derivedWallets$ = this.wallet$.pipe(
