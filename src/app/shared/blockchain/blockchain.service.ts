@@ -1,65 +1,89 @@
 import { Injectable } from '@angular/core';
-import { ethers } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 
 import Onboard from '@web3-onboard/core'
 import chains from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import safeModule from '@web3-onboard/gnosis'
+import { RPC } from '../variables';
+
+import { Alchemy, Network } from "alchemy-sdk";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlockchainService {
 
-  readProvider = new ethers.providers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com', 11155111)  
+  readProvider = 
+    new ethers.providers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com', 11155111)
+  
+  assetsProviders = 
+    [new ethers.providers.JsonRpcProvider(RPC.ethRPC, 1)]
 
   safe = safeModule()
+  injected = injectedModule()
 
-  wallets = [this.safe]
+  wallets = [this.safe, this.injected]
 
-  chains = [
+  apiKey = 'sB2CDInJN_t6g0Id2SkYHG5nBycaQMK9'
+
+  prodChains: ChainInfo[] = [
     {
       id: 1,
       token: 'ETH',
       label: 'Ethereum Mainnet',
-      rpcUrl: 'https://eth.llamarpc.com'
+      rpcUrl: 'https://eth.llamarpc.com',
+      network: Network.ETH_MAINNET
     },
     {
       id: 137,
       token: 'MATIC',
       label: 'Polygon Mainnet',
-      rpcUrl: 'https://polygon.llamarpc.com'
-    },
-    {
-      id: 43114,
-      token: 'AVAX',
-      label: 'Avalanche C-Chain',
-      rpcUrl: 'https://avalanche.drpc.org'
+      rpcUrl: 'https://polygon.llamarpc.com',
+      network: Network.MATIC_MAINNET
+
     },
     {
       id: 42161,
       token: 'ETH',
       label: 'Arbitrum',
-      rpcUrl: 'https://arbitrum.llamarpc.com'
+      rpcUrl: 'https://arbitrum.llamarpc.com',
+      network: Network.ARB_MAINNET
+
     },
     {
       id: 10,
       token: 'ETH',
       label: 'Optimism',
-      rpcUrl: 'https://optimism.llamarpc.com'
-    },
-    {
-      id: 56,
-      token: 'BSC',
-      label: 'Binance Smart Chain',
-      rpcUrl: 'https://binance.llamarpc.com'
+      rpcUrl: 'https://optimism.llamarpc.com',
+      network: Network.OPT_MAINNET
+
     },
     {
       id: 8453,
       token: 'ETH',
       label: 'Base',
-      rpcUrl: 'https://base.drpc.org'
+      rpcUrl: 'https://base.drpc.org',
+      network: Network.BASE_MAINNET
+
     },
+  ]
+
+  testChains: ChainInfo[] = [
+    {
+      id: 11155111,
+      token: 'SepETH',
+      label: 'Seplia ETH',
+      rpcUrl: 'https://endpoints.omniatech.io/v1/eth/sepolia/public',
+      network: Network.ETH_SEPOLIA
+    },
+    {
+      id: 420,
+      token: 'ETH',
+      label: 'Optimism Goerli',
+      rpcUrl: 'https://goerli.optimism.io',
+      network: Network.OPT_GOERLI
+    }
   ]
 
   appMetadata = {
@@ -83,10 +107,19 @@ export class BlockchainService {
 
   onboard = Onboard({
     wallets: this.wallets,
-    chains: this.chains,
+    chains: this.prodChains.map(chain => {
+      return {
+        id: chain.id,
+        token: chain.token,
+        label: chain.label,
+        rpcUrl: chain.rpcUrl,
+      }
+    }),
   })
 
-  constructor() { }
+  constructor() { 
+
+  }
 
   connectWallet() {
     return this.onboard.connectWallet()
@@ -105,4 +138,47 @@ export class BlockchainService {
       salt
     )
   }
+
+  getSDK(chainID: number) {
+      const chain = this.prodChains.find(chain => chain.id === chainID)!
+      return new Alchemy({
+        apiKey: this.apiKey,
+        network: chain.network
+      })
+  }
+
+  async getPortfolio(address: string, chainID: number) {
+    const sdk = this.getSDK(chainID)
+    return await sdk?.core.getTokenBalances(
+      address
+    )
+  }
+
+  async getTokenMetadata(address: string, chainID: number) {
+    const sdk = this.getSDK(chainID)
+    return await sdk?.core.getTokenMetadata(address)
+  }
+}
+
+interface TokenBalanceModel {
+  nativeTokenBalance: string,
+  result: [
+    {
+      address: string,
+      decimals: number,
+      name: string,
+      quantityIn: number,
+      quantityOut: number,
+      symbol: string,
+      totalBalance: BigNumberish
+    }
+  ]
+}
+
+interface ChainInfo {
+  id: number,
+  token: string,
+  label: string,
+  rpcUrl: string
+  network: Network
 }

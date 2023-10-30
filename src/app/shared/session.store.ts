@@ -6,11 +6,16 @@ import { Wallet } from 'ethers';
 export type WalletStorage = {
     contractType: ContractType,
     wallet: string
-    derivedWallets: string[]
+    derivedWallets: DerivedWalletData[]
 }
 
 export interface SessionState {
    savedWallets: WalletStorage[]
+}
+
+export interface DerivedWalletData {
+  address: string
+  tag: string | null
 }
 
 export function createInitialState(): SessionState {
@@ -19,7 +24,7 @@ export function createInitialState(): SessionState {
   };
 }
 
-@StoreConfig({ name: 'session' })
+@StoreConfig({ name: 'session', resettable: true })
 @Injectable({ providedIn: 'root' })
 export class SessionStore extends Store<SessionState> {
   constructor() {

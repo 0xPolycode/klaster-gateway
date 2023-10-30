@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, from, map } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
+import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { SessionQuery } from 'src/app/shared/session.query';
-import { SessionStore, WalletStorage } from 'src/app/shared/session.store';
+import { DerivedWalletData, SessionStore, WalletStorage } from 'src/app/shared/session.store';
 import { SessionService } from 'src/app/shared/storage/session.service';
 
 @Component({
@@ -37,6 +38,9 @@ export class AddressOverviewComponent implements OnInit {
     })
   )
 
+  sidebarCollapsedSub = new BehaviorSubject(false)
+  sidebarCollapsed$ = this.sidebarCollapsedSub.asObservable()
+
   derivedWallets$ = this.wallet$.pipe(
     map(wallet => wallet?.derivedWallets)
   )
@@ -44,15 +48,21 @@ export class AddressOverviewComponent implements OnInit {
   walletTogglerVisibleSub = new BehaviorSubject(false)
   walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()
 
+  sendTxPreviewModal$ = this.txService.sendTxPreviewModal$
+
+
   constructor(private route: ActivatedRoute,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
-    private blockchainService: BlockchainService) { }
+    private blockchainService: BlockchainService,
+    private txService: TransactionService) { }
 
   ngOnInit(): void {
+    
   }
 
-  async addNewWallet(derivedWallets: string[]) {
+
+  async addNewWallet(derivedWallets: DerivedWalletData[]) {
     const newWallet = await this.blockchainService.calculateAddress(
       this.address,
       derivedWallets.length.toString()
@@ -63,9 +73,17 @@ export class AddressOverviewComponent implements OnInit {
   toggleWalletToggler() {
     this.walletTogglerVisibleSub.next(!this.walletTogglerVisibleSub.value)
   }
+  
+  toggleSidebar() {
+    this.sidebarCollapsedSub.next(!this.sidebarCollapsedSub.value)
+  }
 
   connectWallet() {
     this.blockchainService.connectWallet()
+  }
+
+  declineTxPreview() {
+    this.txService.declineTxPreviewModal()
   }
 
 }

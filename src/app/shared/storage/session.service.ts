@@ -17,10 +17,39 @@ export class SessionService {
       })
   }
 
+  reset() {
+    this.sessionStore.reset()
+  }
+
   removeExistingWallet(walletAddress: string) {
     this.sessionStore.update(session => ({
       savedWallets: session.savedWallets.filter(wallet => wallet.wallet !== walletAddress)
     }))
+  }
+
+  tagWallet(address: string, tag: string) {
+    this.sessionStore.update(session => {
+      const walletStore = session.savedWallets
+        .find(wallet => wallet.derivedWallets.map(x => x.address).includes(address))
+      if(!walletStore) { return session }
+
+      const newStore: WalletStorage = {
+        contractType: walletStore.contractType,
+        derivedWallets: walletStore.derivedWallets.map(wallet => {
+          if(wallet.address !== address) { return wallet }
+          return { address: wallet.address, tag: tag }
+        }),
+        wallet: walletStore.wallet
+      }
+
+      const newSavedWallets = session.savedWallets.map(saved => {
+        if(saved.wallet !== newStore.wallet) { return saved }
+        return newStore 
+      })
+
+      return { savedWallets: newSavedWallets }
+      
+    })
   }
 
   addCrossChainAccount(forWallet: string, newDerivedWallet: string) {
@@ -30,7 +59,7 @@ export class SessionService {
 
       const newWalletStore: WalletStorage = {
         contractType: walletStore.contractType,
-        derivedWallets: walletStore.derivedWallets.concat(newDerivedWallet),
+        derivedWallets: walletStore.derivedWallets.concat({address: newDerivedWallet, tag: null}),
         wallet: walletStore.wallet
       }
 

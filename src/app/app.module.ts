@@ -17,6 +17,7 @@ import { SessionQuery } from './shared/session.query';
 import { SessionStore } from './shared/session.store';
 import { AddressOverviewComponent } from './app/address-overview/address-overview.component';
 import { CrossChainAccountContainerComponent } from './app/address-overview/cross-chain-account-container/cross-chain-account-container.component';
+import { SinglePortfolioAssetContainerComponent } from './app/address-overview/cross-chain-account-container/single-portfolio-asset-container/single-portfolio-asset-container.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CrossChainAccountContainerComponent } from './app/address-overview/cros
     InfoComponent,
     ShortenPipe,
     AddressOverviewComponent,
-    CrossChainAccountContainerComponent
+    CrossChainAccountContainerComponent,
+    SinglePortfolioAssetContainerComponent
   ],
   imports: [
     BrowserModule,

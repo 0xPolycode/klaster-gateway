@@ -1,131 +1,176 @@
 <div class="grid grid-cols-1 mt-2 card-body !p-0">
 
     <div class="grid grid-cols-12">
-        
-        <div (click)="copyAddress(wallet)" class="border-b group relative border-r border-rose-100 flex flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-              </svg>
 
-            <div *ngIf="tooltipText$ | async as text" 
-            class="absolute group-hover:opacity-80 backdrop-blur-[2px] font-medium opacity-0 transition-all w-24
+        <div (click)="copyAddress(derivedWallet)"
+            class="border-b group relative border-r border-rose-100 z-50 flex flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+            </svg>
+
+            <div *ngIf="tooltipText$ | async as text" class="absolute hidden group-hover:flex group-hover:opacity-80 backdrop-blur-[2px] font-medium opacity-0 transition-all w-24
              bg-gray-600 top-8 left-6 rounded-md uppercase px-3 py-1 text-[10px] text-center text-white">
                 {{text}}
             </div>
-              
+
         </div>
 
-        <div (click)="toggleVisibility()"
-        class="col-span-11 px-5 flex flex-row hover:bg-rose-50 
-        cursor-pointer text-slate-500 text-sm rounded-t-md items-center
+        <div class="relative h-full">
+            <div (click)="toggleTagInput()"
+            class="border-b group relative border-r h-full border-rose-100 flex
+             flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+            </svg>              
+
+            <div *ngIf="(addressTagInputToggled$ | async) === false" class="absolute hidden group-hover:flex group-hover:opacity-80 backdrop-blur-[2px] font-medium opacity-0 transition-all w-32
+             bg-gray-600 top-8 left-6 rounded-md uppercase px-3 py-1 text-[10px] text-center text-white">
+                Set address tag
+            </div>
+
+            
+
+        </div>
+            <div *ngIf="addressTagInputToggled$ | async" class="fixed bg-white rounded-b-md border z-[200] w-96
+             top-12 left-[3.9rem] flex flex-row justify-between gap-x-2">
+                <input [formControl]="addressTagInputForm" class="pl-4 py-3 outline-none rounded-bl-md w-full text-sm" type="text" placeholder="Tag" name="" id="">
+                <button (click)="setAddressTag()" [disabled]="!addressTagInputForm.valid" class="flex flex-row items-center cursor-pointer justify-center app-button my-2 mr-2 !rounded-md px-4 text-xs">Set</button>
+            </div>
+        </div>
+        
+        
+
+        <div (click)="toggleVisibility()" class="col-span-10 px-5 flex flex-row hover:bg-rose-50 
+        cursor-pointer text-slate-500 text-sm rounded-tr-md items-center
          justify-between py-3 border-b border-rose-100">
-           <div>
-               {{wallet}}
-           </div>
-           <div class="text-rose-600">
-               <svg *ngIf="isCollapsed$ | async;else upCaret"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-               class="w-6 h-6 cursor-pointer">
-                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                 </svg>
-               <ng-template #upCaret>
-                   
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 cursor-pointer">
-                       <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                     </svg>
-                     
-                     
-               </ng-template>
-           </div>
-       </div>
+            <div *ngIf="tag$ | async as tag; else noTagWallet">
+                <span class="font-semibold text-slate-700">{{tag}}</span> ({{derivedWallet | shorten:8:4}})
+            </div>
+            <ng-template #noTagWallet>
+                <div class="">
+                    {{derivedWallet}}
+                </div>
+            </ng-template>
+            
+            <div class="text-rose-600">
+                <svg *ngIf="isCollapsed$ | async;else upCaret" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+                <ng-template #upCaret>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                    </svg>
+
+
+                </ng-template>
+            </div>
+        </div>
 
     </div>
-    
+
     <div *ngIf="(isCollapsed$ | async) === false" class="">
 
+        
 
-        <div class="px-4 py-3 border-b flex flex-row justify-between items-center gap-x-2 border-rose-100">
-            
-            <img class="h-4" src="../../../../assets/networks/ethereum.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/polygon.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/optimism.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/avalanche.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/bsc.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/base.svg" alt="" srcset="">
-            <img class="h-4" src="../../../../assets/networks/arbitrum.svg" alt="" srcset="">
-
-        </div>
 
         <div class="grid grid-cols-8 -mx-2 text-slate-700 px-4 py-2">
 
+            <div class="w-full mb-2 mt-2 col-span-8 px-2 flex flex-row text-slate-500
+                justify-start items-center text-xs font-medium gap-x-3">
+                <input [formControl]="showOnlyVerified" type="checkbox">
+
+                <div>Show only known tokens</div>
+            </div>
+
+            <input [formControl]="searchQuery"
+            class="col-span-8 border py-3 px-4 rounded-md mx-2 !outline-none font-medium text-sm bg-transparent" 
+            placeholder="Search by name, symbol or address" type="text" name="" id="">
+
+            <div class="col-span-8 border-b mb-2 border-rose-50">
+                <div class="px-2 py-4 flex flex-row justify-between items-center gap-x-2 border-rose-50">
+    
+                    <div class="flex flex-row gap-x-2 items-center">
+                        <img class="h-4" src="../../../../assets/networks/ethereum.svg" alt="" srcset="">
+                        <input checked type="checkbox">
+                    </div>
+    
+                    <div class="flex flex-row gap-x-2 items-center">
+                        <img class="h-4" src="../../../../assets/networks/matic.svg" alt="" srcset="">
+                        <input checked type="checkbox">
+                    </div>
+    
+                    <div class="flex flex-row gap-x-2 items-center">
+                        <img class="h-4" src="../../../../assets/networks/optimism.svg" alt="" srcset="">
+                        <input checked type="checkbox">
+                    </div>
+    
+                    <div class="flex flex-row gap-x-2 items-center">
+                        <img class="h-4" src="../../../../assets/networks/base.svg" alt="" srcset="">
+                        <input checked type="checkbox">
+                    </div>
+    
+                    <div class="flex flex-row gap-x-2 items-center">
+                        <img class="h-4" src="../../../../assets/networks/arbitrum.svg" alt="" srcset="">
+                        <input checked type="checkbox">
+                    </div>
+        
+                </div>
+            </div>
+
+
             <!-- HEADER -->
-            <div class="col-span-8 grid px-2 grid-cols-8 mb-2 mt-2">
-                <div class="col-span-3 text-sm uppercase text-slate-500">
+            <div class="col-span-8 grid px-2 grid-cols-12 mb-2 mt-2">
+                <div class="col-span-4 text-sm uppercase text-slate-500">
                     Asset
                 </div>
 
-                <div class="col-span-1 text-center text-sm uppercase text-slate-500">
+                <div class="col-span-3 text-start text-sm uppercase text-slate-500">
                     Price
                 </div>
 
-                <div class="col-span-2 text-sm text-end uppercase text-slate-500">
+                <div class="col-span-3 text-sm text-start uppercase text-slate-500">
                     Value (USD)
                 </div>
             </div>
 
             <!-- END HEADER -->
 
-            
 
-            <div class="col-span-8 grid grid-cols-8 px-2">
-                <div class="!py-2 col-span-3 flex flex-row items-center">
 
-                    <div class="relative">
-                        <img class="h-8" src="../../../assets/tokens/usdc-logo.png" alt="" srcset="">
-                        <div class="absolute -top-1 left-5">
-                            <div class="w-5">
-                                <img class="h-5" src="../../../assets/networks/optimism.svg" alt=""
-                                    srcset="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col ml-4">
-                        <div>
-                            7,908.641
-                        </div>
-                        <div class="text-slate-500 text-sm -mt-1 font-medium">
-                            USDC
-                        </div>
-                    </div>
+            <div *ngIf="portfolio$ | async as portfolio; else noItems" class="flex flex-col col-span-8">
 
-                </div>
+                <div *ngFor="let item of portfolio">
+                        <app-single-portfolio-asset-container 
+                            [contractAddress]="item.contractAddress"
+                            [wallet]="derivedWallet"
+                            [rawBalance]="item.tokenBalance"
+                            [search]="searchQuery.value"
+                            [onlyVerified]="showOnlyVerified.value"
+                            [chainID]="item.chainID"></app-single-portfolio-asset-container>
 
-                <div class="col-span-1 flex flex-row items-center justify-center">
-                    $1.00
-                </div>
-
-                <div class="col-span-2 flex flex-row items-center justify-end">
-                    $7,908.641
-                </div>
-                
-                <div class="col-span-2 flex flex-row items-center gap-x-2 justify-center pl-8">
-
-                    <div class="w-full border uppercase font-semibold py-2 hover:bg-rose-700 hover:text-white
-                     text-xs rounded-md border-rose-100 text-rose-700 cursor-pointer transition-all hover:border-transparent
-                      flex flex-row items-center justify-center">
-                        Send
-                    </div>
-
-                    <div class="w-full border uppercase font-semibold py-2 hover:bg-rose-700 hover:text-white
-                     text-xs rounded-md border-rose-100 text-rose-700 cursor-pointer transition-all hover:border-transparent
-                      flex flex-row items-center justify-center">
-                        Swap
-                    </div>
-                   
                 </div>
             </div>
 
 
-            
+            <ng-template #noItems>
+                <div class="w-full col-span-8 gap-x-3 flex flex-row text-sm items-center justify-center py-8 uppercase text-slate-500">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                          </svg>                          
+                    </div>
+                    <div>
+                        No assets detected.
+                    </div>
+                </div>
+            </ng-template>
+
 
         </div>
 

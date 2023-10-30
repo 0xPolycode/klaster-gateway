@@ -27,7 +27,12 @@ export class DashboardComponent implements OnInit {
 
   connectSafe() {
     this.blockchainService.connectWallet().then(wallet => {
-      console.log("WALLET OBJECT", wallet)
+      this.router.navigate(['address', wallet.at(0)?.accounts.at(0)?.address])
+    })
+  }
+
+  connectWallet() {
+    this.blockchainService.connectWallet().then(wallet => {
       this.router.navigate(['address', wallet.at(0)?.accounts.at(0)?.address])
     })
   }
