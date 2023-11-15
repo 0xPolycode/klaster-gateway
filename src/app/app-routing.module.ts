@@ -6,9 +6,7 @@ import { DashboardComponent } from './app/dashboard/dashboard.component';
 import { AddressOverviewComponent } from './app/address-overview/address-overview.component';
 
 const routes: Routes = [
-  { path: 'onboarding', component: OnboardingComponent },
-  { path: '', component: DashboardComponent },
-  { path: 'address/:address', component: AddressOverviewComponent }
+  { path: '', component: AddressOverviewComponent }
 ];
 
 @NgModule({

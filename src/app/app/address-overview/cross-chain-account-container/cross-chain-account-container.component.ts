@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { BigNumber, ethers } from 'ethers';
-import { BehaviorSubject, combineLatest, forkJoin, from, map, of, share, shareReplay, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, forkJoin, from, map, of, share, shareReplay, startWith, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { PriceFeedService } from 'src/app/shared/services/price-feed.service';
 import { SessionQuery } from 'src/app/shared/session.query';
@@ -17,6 +17,9 @@ export class CrossChainAccountContainerComponent implements OnInit {
   @Input() derivedWallet!: string
   @Input() isCollapsed = true
 
+  portfolioFetchTriggerSub = new BehaviorSubject<number | null>(null)
+  portfolioFetchTrigger$ = this.portfolioFetchTriggerSub.asObservable()
+
   tooltipTextSub = new BehaviorSubject("Copy address")
   tooltipText$ = this.tooltipTextSub.asObservable()
 
@@ -25,7 +28,6 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   tokenList = require('../../../../assets/tokens/list.json') as TokenListRoot
 
-  tempAddress = '0xB9b8EF61b7851276B0239757A039d54a23804CBb'
   showOnlyVerified = new FormControl(true, [])
 
   searchQuery = new FormControl('', [])
@@ -35,20 +37,24 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   addressTagInputForm = new FormControl('', [Validators.required])
 
-  portfolio$ = combineLatest([
-    from(this.blockchainService.getPortfolio(this.derivedWallet, 1)).pipe(shareReplay()),
-    from(this.blockchainService.getPortfolio(this.derivedWallet, 137)).pipe(shareReplay()),
-  ]).pipe(
-    map(([eth, matic]) => {
-
-      const portfolio = eth.tokenBalances.map(balance => {
-        return {...balance, chainID: 1}
-      }).concat(matic.tokenBalances.map(balance => {
-        return {...balance, chainID: 137}
-      }))
-      return portfolio
+  portfolio$ = this.portfolioFetchTrigger$.pipe(
+    switchMap(_ => {
+      return combineLatest(
+        this.blockchainService.chains.map(chain => 
+          this.blockchainService.getPortfolio(this.derivedWallet, chain.id))
+      )
+    }),
+    map(chainPortfolios => {
+      return chainPortfolios.flatMap(portfolio => portfolio?.tokenBalances)
     })
   )
+  
+  
+  // combineLatest([
+  //   this.portfolioFetchTrigger$,
+  // ]).pipe(
+
+  // )
 
   tag$ = this.sessionQuery.wallets$.pipe(
     map(wallets => {
@@ -58,6 +64,15 @@ export class CrossChainAccountContainerComponent implements OnInit {
     })
   )
 
+  supportedNetworks = [
+    { name: 'Ethereum', logo: 'ethereum.svg' },
+    { name: 'Polygon', logo: 'matic.svg' },
+    { name: 'Optimism', logo: 'optimism.svg' },
+    { name: 'Arbitrum', logo: 'arbitrum.svg' },
+    { name: 'Base', logo: 'base.svg' },
+    { name: 'Ethereum', logo: 'ethereum.svg' }
+  ]
+
   constructor(private blockchainService: BlockchainService,
     private storageService: SessionService,
     private sessionQuery: SessionQuery,
@@ -65,9 +80,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCollapsedSub.next(this.isCollapsed)
-    // setTimeout(() => {
-    //   this.showOnlyVerified.setValue(true)
-    // }, 30);
+    this.portfolioFetchTriggerSub.next(0)
   }
 
 

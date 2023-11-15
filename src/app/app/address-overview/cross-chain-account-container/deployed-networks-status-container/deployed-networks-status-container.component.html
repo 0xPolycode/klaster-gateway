@@ -1,0 +1,48 @@
+<div *ngIf="networkLoading$ | async as networkLoading" class="col-span-8 bg-[rgba(255,255,255,0.2)] mt-2 mx-2">
+        <div class="mt-2 grid grid-cols-5 items-center gap-x-4 border-rose-50">
+
+            <div *ngFor="let network of deployableNetworks" 
+                [class.opacity-50]="(network.deploymentStatus$ | async) === false"
+                [class.hover:bg-rose-50]="(network.deploymentStatus$ | async) === false"
+                [class.cursor-pointer]="(network.deploymentStatus$ | async) === false"
+                class="flex flex-row justify-center gap-x-2 
+                    hover:opacity-100
+                    items-center py-2 px-3 border rounded-md w-full"
+                (click)="deployClicked(network.id)">
+
+                <ng-container *ngIf="networkLoading !== network.id; else loading">
+                    <img class="h-4" src="../../../../../assets/networks/{{network.logoUri}}" alt="" srcset="">
+                    <div class="text-xs uppercase font-semibold">
+                        <div *ngIf="network.deploymentStatus$ | async as status; else notDeployed">
+                            <div class="flex flex-row gap-x-2 items-center">
+                                {{network.label}}
+                                <div class="text-emerald-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                                      </svg>
+                        
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #notDeployed>
+                            <div>
+                                Deploy
+                            </div>
+                        </ng-template>
+                    </div>
+                </ng-container>
+                
+                <ng-template #loading>
+                    <div class="text-xs font-medium">
+                        Loading...
+                    </div>
+                </ng-template>
+
+            </div>
+
+        </div>
+        <div class="mt-2 bg-amber-100 rounded-md py-3 px-5 text-xs text-orange-700">
+            This cross-chain account was deployed partially. 
+            Only accept assets on the networks with a checkmark next to them. Click on undeployed networks to add support for them.
+        </div>
+</div>

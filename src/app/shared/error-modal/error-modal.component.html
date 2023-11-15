@@ -1,0 +1,25 @@
+<div *ngIf="errorData$ | async as data" class="fixed top-0 left-0 z-50 w-screen flex flex-row items-center justify-center h-screen bg-[rgba(255,255,255,0.5)] backdrop-blur-[1px]">
+    
+    
+    <div class="max-w-md font-medium bg-white w-full p-8 border rounded-md flex flex-col items-center">
+        <div class="text-red-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+              </svg>
+              
+        </div>
+        <div class="mt-2">
+            {{data.title}}
+        </div>
+        <div class="mt-4 text-slate-500 text-sm font-normal">
+            {{data.message}}
+        </div>
+
+        <button (click)="dismiss()" class="app-button mt-8 w-full py-2">
+            Close
+        </button>
+    
+    </div>
+    
+
+</div>

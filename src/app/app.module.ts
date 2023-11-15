@@ -18,6 +18,9 @@ import { SessionStore } from './shared/session.store';
 import { AddressOverviewComponent } from './app/address-overview/address-overview.component';
 import { CrossChainAccountContainerComponent } from './app/address-overview/cross-chain-account-container/cross-chain-account-container.component';
 import { SinglePortfolioAssetContainerComponent } from './app/address-overview/cross-chain-account-container/single-portfolio-asset-container/single-portfolio-asset-container.component';
+import { DeployCrossChainAccountModalComponent } from './app/address-overview/deploy-cross-chain-account-modal/deploy-cross-chain-account-modal.component';
+import { DeployedNetworksStatusContainerComponent } from './app/address-overview/cross-chain-account-container/deployed-networks-status-container/deployed-networks-status-container.component';
+import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,10 @@ import { SinglePortfolioAssetContainerComponent } from './app/address-overview/c
     ShortenPipe,
     AddressOverviewComponent,
     CrossChainAccountContainerComponent,
-    SinglePortfolioAssetContainerComponent
+    SinglePortfolioAssetContainerComponent,
+    DeployCrossChainAccountModalComponent,
+    DeployedNetworksStatusContainerComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,

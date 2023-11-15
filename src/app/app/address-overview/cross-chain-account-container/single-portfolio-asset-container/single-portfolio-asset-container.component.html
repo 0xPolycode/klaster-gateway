@@ -83,7 +83,7 @@
     <div *ngIf="metadata$ | async as metadata" class="col-span-5 h-full">
         <div class="flex flex-row gap-x-2 border items-center h-full px-2 rounded-md">
             <img class="h-7 w-7 p-[0.35rem] border rounded-full" src="../../../../../assets/networks/{{getNetworkURI(chainID)}}" alt="" srcset="">
-            <input [formControl]="recipientAddressForm" placeholder="Recipient address (Ethereum Mainnet)" 
+            <input [formControl]="recipientAddressForm" placeholder="Recipient address" 
                 class="w-full !outline-none border-l text-xs py-3 pr-1 pl-2" type="text">
         </div>
     </div>

@@ -1,187 +1,162 @@
-<!-- <div class="mt-32 card-body flex flex-col items-center">
-    <div class="uppercase text-lg text-slate-700 font-semibold">
-        Controller wallet
-    </div>
-    <div class="text-slate-500 mt-3">
-        {{address}}
-    </div>
-</div> -->
+<ng-container>
+    <div class="mt-32 min-h-screen" >
 
-<div class="mt-32 min-h-screen" *ngIf="derivedWallets$ | async as wallets">
-
-    <div class="grid grid-cols-12 gap-x-4">
-        <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
-
-            <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-                <div class="card-body grid grid-cols-12 mt-4 text-slate-600">
-                    <div class="col-span-12 pr-4">
-                        <div class="text-sm uppercase font-medium text-slate-500">
-                            Controller Safe
-                        </div>
-                        <div class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
-                            <div>
-                                <img class="h-4" src="../../../assets/safelogo.png" alt="" srcset="">
+        <div class="grid grid-cols-12 gap-x-4">
+            <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
+    
+                <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
+                    <div class="card-body grid grid-cols-12 mt-4 text-slate-600">
+                        <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
+                            <div class="text-sm uppercase font-medium text-slate-500">
+                                Controller Safe
                             </div>
-                            <div>
-                                {{address | shorten:8:5}}
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-4 h-4 cursor-pointer hover:text-rose-600">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                            </svg>
+                            <div class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
 
-                        </div>
-
-                        <!-- <div class="text-sm uppercase font-medium mt-8 text-slate-500">
-                            Transaction history
-                        </div>
-                        <div class="flex flex-row justify-between text-sm text-slate-500 uppercase">
-                            <div>
-                                Tx Hash
-                            </div>
-                            <div>
-                                Status
-                            </div>
-                        </div>
-        
-                        <div class="w-full flex flex-col gap-y-4 ">
-                            <div
-                                class="flex flex-row items-center -mx-4 justify-between py-3 hover:bg-rose-50 cursor-pointer px-4">
-                                <div class="flex flex-row items-center gap-x-4 text-sm">
-                                    <img src="../../../assets/networks/optimism.svg" alt="" srcset="">
-                                    <div>{{address | shorten:5:3}}</div>
+                                <div>
+                                    <img class="h-4" src="../../../assets/safelogo.png" alt="" srcset="">
                                 </div>
-                                <div class="text-emerald-600">
+                                <div>
+                                    {{address | shorten:8:5}}
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="w-4 h-4 cursor-pointer hover:text-rose-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                                </svg>
+                            </div>
+
+                            <div class="text-sm mt-4 uppercase font-medium text-slate-500">
+                                Connected network
+                            </div>
+                            <div *ngIf="network$ | async as network" class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
+
+                                <div>
+                                    <img class="h-4" src="../../../assets/networks/{{network.logoUri}}" alt="" srcset="">
+                                </div>
+                                <div>
+                                    {{network.label}}
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="w-4 h-4 cursor-pointer hover:text-rose-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                                </svg>
+                            </div>
+                        </div>
+                        <ng-template #noAddress>
+                            <button (click)="connectWallet()" class="app-button flex flex-row gap-x-2 items-center justify-center cursor-pointer col-span-12 py-3 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mt-[0.08rem]">
+                                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd" />
+                                  </svg>
+                                <div>Connect wallet</div>                              
+                            </button>
+                        </ng-template>
+                    </div>
+                    <div class="card-body text-sm text-slate-700 leading-relaxed">
+                        <div class="font-semibold mb-4 text-rose-700 uppercase">Developing smart contracts?</div>
+                        Add cross-chain accounts to any smart contract with the developer-friendly Klaster Solidity SDK
+                        <a target="_blank" href="https://klaster.gitbook.io/gateway"
+                            class="mt-4 border border-rose-200 py-3 text-center hover:bg-rose-700 hover:border-transparent hover:text-white
+                        rounded-md text-rose-700 flex flex-row gap-x-2 justify-center items-center transition-all uppercase font-semibold bg-[rgba(255,255,255,0.4)] cursor-pointer">
+    
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 mt-[0.12rem] h-5">
+                                <path
+                                    d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                            </svg>
+                            <div>
+                                Read developer docs
+                            </div>
+    
+                        </a>
+    
+                    </div>
+                </div>
+                <ng-container *ngIf="derivedWallets$ | async as wallets">
+                    <div *ngIf="address$ | async as address; else connectPrompt" [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8 mt-4">
+                        <div *ngIf="wallets.length !== 0" class="col-span-8 flex flex-row mt-4 items-center justify-between">
+                            <div class="card-header-title">
+                                Cross-chain accounts
+                            </div>
+                            <div class="relative">
+        
+                                <div [class.!opacity-0]="(walletTogglerVisible$ | async)" (click)="deployWallet()" 
+                                    class="uppercase px-8 text-sm flex flex-row py-3 gap-x-2 bg-white
+                                            border-rose-100 border rounded-md text-rose-700 items-center 
+                                            hover:border-transparent transition-all font-medium hover:bg-rose-700 
+                                            hover:text-white cursor-pointer">
+        
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                            class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            
+        
+                                    <div>
+                                        Deploy Account
+                                    </div>
+                                </div>
+        
+                                <div *ngIf="walletTogglerVisible$ | async" (click)="toggleWalletToggler()" class="bg-white z-50 text-rose-700 hover:bg-rose-700 
+                                            hover:text-white cursor-pointer py-3 px-3 top-0
+                                                border border-rose-100 rounded-md absolute right-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="w-5 h-5">
                                         <path fill-rule="evenodd"
-                                            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
                                             clip-rule="evenodd" />
                                     </svg>
+                                </div>
         
+                                <div *ngIf="walletTogglerVisible$ | async" class="absolute right-0 z-20 px-8 py-8 flex flex-col gap-y-6
+                                bg-white mt-2 border border-rose-100 rounded-md">
+        
+                                    <div *ngFor="let wallet of wallets"
+                                        class="text-sm text-slate-600 flex flex-row items-center gap-x-4">
+                                        <div>
+                                            {{wallet | shorten:10:8}}
+                                        </div>
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor"
+                                                class="w-4 h-4 cursor-pointer hover:text-rose-600">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div 
+                                        class="app-button text-xs py-3 cursor-pointer text-center">
+                                        Deploy new 
+                                    </div>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div *ngFor="let derivedWallet of wallets; let i = index">
+                            <app-cross-chain-account-container [isCollapsed]="!(i === 0)"
+                                [derivedWallet]="derivedWallet"></app-cross-chain-account-container>
+                        </div>
+                        <div *ngIf="wallets.length === 0">
+                            <div class="w-full h-full card-body text-slate-600 flex flex-col items-center justify-center">
+                                You haven't deployed any cross-chain accounts yet. 
+                            
+                                <div (click)="deployWallet()" class="app-button px-16 mt-8 py-3 text-sm cursor-pointer">
+                                    Deploy now
                                 </div>
                             </div>
-                        </div> -->
-                    </div>
-                    <!-- <div (click)="toggleSidebar()" class="col-span-1 hover:text-rose-700 cursor-pointer pl-4 h-full border-l flex flex-col justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
-                          </svg>
-                          
-                    </div> -->
-                </div>
-                <div class="card-body text-sm text-slate-700 leading-relaxed">
-                    <div class="font-semibold mb-4 text-rose-700 uppercase">Developing smart contracts?</div>
-                    Add cross-chain accounts to any smart contract with the developer-friendly Klaster Solidity SDK
-                    <a target="_blank" href="https://klaster.gitbook.io/gateway"
-                        class="mt-4 border border-rose-200 py-3 text-center hover:bg-rose-700 hover:border-transparent hover:text-white
-                    rounded-md text-rose-700 flex flex-row gap-x-2 justify-center items-center transition-all uppercase font-semibold bg-[rgba(255,255,255,0.4)] cursor-pointer">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 mt-[0.12rem] h-5">
-                            <path
-                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
-                        </svg>
-                        <div>
-                            Read developer docs
+                            
                         </div>
-
-                    </a>
-
-                </div>
-            </div>
-            <div [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8 mt-4">
-                <div class="col-span-8 flex flex-row mt-4 items-center justify-between">
-                    <div class="card-header-title">
-                        Cross-chain accounts
                     </div>
-                    <div class="relative">
+                </ng-container>
 
-                        <div [class.!opacity-0]="(walletTogglerVisible$ | async)" (click)="toggleWalletToggler()" class="uppercase px-8 text-sm flex flex-row py-3 gap-x-2 bg-white
-                                 border-rose-100 border rounded-md text-rose-700 
-                                   hover:border-transparent transition-all font-medium hover:bg-rose-700 
-                                 hover:text-white cursor-pointer">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
-                                stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-
-                            <div>
-                                Manage accounts
-                            </div>
-                        </div>
-
-                        <div *ngIf="walletTogglerVisible$ | async" (click)="toggleWalletToggler()" class="bg-white z-50 text-rose-700 hover:bg-rose-700 
-                                   hover:text-white cursor-pointer py-3 px-3 top-0
-                                     border border-rose-100 rounded-md absolute right-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-5 h-5">
-                                <path fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-
-                        <div *ngIf="walletTogglerVisible$ | async" class="absolute right-0 z-20 px-8 py-8 flex flex-col gap-y-6
-                        bg-white mt-2 border border-rose-100 rounded-md">
-
-                            <div *ngFor="let wallet of wallets"
-                                class="text-sm text-slate-600 flex flex-row items-center gap-x-4">
-                                <div>
-                                    {{wallet.address| shorten:10:8}}
-                                </div>
-                                <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor"
-                                        class="w-4 h-4 cursor-pointer hover:text-rose-600">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div (click)="addNewWallet(wallets)"
-                                class="app-button text-xs py-3 cursor-pointer text-center">
-                                Add new
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div
-                    class="text-xs underline mt-2 col-span-8 flex flex-row justify-end gap-x-2 items-center font-normal cursor-pointer normal-case">
-                    <div class="text-slate-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" class="w-4 h-4 mt-[0.05rem]">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                        </svg>
-
-                    </div>
-                    <div class="text-slate-500">
-                        Learn more about cross-chain accounts
-                    </div>
-
-                </div>
-                <div (click)="toggleSidebar()" *ngIf="sidebarCollapsed.value" class="col-span-8 text-center mt-2 border py-2 hover:bg-rose-700 hover:text-white
-                    bg-[rgba(255,255,255,0.3)] uppercase text-sm font-medium text-rose-700
-                    cursor-pointer rounded-md transition-all border-rose-100">
-                    Show sidebar
-                </div>
-                <div *ngFor="let derivedWallet of wallets; let i = index">
-                    <app-cross-chain-account-container [isCollapsed]="!(i === 0)"
-                        [derivedWallet]="derivedWallet.address"></app-cross-chain-account-container>
-                </div>
-            </div>
-        </ng-container>
-
+            </ng-container>
+    
+        </div>
+    
+    
     </div>
+</ng-container>
 
-
-</div>
 
 <div (click)="toggleWalletToggler()" *ngIf="walletTogglerVisible$ | async"
     class="fixed top-0 left-0 z-10 bg-[rgba(255,255,255,0.2)] backdrop-blur-[2px] w-screen h-screen"></div>
@@ -248,3 +223,13 @@
         
     </div>
 </div>
+
+<div *ngIf="deployWalletModalVisible$ | async">
+    <app-deploy-cross-chain-account-modal></app-deploy-cross-chain-account-modal>
+</div>
+
+<ng-template #connectPrompt>
+    <div class="w-full text-slate-500 card-body mt-4 col-span-8 h-full flex flex-row items-center justify-center">
+        Please connect your wallet to use the Klaster app.
+    </div>
+</ng-template>

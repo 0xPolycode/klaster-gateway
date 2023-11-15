@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionQuery } from '../shared/session.query';
+import { SessionService } from '../shared/storage/session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private sessionService: SessionService) { }
 
   ngOnInit(): void {
+  }
+
+  reset() {
+    this.sessionService.reset()
   }
 
 }

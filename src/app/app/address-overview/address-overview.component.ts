@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, from, map } from 'rxjs';
+import { BehaviorSubject, from, map, of, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { SessionQuery } from 'src/app/shared/session.query';
@@ -14,60 +14,50 @@ import { SessionService } from 'src/app/shared/storage/session.service';
 })
 export class AddressOverviewComponent implements OnInit {
 
-  address = this.route.snapshot.params['address']
-
-  wallet$ = this.sessionQuery.wallets$.pipe(
-    map(wallets => {
-      const fetchedWallets = wallets
-        .filter(wallet => 
-          wallet.wallet === this.address)
-        .at(0)
-
-      if(fetchedWallets) {
-        return fetchedWallets
-      } else {
-        const walletStorage: WalletStorage = {
-          contractType: 'SAFE',
-          derivedWallets: [],
-          wallet: this.address
-        }
-        this.sessionService.addNewWallet(walletStorage)
-        this.addNewWallet(walletStorage.derivedWallets)
-        return walletStorage
-      }
-    })
+  address$ = this.blockchainService.address$
+  network$ = this.address$.pipe(
+    switchMap(_ => this.blockchainService.connectedProvider$),
+    map(provider => provider?.network.chainId),
+    map(chainID => this.blockchainService.chains.find(network => network.id === chainID))
   )
 
   sidebarCollapsedSub = new BehaviorSubject(false)
   sidebarCollapsed$ = this.sidebarCollapsedSub.asObservable()
 
-  derivedWallets$ = this.wallet$.pipe(
-    map(wallet => wallet?.derivedWallets)
+  derivedWallets$ = this.address$.pipe(
+    switchMap(_ => from(this.blockchainService.getDeployedWallets()))
   )
+  
+  // from(this.blockchainService.getDeployedWallets()).pipe(
+  //   tap(wallets => console.log("WALLETS", wallets))
+  // )
 
   walletTogglerVisibleSub = new BehaviorSubject(false)
   walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()
 
   sendTxPreviewModal$ = this.txService.sendTxPreviewModal$
 
+  deployWalletModalVisibleSub = new BehaviorSubject(false)
+  deployWalletModalVisible$ = this.deployWalletModalVisibleSub.asObservable()
 
-  constructor(private route: ActivatedRoute,
-    private sessionQuery: SessionQuery,
-    private sessionService: SessionService,
-    private blockchainService: BlockchainService,
+  constructor(private blockchainService: BlockchainService,
     private txService: TransactionService) { }
 
   ngOnInit(): void {
     
   }
 
+  setNetwork() {
+    this.blockchainService.setNetworkToSepolia()
+  }
+
 
   async addNewWallet(derivedWallets: DerivedWalletData[]) {
-    const newWallet = await this.blockchainService.calculateAddress(
-      this.address,
-      derivedWallets.length.toString()
-    )
-    this.sessionService.addCrossChainAccount(this.address, newWallet)
+    // const newWallet = await this.blockchainService.calculateAddress(
+    //   this.address,
+    //   derivedWallets.length.toString()
+    // )
+    // this.sessionService.addCrossChainAccount(this.address, newWallet)
   }
 
   toggleWalletToggler() {
@@ -84,6 +74,10 @@ export class AddressOverviewComponent implements OnInit {
 
   declineTxPreview() {
     this.txService.declineTxPreviewModal()
+  }
+
+  deployWallet() {
+    this.deployWalletModalVisibleSub.next(true)
   }
 
 }

@@ -12,7 +12,7 @@ export class TransactionService {
 
   constructor() { }
 
-  openTxPreviewModal(metadata: TokenMetadataResponse, recipient: string, amount: string) {
+  openTxPreviewModal(metadata: TokenMetadataResponse, network: string, recipient: string, amount: string) {
     this.sendTxPreviewModalSub.next({
       metadata: metadata,
       recipient: recipient,

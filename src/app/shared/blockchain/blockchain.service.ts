@@ -1,24 +1,39 @@
 import { Injectable } from '@angular/core';
-import { BigNumberish, ethers } from 'ethers';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
 
 import Onboard from '@web3-onboard/core'
 import chains from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import safeModule from '@web3-onboard/gnosis'
-import { RPC } from '../variables';
+import { ChainSelectors, RPC } from '../variables';
 
 import { Alchemy, Network } from "alchemy-sdk";
+import { formatBytes32String } from 'ethers/lib/utils';
+import { BehaviorSubject, from, map, of, switchMap, tap } from 'rxjs';
+
+const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
+
+const KLASTER_SINLGETON_TESTNET_ADDRESS = '0x1096998f9531DE5cbF43A772dCa38c17E7F7dFD1'
+const KLASTER_SINLGETON_MAINNET_ADDRESS = '0xef3c8e083De1AE85afecdAf5D6AbC15427f5AbcB'
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlockchainService {
 
-  readProvider = 
-    new ethers.providers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com', 11155111)
-  
-  assetsProviders = 
-    [new ethers.providers.JsonRpcProvider(RPC.ethRPC, 1)]
+
+  private connectedProviderSub = new BehaviorSubject<ethers.providers.Web3Provider | null>(null)
+  connectedProvider$ = this.connectedProviderSub.asObservable()
+
+  address$ = this.connectedProvider$.pipe(
+    switchMap(provider => {
+      if(!provider) return of(null)
+      return from(provider!.send('eth_requestAccounts', []))
+    }),
+    map(accounts => {
+      return accounts?.at(0) as string | null | undefined
+    })
+  )
 
   safe = safeModule()
   injected = injectedModule()
@@ -31,60 +46,66 @@ export class BlockchainService {
     {
       id: 1,
       token: 'ETH',
-      label: 'Ethereum Mainnet',
-      rpcUrl: 'https://eth.llamarpc.com',
-      network: Network.ETH_MAINNET
+      label: 'Ethereum',
+      rpcUrl: RPC.ethRPC,
+      network: Network.ETH_MAINNET,
+      logoUri: 'ethereum.svg',
+      selector: ChainSelectors.ETH
     },
     {
       id: 137,
       token: 'MATIC',
-      label: 'Polygon Mainnet',
-      rpcUrl: 'https://polygon.llamarpc.com',
-      network: Network.MATIC_MAINNET
-
+      label: 'Polygon',
+      rpcUrl: RPC.maticRPC,
+      network: Network.MATIC_MAINNET,
+      logoUri: 'matic.svg',
+      selector: ChainSelectors.MATIC
     },
     {
       id: 42161,
       token: 'ETH',
       label: 'Arbitrum',
-      rpcUrl: 'https://arbitrum.llamarpc.com',
-      network: Network.ARB_MAINNET
-
+      rpcUrl: RPC.arbRPC,
+      network: Network.ARB_MAINNET,
+      logoUri: 'arbitrum.svg',
+      selector: ChainSelectors.ARB
     },
     {
       id: 10,
       token: 'ETH',
       label: 'Optimism',
-      rpcUrl: 'https://optimism.llamarpc.com',
-      network: Network.OPT_MAINNET
-
+      rpcUrl: RPC.opRPC,
+      network: Network.OPT_MAINNET,
+      logoUri: 'optimism.svg',
+      selector: ChainSelectors.OP
     },
     {
       id: 8453,
       token: 'ETH',
       label: 'Base',
-      rpcUrl: 'https://base.drpc.org',
-      network: Network.BASE_MAINNET
-
+      rpcUrl: RPC.baseRPC,
+      network: Network.BASE_MAINNET,
+      logoUri: 'base.svg',
+      selector: ChainSelectors.BASE
     },
   ]
+
+  readProviders = this.prodChains.map(chain => {
+    return new ethers.providers.JsonRpcProvider(chain.rpcUrl)
+  })
 
   testChains: ChainInfo[] = [
     {
       id: 11155111,
       token: 'SepETH',
       label: 'Seplia ETH',
-      rpcUrl: 'https://endpoints.omniatech.io/v1/eth/sepolia/public',
-      network: Network.ETH_SEPOLIA
-    },
-    {
-      id: 420,
-      token: 'ETH',
-      label: 'Optimism Goerli',
-      rpcUrl: 'https://goerli.optimism.io',
-      network: Network.OPT_GOERLI
+      rpcUrl: 'https://radial-broken-spring.ethereum-sepolia.quiknode.pro/76fbf006752985130ff77d32d2284d2356438b61/',
+      network: Network.ETH_SEPOLIA,
+      selector: ChainSelectors.SEPETH
     }
   ]
+
+  chains = this.prodChains
 
   appMetadata = {
     name: 'Klaster Gateway',
@@ -107,7 +128,7 @@ export class BlockchainService {
 
   onboard = Onboard({
     wallets: this.wallets,
-    chains: this.prodChains.map(chain => {
+    chains: this.chains.map(chain => {
       return {
         id: chain.id,
         token: chain.token,
@@ -118,21 +139,63 @@ export class BlockchainService {
   })
 
   constructor() { 
+  }
 
+  async getAddress() {
+    const accounts = await this.connectedProviderSub.value?.send('eth_requestAccounts', [])
+    return accounts?.at(0)
   }
 
   connectWallet() {
-    return this.onboard.connectWallet()
+    const walletPromise = this.onboard.connectWallet()
+    walletPromise.then(res => {
+      this.connectedProviderSub.next(new ethers.providers.Web3Provider(res[0].provider))
+    })
+    return walletPromise
   }
 
-  private getKlasterProxyFactory() {
-    const proxyFactory = require('../../../assets/abis/KlasterProxyFactory.json')
-    return new ethers.Contract('0xe31eb0adfD645a2Fe39e3732683791738151AE11', proxyFactory, this.readProvider)
+  private getKlasterSingletonSigner() {
+    const providerOrSigner = this.connectedProviderSub.value?.getSigner()
+    const proxyFactory = require('../../../assets/abis/KlasterGatewaySingleton.json')
+    if(!providerOrSigner) { return null }
+    return new ethers.Contract(
+      KLASTER_SINLGETON_MAINNET_ADDRESS, 
+      proxyFactory, 
+      providerOrSigner ?? undefined)
+  }
+
+  private getKlasterSingletonForNetwork(provider: ethers.providers.Provider) {
+    const signleton = require('../../../assets/abis/KlasterGatewaySingleton.json')
+    return new ethers.Contract(
+      KLASTER_SINLGETON_MAINNET_ADDRESS,
+      signleton,
+      provider
+    )
+  }
+
+  setNetworkToSepolia() {
+    const provider = this.connectedProviderSub.value?.provider
+    if(!provider?.request) { return }
+    
+    provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [{
+        chainId: ethers.utils.hexlify(this.testChains[0].id),
+        rpcUrls: [this.testChains[0].rpcUrl],
+        chainName: 'Eth Sepolia',
+        nativeCurrency: {
+          name: 'SepETH',
+          symbol: 'ETH',
+          decimals: 18
+        },
+        blockExplorerUrls: ['https://sepolia.etherscan.io/']
+      }]
+    })
   }
 
   async calculateAddress(address: string, salt: string) {
-    const klasterProxy = this.getKlasterProxyFactory()
-
+    const klasterProxy = this.getKlasterSingletonSigner()
+    if(!klasterProxy) { return }
     return await klasterProxy['calculateAddress'](
       address,
       salt
@@ -140,7 +203,8 @@ export class BlockchainService {
   }
 
   getSDK(chainID: number) {
-      const chain = this.prodChains.find(chain => chain.id === chainID)!
+      const chain = this.chains.find(chain => chain.id === chainID)
+      if(!chain) { return null }
       return new Alchemy({
         apiKey: this.apiKey,
         network: chain.network
@@ -148,15 +212,85 @@ export class BlockchainService {
   }
 
   async getPortfolio(address: string, chainID: number) {
+    if(!address) { return }
     const sdk = this.getSDK(chainID)
-    return await sdk?.core.getTokenBalances(
+    const tokenBalances = await sdk?.core.getTokenBalances(
       address
     )
+    return {...tokenBalances, tokenBalances: tokenBalances?.tokenBalances.map(balance => {
+      return {...balance, chainID: chainID}
+    })}
   }
 
   async getTokenMetadata(address: string, chainID: number) {
     const sdk = this.getSDK(chainID)
     return await sdk?.core.getTokenMetadata(address)
+  }
+
+  // NOTE: If the user has deployed the contract through some other method (not)
+  // this frontend, then this method cannot be used to derive the "next" salt.
+  async getNextDeploymentSalt() {
+    const klaster = this.getKlasterSingletonSigner()
+    if(!klaster) { alert("No contract"); return }
+    const address = await this.getAddress()
+    const accounts = await klaster['getDeployedWallets'](address) as string[]
+    return accounts.length ?? 0
+  }
+
+  async getDeployedWallets() {
+    const klaster = this.getKlasterSingletonSigner()
+    const address = await this.getAddress()
+    if(!address) { return [] }
+    if(!klaster) { return }
+    return await klaster['getDeployedWallets'](address) as string[]
+  }
+
+  async calculateDeploymentFee(selectedChains: string[], salt: string) {
+    const klaster = this.getKlasterSingletonSigner()
+    const address = await this.getAddress()
+    if(!address) { alert("No address"); return 0 }
+    if(!klaster) { alert("No contract"); return 0 }
+    return await klaster['calculateExecuteFee'](
+      await address,
+      selectedChains,
+      salt,
+      await address,
+      0,
+      [],
+      BigNumber.from("2000000"),
+      formatBytes32String("")
+    )
+  }
+
+  async checkDeploymentStatusForNetwork(chainID: number, address: string) {
+    const readProvider = this.readProviders.find(provider => provider.network.chainId === chainID)
+    if(!readProvider) { alert(`Provider not found for network ${chainID}`); return null }
+    const klaster = this.getKlasterSingletonForNetwork(readProvider)
+
+    const connectedWallet = await this.getAddress()
+
+    const wallets = await klaster['getDeployedWallets'](connectedWallet) as string[]
+
+    console.log(`Wallets on ${chainID}: ${wallets}. Checking against ${address}`)
+
+    return wallets.includes(address)
+  }
+
+  async executeContractDeployments(selectedChains: string[], salt: string, fee: string) {
+    const klaster = this.getKlasterSingletonSigner()
+    if(!klaster) { return }
+    return await klaster['execute'](
+      selectedChains,
+      salt,
+      await this.getAddress(),
+      0,
+      [],
+      BigNumber.from("2000000"),
+      formatBytes32String(""),
+      {
+        value: BigNumber.from(fee)
+      }
+    )
   }
 }
 
@@ -180,5 +314,7 @@ interface ChainInfo {
   token: string,
   label: string,
   rpcUrl: string
-  network: Network
+  network: Network,
+  logoUri?: string
+  selector: string
 }

@@ -1,9 +1,21 @@
 export class RPC {
-    static ethRPC = 'https://flashy-few-wildflower.quiknode.pro/8d0390009c7d0b39934822aafc232dcba3cc5eb6/'
-    static maticRPC = 'https://quick-wispy-sponge.matic.quiknode.pro/e90151619f6ba5165325518512b44663d42dea64/'
-    static opRPC = ''
-    static arbRPC = ''
-    static baseRPC = ''
-    static bscRPC = ''
-    static avaxRPC = ''
+    static ethRPC = 'https://rpc.payload.de'
+    static maticRPC = 'https://polygon.llamarpc.com'
+    static opRPC = 'https://optimism.llamarpc.com'
+    static arbRPC = 'https://arbitrum.llamarpc.com'
+    static baseRPC = 'https://base.llamarpc.com'
+    static bscRPC = 'https://binance.llamarpc.com'
+    static avaxRPC = 'https://avalanche.drpc.org'
+}
+
+export class ChainSelectors {
+    static ETH = "5009297550715157269"
+    static OP = "3734403246176062136"
+    static MATIC = "4051577828743386545"
+    static AVAX = "6433500567565415381"
+    static ARB = "4949039107694359620"
+    static BNB = "11344663589394136015"
+    static BASE = "15971525489660198786"
+    static SEPETH = '16015286601757825753'
+    static OPGOERLI = '2664363617261496610'
 }

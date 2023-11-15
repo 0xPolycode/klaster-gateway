@@ -55,11 +55,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
   }
 
   getNetworkURI(chainID: number) {
-    switch(chainID) {
-      case 1: return 'ethereum.svg'
-      case 137: return 'matic.svg'
-      default: return 'unknown.svg'
-    }
+    return this.blockchainService.chains.find(chain => chain.id === chainID)?.logoUri
   }
 
   toggleSendForm() {
@@ -102,8 +98,8 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
       decimals: decimals,
       logo: logo ?? null,
       name: name,
-      symbol: symbol
-    }, recipient, amount)
+      symbol: symbol,
+    }, "Matic", recipient, amount)
   }
 
 }

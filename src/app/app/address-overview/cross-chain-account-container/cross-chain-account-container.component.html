@@ -47,7 +47,7 @@
         cursor-pointer text-slate-500 text-sm rounded-tr-md items-center
          justify-between py-3 border-b border-rose-100">
             <div *ngIf="tag$ | async as tag; else noTagWallet">
-                <span class="font-semibold text-slate-700">{{tag}}</span> ({{derivedWallet | shorten:8:4}})
+                <span class="font-semibold text-slate-700">{{tag}}</span> ({{derivedWallet | shorten:8:6}})
             </div>
             <ng-template #noTagWallet>
                 <div class="">
@@ -92,52 +92,15 @@
             class="col-span-8 border py-3 px-4 rounded-md mx-2 !outline-none font-medium text-sm bg-transparent" 
             placeholder="Search by name, symbol or address" type="text" name="" id="">
 
-            <div class="col-span-8 border-b mb-2 border-rose-50">
-                <div class="px-2 py-4 flex flex-row justify-between items-center gap-x-2 border-rose-50">
-    
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-4" src="../../../../assets/networks/ethereum.svg" alt="" srcset="">
-                        <input checked type="checkbox">
-                    </div>
-    
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-4" src="../../../../assets/networks/matic.svg" alt="" srcset="">
-                        <input checked type="checkbox">
-                    </div>
-    
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-4" src="../../../../assets/networks/optimism.svg" alt="" srcset="">
-                        <input checked type="checkbox">
-                    </div>
-    
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-4" src="../../../../assets/networks/base.svg" alt="" srcset="">
-                        <input checked type="checkbox">
-                    </div>
-    
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-4" src="../../../../assets/networks/arbitrum.svg" alt="" srcset="">
-                        <input checked type="checkbox">
-                    </div>
-        
-                </div>
+
+            <div class="w-full col-span-8">
+                <app-deployed-networks-status-container [derivedWallet]="derivedWallet"></app-deployed-networks-status-container>
             </div>
+
 
 
             <!-- HEADER -->
-            <div class="col-span-8 grid px-2 grid-cols-12 mb-2 mt-2">
-                <div class="col-span-4 text-sm uppercase text-slate-500">
-                    Asset
-                </div>
-
-                <div class="col-span-3 text-start text-sm uppercase text-slate-500">
-                    Price
-                </div>
-
-                <div class="col-span-3 text-sm text-start uppercase text-slate-500">
-                    Value (USD)
-                </div>
-            </div>
+            
 
             <!-- END HEADER -->
 
@@ -145,8 +108,22 @@
 
             <div *ngIf="portfolio$ | async as portfolio; else noItems" class="flex flex-col col-span-8">
 
+                <div class="col-span-8 grid px-2 grid-cols-12 mb-2 mt-4">
+                    <div class="col-span-4 text-sm uppercase text-slate-500">
+                        Asset
+                    </div>
+    
+                    <div class="col-span-3 text-start text-sm uppercase text-slate-500">
+                        Price
+                    </div>
+    
+                    <div class="col-span-3 text-sm text-start uppercase text-slate-500">
+                        Value (USD)
+                    </div>
+                </div>
+
                 <div *ngFor="let item of portfolio">
-                        <app-single-portfolio-asset-container 
+                        <app-single-portfolio-asset-container *ngIf="item !== undefined" 
                             [contractAddress]="item.contractAddress"
                             [wallet]="derivedWallet"
                             [rawBalance]="item.tokenBalance"
