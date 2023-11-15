@@ -1,11 +1,11 @@
 export class RPC {
-    static ethRPC = 'https://rpc.payload.de'
-    static maticRPC = 'https://polygon.llamarpc.com'
-    static opRPC = 'https://optimism.llamarpc.com'
-    static arbRPC = 'https://arbitrum.llamarpc.com'
-    static baseRPC = 'https://base.llamarpc.com'
-    static bscRPC = 'https://binance.llamarpc.com'
-    static avaxRPC = 'https://avalanche.drpc.org'
+    static ethRPC = 'https://eth-pokt.nodies.app'
+    static maticRPC = 'https://polygon.meowrpc.com'
+    static opRPC = 'https://optimism.meowrpc.com'
+    static arbRPC = 'wss://arbitrum-one.publicnode.com'
+    static baseRPC = 'https://base.publicnode.com'
+    static bscRPC = 'https://bsc.publicnode.com'
+    static avaxRPC = 'https://avax.meowrpc.com'
 }
 
 export class ChainSelectors {
