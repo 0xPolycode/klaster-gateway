@@ -1,10 +1,11 @@
 import { Chain } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ethers } from 'ethers';
 import { BehaviorSubject, combineLatest, from, map, of, startWith, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { ErrorService } from 'src/app/shared/error.service';
+import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
 import { ChainSelectors } from 'src/app/shared/variables';
 
 @Component({
@@ -13,6 +14,7 @@ import { ChainSelectors } from 'src/app/shared/variables';
   styleUrls: ['./deploy-cross-chain-account-modal.component.css']
 })
 export class DeployCrossChainAccountModalComponent implements OnInit {
+
 
   deployableNetworks = this.blockchainService.chains.map(network => {
     return {...network, check: new FormControl(true, [])}
@@ -31,6 +33,8 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
       return this.blockchainService.calculateAddress(address, salt.toString())
     })
   )
+
+  @Input() deployShouldBeVisibleSub!: BehaviorSubject<boolean>
 
   deployButtonLoadingSub = new BehaviorSubject(false)
   deployButtonLoading$ = this.deployButtonLoadingSub.asObservable()
@@ -78,7 +82,13 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
       .map(network => network.selector)
   }
 
-  constructor(private blockchainService: BlockchainService, private errorService: ErrorService) { }
+  cancelClicked() {
+    this.miscModalsService.dismissDeployModal()
+  }
+
+  constructor(private blockchainService: BlockchainService, 
+    private errorService: ErrorService,
+    private miscModalsService: MiscModalsServiceService) { }
 
   ngOnInit(): void {
   }

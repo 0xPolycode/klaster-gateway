@@ -45,7 +45,7 @@ export class DeployedNetworksStatusContainerComponent implements OnInit {
     }
     const deployFee = await this.blockchainService.calculateDeploymentFee([chain.selector], "0")
     this.blockchainService.executeContractDeployments([chain.selector], "0", deployFee).catch(err => {
-      this.errorService.showSimpleError(err.data.message)
+      this.errorService.showSimpleError(err)
       this.networkLoadingSub.next(-1)
     })
     

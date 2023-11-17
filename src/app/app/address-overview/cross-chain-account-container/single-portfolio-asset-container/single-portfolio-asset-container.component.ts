@@ -18,6 +18,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
   @Input() rawBalance!: string | null
   @Input() search!: string | null
   @Input() onlyVerified!: boolean | null
+  @Input() addressSalt!: string
 
   metadata$: Observable<TokenMetadataViewModel | null> = of(null)
 
@@ -75,7 +76,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
     return this.onlyVerified ?  metadata.logo !== null : true
   }
 
-  openSendModal(metadata: TokenMetadataViewModel) {
+  openSendModal(metadata: TokenMetadataViewModel, chainID: number) {
 
     const decimals = metadata.decimals
     const logo = metadata.logo
@@ -99,7 +100,13 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
       logo: logo ?? null,
       name: name,
       symbol: symbol,
-    }, "Matic", recipient, amount)
+    }, 
+      this.addressSalt,
+      this.contractAddress, 
+      chainID, 
+      recipient, 
+      amount
+    )
   }
 
 }

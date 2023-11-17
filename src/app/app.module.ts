@@ -21,6 +21,7 @@ import { SinglePortfolioAssetContainerComponent } from './app/address-overview/c
 import { DeployCrossChainAccountModalComponent } from './app/address-overview/deploy-cross-chain-account-modal/deploy-cross-chain-account-modal.component';
 import { DeployedNetworksStatusContainerComponent } from './app/address-overview/cross-chain-account-container/deployed-networks-status-container/deployed-networks-status-container.component';
 import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
+import { TransactionModalsComponent } from './shared/transaction-modals/transaction-modals.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ErrorModalComponent } from './shared/error-modal/error-modal.component'
     SinglePortfolioAssetContainerComponent,
     DeployCrossChainAccountModalComponent,
     DeployedNetworksStatusContainerComponent,
-    ErrorModalComponent
+    ErrorModalComponent,
+    TransactionModalsComponent
   ],
   imports: [
     BrowserModule,

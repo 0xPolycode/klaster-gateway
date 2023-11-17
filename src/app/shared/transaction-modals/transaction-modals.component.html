@@ -1,0 +1,17 @@
+
+
+<!-- TX Processing -->
+<div class="fixed top-0 left-0 w-screen flex flex-row justify-center items-center
+     h-screen bg-[rgba(255,255,255,0.3)] backdrop-blur-[2px]" *ngIf="txIsProcessing$ | async">
+
+    <div class="max-w-md w-full p-6 border bg-white items-center
+        flex flex-col text-sm uppercase justify-center font-medium">
+
+        <div class="mt-8">
+            Transaction processing...
+        </div>
+
+        <div class="loader">Loading...</div>
+    </div>
+
+</div>

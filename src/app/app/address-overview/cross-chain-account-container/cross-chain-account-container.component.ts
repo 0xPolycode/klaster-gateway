@@ -16,6 +16,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   @Input() derivedWallet!: string
   @Input() isCollapsed = true
+  @Input() salt!: string
 
   portfolioFetchTriggerSub = new BehaviorSubject<number | null>(null)
   portfolioFetchTrigger$ = this.portfolioFetchTriggerSub.asObservable()
@@ -46,7 +47,8 @@ export class CrossChainAccountContainerComponent implements OnInit {
     }),
     map(chainPortfolios => {
       return chainPortfolios.flatMap(portfolio => portfolio?.tokenBalances)
-    })
+    }),
+   
   )
   
   

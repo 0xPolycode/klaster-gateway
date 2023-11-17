@@ -9,7 +9,7 @@ export class ShortenPipe implements PipeTransform {
     const start = value.substring(0, (startLength))
     const end = value.substring(
       (value.length - 1 - endLength),
-      (value.length - 1)
+      (value.length)
     )
     const interfix = showElipsis ? '...' : ''
     return `${start}${interfix}${end}`

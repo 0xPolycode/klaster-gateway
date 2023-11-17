@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div *ngFor="let derivedWallet of wallets; let i = index">
-                            <app-cross-chain-account-container [isCollapsed]="!(i === 0)"
+                            <app-cross-chain-account-container [salt]="i.toString()" [isCollapsed]="!(i === 0)"
                                 [derivedWallet]="derivedWallet"></app-cross-chain-account-container>
                         </div>
                         <div *ngIf="wallets.length === 0">
@@ -177,8 +177,8 @@
                         {{txData.amount}}
                     </div>
                     <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-6 w-6 p-1 bg-white border rounded-full" [src]="txData.metadata.logo" alt="" srcset=""> 
-                        <div class="font-semibold">{{txData.metadata.symbol}}</div>
+                        <img class="h-6 w-6 p-1 bg-white border rounded-full" [src]="txData.metadata?.logo" alt="" srcset=""> 
+                        <div class="font-semibold">{{txData.metadata?.symbol}}</div>
                     </div>
                 </div>
             </div>
@@ -187,8 +187,8 @@
         <div class="col-span-4">
             <div class="text-sm uppercase font-semibold text-slate-700">Network</div>
             <div class="flex flex-row gap-x-2 items-center justify-center px-2 py-2 mt-2 border rounded-md text-sm text-slate-700">
-                <img class="h-6 w-6 p-1 bg-white border rounded-full" src="../../../assets/networks/ethereum.svg" alt="" srcset=""> 
-                <div class="font-semibold uppercase text-sm">Ethereum Mainnet</div>
+                <img class="h-6 w-6 p-1 bg-white border rounded-full" src="../../../assets/networks/{{txData.network.logoUri}}" alt="" srcset=""> 
+                <div class="font-semibold uppercase text-sm">{{txData.network.label}}</div>
             </div>
         </div>
 
@@ -213,7 +213,7 @@
                   
                 Decline
             </div>
-            <div class="w-full mt-4 py-3 app-button text-center uppercase text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
+            <div (click)="sendTransaction(txData)" class="w-full mt-4 py-3 app-button text-center uppercase text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
                   </svg>              
@@ -224,7 +224,7 @@
     </div>
 </div>
 
-<div *ngIf="deployWalletModalVisible$ | async">
+<div *ngIf="deployShouldBeVisible$ | async">
     <app-deploy-cross-chain-account-modal></app-deploy-cross-chain-account-modal>
 </div>
 
@@ -233,3 +233,5 @@
         Please connect your wallet to use the Klaster app.
     </div>
 </ng-template>
+
+<app-transaction-modals></app-transaction-modals>

@@ -5,7 +5,7 @@ import Onboard from '@web3-onboard/core'
 import chains from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import safeModule from '@web3-onboard/gnosis'
-import { ChainSelectors, RPC } from '../variables';
+import { ChainSelectors, RPC, logoSvg } from '../variables';
 
 import { Alchemy, Network } from "alchemy-sdk";
 import { formatBytes32String } from 'ethers/lib/utils';
@@ -47,7 +47,7 @@ export class BlockchainService {
       id: 1,
       token: 'ETH',
       label: 'Ethereum',
-      rpcUrl: RPC.ethRPC,
+      rpcUrl: RPC.ethRPC!,
       network: Network.ETH_MAINNET,
       logoUri: 'ethereum.svg',
       selector: ChainSelectors.ETH
@@ -56,7 +56,7 @@ export class BlockchainService {
       id: 137,
       token: 'MATIC',
       label: 'Polygon',
-      rpcUrl: RPC.maticRPC,
+      rpcUrl: RPC.maticRPC!,
       network: Network.MATIC_MAINNET,
       logoUri: 'matic.svg',
       selector: ChainSelectors.MATIC
@@ -65,7 +65,7 @@ export class BlockchainService {
       id: 42161,
       token: 'ETH',
       label: 'Arbitrum',
-      rpcUrl: RPC.arbRPC,
+      rpcUrl: RPC.arbRPC!,
       network: Network.ARB_MAINNET,
       logoUri: 'arbitrum.svg',
       selector: ChainSelectors.ARB
@@ -74,7 +74,7 @@ export class BlockchainService {
       id: 10,
       token: 'ETH',
       label: 'Optimism',
-      rpcUrl: RPC.opRPC,
+      rpcUrl: RPC.opRPC!,
       network: Network.OPT_MAINNET,
       logoUri: 'optimism.svg',
       selector: ChainSelectors.OP
@@ -83,7 +83,7 @@ export class BlockchainService {
       id: 8453,
       token: 'ETH',
       label: 'Base',
-      rpcUrl: RPC.baseRPC,
+      rpcUrl: RPC.baseRPC!,
       network: Network.BASE_MAINNET,
       logoUri: 'base.svg',
       selector: ChainSelectors.BASE
@@ -91,7 +91,7 @@ export class BlockchainService {
   ]
 
   readProviders = this.prodChains.map(chain => {
-    return new ethers.providers.JsonRpcProvider(chain.rpcUrl)
+    return new ethers.providers.JsonRpcProvider(chain.rpcUrl, chain.id)
   })
 
   testChains: ChainInfo[] = [
@@ -114,12 +114,8 @@ export class BlockchainService {
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
     </svg>  
     `,
-    logo: `
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-    </svg>
-    `,
-    description: '',
+    logo: logoSvg,
+    description: 'Klaster enables any wallet to create cross-chain accounts',
     recommendedInjectedWallets: [
       { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
       { name: 'MetaMask', url: 'https://metamask.io' }
@@ -128,6 +124,7 @@ export class BlockchainService {
 
   onboard = Onboard({
     wallets: this.wallets,
+    appMetadata: this.appMetadata,
     chains: this.chains.map(chain => {
       return {
         id: chain.id,
@@ -154,7 +151,7 @@ export class BlockchainService {
     return walletPromise
   }
 
-  private getKlasterSingletonSigner() {
+  getKlasterSingletonSigner() {
     const providerOrSigner = this.connectedProviderSub.value?.getSigner()
     const proxyFactory = require('../../../assets/abis/KlasterGatewaySingleton.json')
     if(!providerOrSigner) { return null }
