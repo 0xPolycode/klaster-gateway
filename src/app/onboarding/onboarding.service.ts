@@ -42,22 +42,6 @@ export class OnboardingService {
   }
 
   finishOnboarding() {
-    this.activeStepSub.next({ value: 0 })
-    const address = this.addressSub.value
-    const type = this.privateContractTypeSub.value
-
-
-    if(address && type) {
-      const derivedAddress = this.blockchainService.calculateAddress(address, '0').then(derived => {
-        this.sessionService.addNewWallet({
-          contractType: type,
-          wallet: address,
-          derivedWallets: [derived]
-        })
-      }).catch(err => {
-        alert("Saving address failed")
-      })
-    }
   }
 
 }

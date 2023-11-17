@@ -268,8 +268,6 @@ export class BlockchainService {
 
     const wallets = await klaster['getDeployedWallets'](connectedWallet) as string[]
 
-    console.log(`Wallets on ${chainID}: ${wallets}. Checking against ${address}`)
-
     return wallets.includes(address)
   }
 

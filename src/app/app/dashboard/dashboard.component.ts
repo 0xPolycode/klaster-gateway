@@ -37,9 +37,5 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  deleteAccount(address: string) {
-    this.sessionService.removeExistingWallet(address)
-  }
-
 
 }

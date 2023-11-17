@@ -3,14 +3,9 @@ import { Store, StoreConfig } from '@datorama/akita';
 import { ContractType } from '../onboarding/onboarding-select-type/onboarding-select-type.component';
 import { Wallet } from 'ethers';
 
-export type WalletStorage = {
-    contractType: ContractType,
-    wallet: string
-    derivedWallets: DerivedWalletData[]
-}
 
 export interface SessionState {
-   savedWallets: WalletStorage[]
+   savedWallets: DerivedWalletData[]
 }
 
 export interface DerivedWalletData {

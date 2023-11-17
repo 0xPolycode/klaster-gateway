@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SessionStore, WalletStorage } from '../session.store';
+import { SessionStore } from '../session.store';
 import { BlockchainService } from '../blockchain/blockchain.service';
 
 @Injectable({
@@ -9,66 +9,18 @@ export class SessionService {
   constructor(private sessionStore: SessionStore,
     private blockchainService: BlockchainService) {}
 
-  addNewWallet(wallet: WalletStorage) {
-      this.sessionStore.update(session => {
-        const savedWallets = session.savedWallets.map(wallet => wallet.wallet)
-        if(savedWallets.includes(wallet.wallet)) { return { savedWallets: session.savedWallets } }
-        return { savedWallets: session.savedWallets.concat(wallet) }
-      })
-  }
-
   reset() {
     this.sessionStore.reset()
   }
 
-  removeExistingWallet(walletAddress: string) {
-    this.sessionStore.update(session => ({
-      savedWallets: session.savedWallets.filter(wallet => wallet.wallet !== walletAddress)
-    }))
-  }
-
   tagWallet(address: string, tag: string) {
     this.sessionStore.update(session => {
-      const walletStore = session.savedWallets
-        .find(wallet => wallet.derivedWallets.map(x => x.address).includes(address))
-      if(!walletStore) { return session }
-
-      const newStore: WalletStorage = {
-        contractType: walletStore.contractType,
-        derivedWallets: walletStore.derivedWallets.map(wallet => {
-          if(wallet.address !== address) { return wallet }
-          return { address: wallet.address, tag: tag }
-        }),
-        wallet: walletStore.wallet
+      return {
+        savedWallets: session.savedWallets.concat({
+          address: address,
+          tag: tag
+        })
       }
-
-      const newSavedWallets = session.savedWallets.map(saved => {
-        if(saved.wallet !== newStore.wallet) { return saved }
-        return newStore 
-      })
-
-      return { savedWallets: newSavedWallets }
-      
-    })
-  }
-
-  addCrossChainAccount(forWallet: string, newDerivedWallet: string) {
-    this.sessionStore.update(session => {
-      const walletStore = session.savedWallets.filter(saved => saved.wallet === forWallet).at(0)
-      if(!walletStore) { return { savedWallets: session.savedWallets} }
-
-      const newWalletStore: WalletStorage = {
-        contractType: walletStore.contractType,
-        derivedWallets: walletStore.derivedWallets.concat({address: newDerivedWallet, tag: null}),
-        wallet: walletStore.wallet
-      }
-
-      const newSavedWallets = session.savedWallets.map(saved => {
-        if(saved.wallet !== forWallet) { return saved }
-        return newWalletStore
-      })
-      
-      return { savedWallets: newSavedWallets }
     })
   }
 }

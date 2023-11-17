@@ -59,11 +59,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
   // )
 
   tag$ = this.sessionQuery.wallets$.pipe(
-    map(wallets => {
-      console.log(wallets)
-      return wallets.flatMap(wallet => wallet.derivedWallets)
-        .find(wallet => wallet.address === this.derivedWallet)?.tag
-    })
+    map(wallets => wallets.find(wallet => wallet.address === this.derivedWallet))
   )
 
   supportedNetworks = [
@@ -110,6 +106,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
     const tag = this.addressTagInputForm.value
     if(!tag) { return }
     this.storageService.tagWallet(this.derivedWallet, tag)
+    this.addressTagInputToggledSub.next(false)
   }
 
 }

@@ -6,7 +6,7 @@ import { SendTxPreview, TransactionService } from 'src/app/shared/blockchain/tra
 import { ErrorService } from 'src/app/shared/error.service';
 import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
 import { SessionQuery } from 'src/app/shared/session.query';
-import { DerivedWalletData, SessionStore, WalletStorage } from 'src/app/shared/session.store';
+import { DerivedWalletData, SessionStore } from 'src/app/shared/session.store';
 import { SessionService } from 'src/app/shared/storage/session.service';
 
 @Component({
