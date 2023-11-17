@@ -12,6 +12,8 @@ import { formatBytes32String } from 'ethers/lib/utils';
 import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { SessionQuery } from '../session.query';
 import { SessionService } from '../storage/session.service';
+import SafeAppsSDK from '@safe-global/safe-apps-sdk/dist/src/sdk';
+import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -23,6 +25,8 @@ const KLASTER_SINLGETON_MAINNET_ADDRESS = '0xef3c8e083De1AE85afecdAf5D6AbC15427f
 })
 export class BlockchainService {
 
+
+  safeSDK = new SafeAppsSDK()
 
   private connectedProviderSub = new BehaviorSubject<ethers.providers.Web3Provider | null>(null)
   connectedProvider$ = this.connectedProviderSub.asObservable().pipe(
@@ -146,18 +150,34 @@ export class BlockchainService {
   })
 
   constructor(private query: SessionQuery, private sessionService: SessionService) { 
-    const ethereum = (window as any).ethereum
-    this.query.isLoggedIn$.subscribe(isLoggedIn => {
-      if(ethereum && isLoggedIn) {
-        ethereum.request({ method: 'eth_accounts'}).then((accounts: any) => {
-          if(accounts.length) {
-            this.connectedProviderSub.next(
-              new ethers.providers.Web3Provider(ethereum, 'any')
-            )
-          }
-        })
-      }
+
+    this.safeSDK.safe.getInfo().then(info => {
+      // App runs inside Safe
+
+      const safeProvider = new SafeAppProvider(info, this.safeSDK as any)
+      this.connectedProviderSub.next(
+        new ethers.providers.Web3Provider(safeProvider, 'any')
+      )
+
+    }).catch(_ => {
+      // App not in Safe
+
+      const ethereum = (
+        window as any).ethereum
+      this.query.isLoggedIn$.subscribe(isLoggedIn => {
+        if(ethereum && isLoggedIn) {
+          ethereum.request({ method: 'eth_accounts'}).then((accounts: any) => {
+            if(accounts.length) {
+              this.connectedProviderSub.next(
+                new ethers.providers.Web3Provider(ethereum, 'any')
+              )
+            }
+          })
+        }
+      })
+
     })
+    
     
   }
 
