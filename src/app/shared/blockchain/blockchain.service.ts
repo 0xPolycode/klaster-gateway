@@ -150,34 +150,6 @@ export class BlockchainService {
   })
 
   constructor(private query: SessionQuery, private sessionService: SessionService) { 
-
-    this.safeSDK.safe.getInfo().then(info => {
-      // App runs inside Safe
-
-      const safeProvider = new SafeAppProvider(info, this.safeSDK as any)
-      this.connectedProviderSub.next(
-        new ethers.providers.Web3Provider(safeProvider, 'any')
-      )
-
-    }).catch(_ => {
-      // App not in Safe
-
-      const ethereum = (
-        window as any).ethereum
-      this.query.isLoggedIn$.subscribe(isLoggedIn => {
-        if(ethereum && isLoggedIn) {
-          ethereum.request({ method: 'eth_accounts'}).then((accounts: any) => {
-            if(accounts.length) {
-              this.connectedProviderSub.next(
-                new ethers.providers.Web3Provider(ethereum, 'any')
-              )
-            }
-          })
-        }
-      })
-
-    })
-    
     
   }
 
