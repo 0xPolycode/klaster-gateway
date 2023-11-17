@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 import { ContractType } from '../onboarding/onboarding-select-type/onboarding-select-type.component';
-import { Wallet } from 'ethers';
+import { Wallet, ethers } from 'ethers';
 
 
 export interface SessionState {
    savedWallets: DerivedWalletData[]
+   isLoggedIn: boolean
 }
 
 export interface DerivedWalletData {
@@ -15,7 +16,8 @@ export interface DerivedWalletData {
 
 export function createInitialState(): SessionState {
   return {
-    savedWallets: []
+    savedWallets: [],
+    isLoggedIn: false
   };
 }
 

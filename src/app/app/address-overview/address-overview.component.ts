@@ -65,6 +65,10 @@ export class AddressOverviewComponent implements OnInit {
     this.txService.sendTransaction(txData).then()
   }
 
+  logOut() {
+    this.blockchainService.logOut()
+  }
+
 
   async addNewWallet(derivedWallets: DerivedWalletData[]) {
     // const newWallet = await this.blockchainService.calculateAddress(

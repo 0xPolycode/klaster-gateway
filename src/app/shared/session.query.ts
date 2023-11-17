@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 export class SessionQuery extends Query<SessionState> {
     
     wallets$ = this.select(state => state.savedWallets)
+    isLoggedIn$ = this.select(state => state.isLoggedIn)
   
     constructor(store: SessionStore) {
     super(store);

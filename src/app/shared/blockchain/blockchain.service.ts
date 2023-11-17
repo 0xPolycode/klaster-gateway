@@ -9,7 +9,9 @@ import { ChainSelectors, RPC, logoSvg } from '../variables';
 
 import { Alchemy, Network } from "alchemy-sdk";
 import { formatBytes32String } from 'ethers/lib/utils';
-import { BehaviorSubject, from, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
+import { SessionQuery } from '../session.query';
+import { SessionService } from '../storage/session.service';
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -23,7 +25,15 @@ export class BlockchainService {
 
 
   private connectedProviderSub = new BehaviorSubject<ethers.providers.Web3Provider | null>(null)
-  connectedProvider$ = this.connectedProviderSub.asObservable()
+  connectedProvider$ = this.connectedProviderSub.asObservable().pipe(
+    tap(provider => {
+      provider?.on("network", (newNetwork, oldNetwork) => {
+        if (oldNetwork) {
+            window.location.reload();
+        }
+    });
+    })
+  )
 
   address$ = this.connectedProvider$.pipe(
     switchMap(provider => {
@@ -135,7 +145,25 @@ export class BlockchainService {
     }),
   })
 
-  constructor() { 
+  constructor(private query: SessionQuery, private sessionService: SessionService) { 
+    const ethereum = (window as any).ethereum
+    this.query.isLoggedIn$.subscribe(isLoggedIn => {
+      if(ethereum && isLoggedIn) {
+        ethereum.request({ method: 'eth_accounts'}).then((accounts: any) => {
+          if(accounts.length) {
+            this.connectedProviderSub.next(
+              new ethers.providers.Web3Provider(ethereum, 'any')
+            )
+          }
+        })
+      }
+    })
+    
+  }
+
+  logOut() {
+    this.sessionService.setLogin(false)
+    this.connectedProviderSub.next(null)
   }
 
   async getAddress() {
@@ -147,6 +175,7 @@ export class BlockchainService {
     const walletPromise = this.onboard.connectWallet()
     walletPromise.then(res => {
       this.connectedProviderSub.next(new ethers.providers.Web3Provider(res[0].provider))
+      this.sessionService.setLogin(true)
     })
     return walletPromise
   }
