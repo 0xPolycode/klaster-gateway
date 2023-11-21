@@ -54,6 +54,22 @@ export class BlockchainService {
 
   safeInfo$ = from(this.safeSDK.safe.getInfo())
 
+  isInSafe$ = this.safeInfo$.pipe(
+    map(info => {
+      return info.chainId
+    })
+  )
+
+  gasBalance$ = combineLatest([
+    this.connectedProvider$,
+    from(this.getAddress())
+  ]).pipe(
+    switchMap(([provider, address]) => {
+      return provider ? 
+        from(provider.getBalance(address)) : of(null)
+    })
+  )
+
   wallets = [this.safe, this.injected]
 
   apiKey = 'sB2CDInJN_t6g0Id2SkYHG5nBycaQMK9'

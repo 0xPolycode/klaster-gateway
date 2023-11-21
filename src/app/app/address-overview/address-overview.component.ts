@@ -20,7 +20,13 @@ export class AddressOverviewComponent implements OnInit {
   network$ = this.address$.pipe(
     switchMap(_ => this.blockchainService.connectedProvider$),
     map(provider => provider?.network.chainId),
-    map(chainID => this.blockchainService.chains.find(network => network.id === chainID))
+    switchMap(chainID => {
+      return chainID ? of(chainID) :
+        this.blockchainService.safeInfo$.pipe(
+          map(safeInfo => safeInfo.chainId)
+        )
+    }),
+    map(chainID => this.blockchainService.chains.find(network => network.id === chainID)),
   )
 
   deployShouldBeVisible$ = this.miscModalsService.deployCrossChainModalVisible$
@@ -32,7 +38,8 @@ export class AddressOverviewComponent implements OnInit {
     switchMap(_ => from(this.blockchainService.getDeployedWallets()))
   )
 
-  safeInfo$ = this.blockchainService.safeInfo$
+  isInSafe$ = this.blockchainService.isInSafe$
+
   
   // from(this.blockchainService.getDeployedWallets()).pipe(
   //   tap(wallets => console.log("WALLETS", wallets))

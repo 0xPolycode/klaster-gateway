@@ -9,7 +9,7 @@
                     Klaster incentives programme
                 </div>
                 <div class="text-sm text-slate-600 mt-2">
-                    Klaster is currently running an incentives programme for early users. In order to become eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer" href="https://klaster.io" target="_blank">read the rewards programme details</a>
+                    Klaster is currently running an incentives programme for early users. In order to become eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer" href="https://klaster.io" target="_blank">read the rewards programme details.</a>
                 </div>
 
             </div>
@@ -65,7 +65,7 @@
                                   </svg>
                                 <div>Connect wallet</div>    
                                 <div>
-                                    {{(safeInfo$ | async)?.chainId}}
+                                    {{isInSafe$ | async}}
                                 </div>                          
                             </button>
                         </ng-template>
