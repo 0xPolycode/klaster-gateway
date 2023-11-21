@@ -18,14 +18,7 @@ export class AddressOverviewComponent implements OnInit {
 
   address$ = this.blockchainService.address$
   network$ = this.address$.pipe(
-    switchMap(_ => this.blockchainService.connectedProvider$),
-    map(provider => provider?.network.chainId),
-    switchMap(chainID => {
-      return chainID ? of(chainID) :
-        this.blockchainService.safeInfo$.pipe(
-          map(safeInfo => safeInfo.chainId)
-        )
-    }),
+    switchMap(_ => this.blockchainService.connectedNetworkChainID$),
     map(chainID => this.blockchainService.chains.find(network => network.id === chainID)),
   )
 
@@ -39,11 +32,6 @@ export class AddressOverviewComponent implements OnInit {
   )
 
   isInSafe$ = this.blockchainService.isInSafe$
-
-  
-  // from(this.blockchainService.getDeployedWallets()).pipe(
-  //   tap(wallets => console.log("WALLETS", wallets))
-  // )
 
   walletTogglerVisibleSub = new BehaviorSubject(false)
   walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()

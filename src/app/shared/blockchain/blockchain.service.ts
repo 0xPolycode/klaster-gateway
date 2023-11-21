@@ -54,6 +54,14 @@ export class BlockchainService {
 
   safeInfo$ = from(this.safeSDK.safe.getInfo())
 
+  connectedNetworkChainID$ = this.connectedProvider$.pipe(
+    switchMap(provider => {
+      return provider?.network.chainId ? 
+        of(provider.network.chainId) : 
+        this.safeInfo$.pipe(map(info => info.chainId))
+    })
+  )
+
   isInSafe$ = this.safeInfo$.pipe(
     map(info => {
       return info.chainId
