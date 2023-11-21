@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { BigNumber, ethers } from 'ethers';
-import { BehaviorSubject, Observable, combineLatest, forkJoin, from, map, of, share, shareReplay, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, forkJoin, from, map, of, share, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { PriceFeedService } from 'src/app/shared/services/price-feed.service';
 import { SessionQuery } from 'src/app/shared/session.query';
@@ -38,6 +38,9 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   addressTagInputForm = new FormControl('', [Validators.required])
 
+  isRefreshingDataSub = new BehaviorSubject(false)
+  isRefreshingData$ = this.isRefreshingDataSub.asObservable()
+
   portfolio$ = this.portfolioFetchTrigger$.pipe(
     switchMap(_ => {
       return combineLatest(
@@ -48,15 +51,8 @@ export class CrossChainAccountContainerComponent implements OnInit {
     map(chainPortfolios => {
       return chainPortfolios.flatMap(portfolio => portfolio?.tokenBalances)
     }),
-   
+    tap(_ => this.isRefreshingDataSub.next(false))
   )
-  
-  
-  // combineLatest([
-  //   this.portfolioFetchTrigger$,
-  // ]).pipe(
-
-  // )
 
   tag$ = this.sessionQuery.wallets$.pipe(
     map(wallets => wallets.find(wallet => wallet.address === this.derivedWallet))
@@ -73,21 +69,14 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   constructor(private blockchainService: BlockchainService,
     private storageService: SessionService,
-    private sessionQuery: SessionQuery,
-    private pricefeedService: PriceFeedService) { }
+    private sessionQuery: SessionQuery) { }
 
   ngOnInit(): void {
     this.isCollapsedSub.next(this.isCollapsed)
     this.portfolioFetchTriggerSub.next(0)
   }
 
-
   toggleVisibility() {
-    // if(this.isCollapsedSub.value) {
-    //   setTimeout(() => {
-    //     this.showOnlyVerified.setValue(true)
-    //   }, 50);
-    // }
     this.isCollapsedSub.next(!this.isCollapsedSub.value)
   }
 
@@ -107,6 +96,11 @@ export class CrossChainAccountContainerComponent implements OnInit {
     if(!tag) { return }
     this.storageService.tagWallet(this.derivedWallet, tag)
     this.addressTagInputToggledSub.next(false)
+  }
+
+  refreshData() {
+    this.isRefreshingDataSub.next(true)
+    this.portfolioFetchTriggerSub.next(0)
   }
 
 }

@@ -40,10 +40,34 @@
                 <button (click)="setAddressTag()" [disabled]="!addressTagInputForm.valid" class="flex flex-row items-center cursor-pointer justify-center app-button my-2 mr-2 !rounded-md px-4 text-xs">Set</button>
             </div>
         </div>
+
+        <div class="relative h-full">
+            <div (click)="refreshData()"
+            class="border-b group relative border-r h-full border-rose-100 flex
+             flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
+             <svg [class.animate-spin]="(isRefreshingData$ | async)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+                           
+
+            <div *ngIf="(addressTagInputToggled$ | async) === false" class="absolute hidden group-hover:flex group-hover:opacity-80 backdrop-blur-[2px] font-medium opacity-0 transition-all w-32
+             bg-gray-600 top-8 left-6 rounded-md uppercase px-3 py-1 text-[10px] text-center text-white">
+                Refresh data
+            </div>
+
+            
+
+        </div>
+            <div *ngIf="addressTagInputToggled$ | async" class="fixed bg-white rounded-b-md border z-[200] w-96
+             top-12 left-[3.9rem] flex flex-row justify-between gap-x-2">
+                <input [formControl]="addressTagInputForm" class="pl-4 py-3 outline-none rounded-bl-md w-full text-sm" type="text" placeholder="Tag" name="" id="">
+                <button (click)="setAddressTag()" [disabled]="!addressTagInputForm.valid" class="flex flex-row items-center cursor-pointer justify-center app-button my-2 mr-2 !rounded-md px-4 text-xs">Set</button>
+            </div>
+        </div>
         
         
 
-        <div (click)="toggleVisibility()" class="col-span-10 px-5 flex flex-row hover:bg-rose-50 
+        <div (click)="toggleVisibility()" class="col-span-9 px-5 flex flex-row hover:bg-rose-50 
         cursor-pointer text-slate-500 text-sm rounded-tr-md items-center
          justify-between py-3 border-b border-rose-100">
             <div *ngIf="tag$ | async as tag; else noTagWallet">

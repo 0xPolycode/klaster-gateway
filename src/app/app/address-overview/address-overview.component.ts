@@ -31,6 +31,8 @@ export class AddressOverviewComponent implements OnInit {
   derivedWallets$ = this.address$.pipe(
     switchMap(_ => from(this.blockchainService.getDeployedWallets()))
   )
+
+  safeInfo$ = this.blockchainService.safeInfo$
   
   // from(this.blockchainService.getDeployedWallets()).pipe(
   //   tap(wallets => console.log("WALLETS", wallets))

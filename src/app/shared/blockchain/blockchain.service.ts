@@ -52,6 +52,8 @@ export class BlockchainService {
   safe = safeModule()
   injected = injectedModule()
 
+  safeInfo$ = from(this.safeSDK.safe.getInfo())
+
   wallets = [this.safe, this.injected]
 
   apiKey = 'sB2CDInJN_t6g0Id2SkYHG5nBycaQMK9'
@@ -150,7 +152,6 @@ export class BlockchainService {
   })
 
   constructor(private query: SessionQuery, private sessionService: SessionService) { 
-    
   }
 
   logOut() {
