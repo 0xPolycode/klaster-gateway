@@ -52,7 +52,9 @@ export class BlockchainService {
   safe = safeModule()
   injected = injectedModule()
 
-  safeInfo$ = from(this.safeSDK.safe.getInfo())
+  safeInfo$ = from(this.safeSDK.safe.getInfo()).pipe(
+    tap(info => console.log(`Safe Info: ${info}`))
+  )
 
   connectedNetworkChainID$ = this.connectedProvider$.pipe(
     switchMap(provider => {
@@ -70,9 +72,10 @@ export class BlockchainService {
 
   gasBalance$ = combineLatest([
     this.connectedProvider$,
-    from(this.getAddress())
+    this.address$
   ]).pipe(
     switchMap(([provider, address]) => {
+      if(!address) { return of(null) }
       return provider ? 
         from(provider.getBalance(address)) : of(null)
     })
@@ -197,6 +200,10 @@ export class BlockchainService {
     return walletPromise
   }
 
+  getBalance(address: string) {
+    return this.connectedProviderSub.value?.getBalance(address)
+  }
+
   getKlasterSingletonSigner() {
     const providerOrSigner = this.connectedProviderSub.value?.getSigner()
     const proxyFactory = require('../../../assets/abis/KlasterGatewaySingleton.json')
@@ -300,7 +307,7 @@ export class BlockchainService {
       await address,
       0,
       [],
-      BigNumber.from("2000000"),
+      BigNumber.from("700000"),
       formatBytes32String("")
     )
   }

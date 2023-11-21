@@ -31,8 +31,6 @@ export class AddressOverviewComponent implements OnInit {
     switchMap(_ => from(this.blockchainService.getDeployedWallets()))
   )
 
-  isInSafe$ = this.blockchainService.isInSafe$
-
   walletTogglerVisibleSub = new BehaviorSubject(false)
   walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()
 

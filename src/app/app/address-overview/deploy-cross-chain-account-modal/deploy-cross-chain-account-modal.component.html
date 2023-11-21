@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 w-screen flex flex-row items-center justify-center h-screen bg-[rgba(0,0,0,0.2)] z-50 backdrop-blur-[1px]">
+<div *ngIf="connectedNetwork$ | async as connected" class="fixed top-0 left-0 w-screen flex flex-row items-center justify-center h-screen bg-[rgba(0,0,0,0.2)] z-50 backdrop-blur-[1px]">
     <div class="max-w-2xl w-full bg-white border rounded-md p-8">
         <div class="uppercase font-semibold mb-4 text-rose-700">
             Deploy new cross-chain account
@@ -18,10 +18,25 @@
         </div>
 
         <div class="uppercase font-semibold text-slate-700 mt-6 text-sm">
-            Select networks
+            Connected network (always deployed)
         </div>
+        <div *ngIf="connectedNetwork$ | async as network" class="flex mt-2 flex-row gap-x-4 justify-between 
+                rounded-md uppercase w-full
+                font-semibold text-slate-700 bg-slate-50
+                 items-center text-xs py-2 px-4">
+                 <div class="flex flex-row gap-x-2 w-full items-center justify-center">
+                    <img class="h-7 w-7 border p-1 bg-white rounded-full" src="../../../assets/networks/{{network.logoUri}}" alt="" srcset="">
+                    <div>{{network.label}}</div>
+                 </div>
+                
+        </div>
+
+        <div class="uppercase font-semibold text-slate-700 mt-6 text-sm">
+            Select remote networks
+        </div>
+       
         <div class="grid grid-cols-3 gap-4 mt-4">
-            <div *ngFor="let network of deployableNetworks" class="flex flex-row gap-x-4 justify-between 
+            <div *ngFor="let network of deployableNetworks" [class.hidden]="network.id === connected.id" class="flex flex-row gap-x-4 justify-between 
                 rounded-md uppercase w-full
                 font-semibold text-slate-700 bg-slate-50
                  items-center text-xs py-2 px-4">
@@ -40,7 +55,7 @@
              justify-center items-center uppercase text-xs font-semibold border h-full">
                 Cancel
             </div>
-            <button [disabled]="deployButtonLoading$ | async" *ngIf="deploymentFee$ | async as fee" (click)="deployContracts(fee)" 
+            <button [disabled]="(deployButtonLoading$ | async) || (notEnoughFundsToDeploy$ | async)" *ngIf="deploymentFee$ | async as fee" (click)="deployContracts(fee)" 
             class="app-button py-3 w-full flex flex-row gap-x-3 justify-center items-center text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
@@ -49,22 +64,35 @@
                     Loading...
                   </div>
                   <ng-template #notLoading>
-                    <div>
-                        Deploy
+                    <div *ngIf="notEnoughFundsToDeploy$ | async; else deployAvailable">
+                        Not enough gas
                       </div>
+                      <ng-template #deployAvailable>
+                        <div>
+                            Deploy
+                        </div>
+                      </ng-template>
                   </ng-template>
                   
             </button>
         </div>
         
 
-        <div class="mt-4 text-slate-600 flex flex-col items-end">
-            <div class="uppercase text-slate-500 text-xs font-medium">
-                Deployment gas fee
+        <div class="mt-4 text-slate-600  grid grid-cols-2">
+            <div class="flex flex-col text-xs text-indigo-700">
+                <div class="bg-indigo-50 rounded-md p-3">
+                    <b>Expensive deployment?</b> Try selecting fewer remote networks. 
+                </div>
             </div>
-            <div class="font-bold">
-                {{deploymentFee$ | async}} Wei
-            </div> 
+            <div class="flex flex-col items-end justify-end">
+                <div class="uppercase text-slate-500 text-xs font-medium">
+                    Deployment price
+                </div>
+                <div class="font-bold">
+                    {{deploymentFeeString$ | async}}
+                </div> 
+            </div>
+            
         </div>
         
     </div>

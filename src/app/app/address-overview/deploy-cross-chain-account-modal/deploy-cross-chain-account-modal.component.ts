@@ -1,7 +1,7 @@
 import { Chain } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { BehaviorSubject, combineLatest, from, map, of, startWith, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { ErrorService } from 'src/app/shared/error.service';
@@ -34,6 +34,12 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
     })
   )
 
+  connectedNetwork$ = this.blockchainService.connectedNetworkChainID$.pipe(
+    map(id => {
+      return this.blockchainService.chains.find(chain => chain.id === id)
+    })
+  )
+
   @Input() deployShouldBeVisibleSub!: BehaviorSubject<boolean>
 
   deployButtonLoadingSub = new BehaviorSubject(false)
@@ -54,6 +60,24 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
         chainSelectors,
         salt.toString()
       )
+    })
+  )
+
+  deploymentFeeString$ = this.deploymentFee$.pipe(
+    map(contractFee => {
+      return BigNumber.from(contractFee).add(
+        BigNumber.from(700000).mul(70000000000)
+      )
+    }),
+    map(fee => ethers.utils.formatEther(fee))
+  )
+
+  notEnoughFundsToDeploy$ = combineLatest([
+    this.blockchainService.gasBalance$,
+    this.deploymentFee$
+  ]).pipe(
+    map(([balance, fee]) => {
+      return balance?.lt(BigNumber.from(fee))
     })
   )
 
