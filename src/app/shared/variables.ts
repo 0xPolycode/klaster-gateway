@@ -1,3 +1,5 @@
+import { Network } from "alchemy-sdk"
+
 export class RPC {
     static ethRPC   = 'https://flashy-few-wildflower.quiknode.pro/8d0390009c7d0b39934822aafc232dcba3cc5eb6/'
     static maticRPC = 'https://divine-thrilling-arrow.matic.quiknode.pro/456d54971974476410189538264c1a6c2936275d/'
@@ -17,6 +19,70 @@ export class ChainSelectors {
     static BASE     = "15971525489660198786"
     static SEPETH   = '16015286601757825753'
     static OPGOERLI = '2664363617261496610'
+}
+
+export class Chains {
+    static list: ChainInfo[] = [
+        {
+          id: 1,
+          token: 'ETH',
+          label: 'Ethereum',
+          rpcUrl: RPC.ethRPC!,
+          network: Network.ETH_MAINNET,
+          logoUri: 'ethereum.svg',
+          selector: ChainSelectors.ETH
+        },
+        {
+          id: 137,
+          token: 'MATIC',
+          label: 'Polygon',
+          rpcUrl: RPC.maticRPC!,
+          network: Network.MATIC_MAINNET,
+          logoUri: 'matic.svg',
+          selector: ChainSelectors.MATIC
+        },
+        {
+          id: 42161,
+          token: 'ETH',
+          label: 'Arbitrum',
+          rpcUrl: RPC.arbRPC!,
+          network: Network.ARB_MAINNET,
+          logoUri: 'arbitrum.svg',
+          selector: ChainSelectors.ARB
+        },
+        {
+          id: 10,
+          token: 'ETH',
+          label: 'Optimism',
+          rpcUrl: RPC.opRPC!,
+          network: Network.OPT_MAINNET,
+          logoUri: 'optimism.svg',
+          selector: ChainSelectors.OP
+        },
+        {
+          id: 8453,
+          token: 'ETH',
+          label: 'Base',
+          rpcUrl: RPC.baseRPC!,
+          network: Network.BASE_MAINNET,
+          logoUri: 'base.svg',
+          selector: ChainSelectors.BASE
+        },
+      ]
+}
+
+export interface ChainInfo {
+    id: number,
+    token: string,
+    label: string,
+    rpcUrl: string
+    network: Network,
+    logoUri?: string
+    selector: string
+  }
+
+export class CCIPLanes {
+    static ethLane = []
 }
 
 export const logoSvg = `<svg width="4047" height="868" viewBox="0 0 4047 868" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,3 +213,4 @@ export const logoSvg = `<svg width="4047" height="868" viewBox="0 0 4047 868" fi
 </linearGradient>
 </defs>
 </svg>`
+

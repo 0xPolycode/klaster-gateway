@@ -4,16 +4,6 @@
 
         <div class="grid grid-cols-12 gap-x-4">
 
-            <div class="col-span-12 card-body">
-                <div class="text-sm uppercase font-semibold text-rose-700">
-                    Klaster incentives programme
-                </div>
-                <div class="text-sm text-slate-600 mt-2">
-                    Klaster is currently running an incentives programme for early users. In order to become eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer" href="https://klaster.io" target="_blank">read the rewards programme details.</a>
-                </div>
-
-            </div>
-
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
     
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">

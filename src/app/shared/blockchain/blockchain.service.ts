@@ -5,7 +5,7 @@ import Onboard from '@web3-onboard/core'
 import chains from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import safeModule from '@web3-onboard/gnosis'
-import { ChainSelectors, RPC, logoSvg } from '../variables';
+import { ChainInfo, ChainSelectors, Chains, RPC, logoSvg } from '../variables';
 
 import { Alchemy, Network } from "alchemy-sdk";
 import { formatBytes32String } from 'ethers/lib/utils';
@@ -13,7 +13,6 @@ import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'r
 import { SessionQuery } from '../session.query';
 import { SessionService } from '../storage/session.service';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk/dist/src/sdk';
-import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -36,6 +35,19 @@ export class BlockchainService {
             window.location.reload();
         }
     });
+    })
+  )
+
+  isChainSupported$ = this.connectedProvider$.pipe(
+    map(provider => {
+      if(!provider) { return false }
+      if(!provider.network) { return false }
+      const chainId = provider?.network.chainId
+      console.log("CHAIN ID: ", chainId)
+      if(!chainId) { return false }
+      const chain = Chains.list.find(chain => chain.id === chainId)
+      if(!chain) { return false }
+      return true
     })
   )
 
@@ -85,58 +97,6 @@ export class BlockchainService {
 
   apiKey = 'sB2CDInJN_t6g0Id2SkYHG5nBycaQMK9'
 
-  prodChains: ChainInfo[] = [
-    {
-      id: 1,
-      token: 'ETH',
-      label: 'Ethereum',
-      rpcUrl: RPC.ethRPC!,
-      network: Network.ETH_MAINNET,
-      logoUri: 'ethereum.svg',
-      selector: ChainSelectors.ETH
-    },
-    {
-      id: 137,
-      token: 'MATIC',
-      label: 'Polygon',
-      rpcUrl: RPC.maticRPC!,
-      network: Network.MATIC_MAINNET,
-      logoUri: 'matic.svg',
-      selector: ChainSelectors.MATIC
-    },
-    {
-      id: 42161,
-      token: 'ETH',
-      label: 'Arbitrum',
-      rpcUrl: RPC.arbRPC!,
-      network: Network.ARB_MAINNET,
-      logoUri: 'arbitrum.svg',
-      selector: ChainSelectors.ARB
-    },
-    {
-      id: 10,
-      token: 'ETH',
-      label: 'Optimism',
-      rpcUrl: RPC.opRPC!,
-      network: Network.OPT_MAINNET,
-      logoUri: 'optimism.svg',
-      selector: ChainSelectors.OP
-    },
-    {
-      id: 8453,
-      token: 'ETH',
-      label: 'Base',
-      rpcUrl: RPC.baseRPC!,
-      network: Network.BASE_MAINNET,
-      logoUri: 'base.svg',
-      selector: ChainSelectors.BASE
-    },
-  ]
-
-  readProviders = this.prodChains.map(chain => {
-    return new ethers.providers.JsonRpcProvider(chain.rpcUrl, chain.id)
-  })
-
   testChains: ChainInfo[] = [
     {
       id: 11155111,
@@ -148,7 +108,12 @@ export class BlockchainService {
     }
   ]
 
-  chains = this.prodChains
+  chains = Chains.list
+
+
+  readProviders = this.chains.map(chain => {
+    return new ethers.providers.JsonRpcProvider(chain.rpcUrl, chain.id)
+  })
 
   appMetadata = {
     name: 'Klaster Gateway',
@@ -221,26 +186,6 @@ export class BlockchainService {
       signleton,
       provider
     )
-  }
-
-  setNetworkToSepolia() {
-    const provider = this.connectedProviderSub.value?.provider
-    if(!provider?.request) { return }
-    
-    provider.request({
-      method: 'wallet_addEthereumChain',
-      params: [{
-        chainId: ethers.utils.hexlify(this.testChains[0].id),
-        rpcUrls: [this.testChains[0].rpcUrl],
-        chainName: 'Eth Sepolia',
-        nativeCurrency: {
-          name: 'SepETH',
-          symbol: 'ETH',
-          decimals: 18
-        },
-        blockExplorerUrls: ['https://sepolia.etherscan.io/']
-      }]
-    })
   }
 
   async calculateAddress(address: string, salt: string) {
@@ -357,12 +302,3 @@ interface TokenBalanceModel {
   ]
 }
 
-interface ChainInfo {
-  id: number,
-  token: string,
-  label: string,
-  rpcUrl: string
-  network: Network,
-  logoUri?: string
-  selector: string
-}

@@ -52,10 +52,6 @@ export class AddressOverviewComponent implements OnInit {
     
   }
 
-  setNetwork() {
-    this.blockchainService.setNetworkToSepolia()
-  }
-
   sendTransaction(txData: SendTxPreview) {
     this.txService.sendTransaction(txData).then()
   }
