@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { BalanceItem } from '@covalenthq/client-sdk';
 import { BigNumber, ethers } from 'ethers';
 import { BehaviorSubject, Observable, from, map, of, share, shareReplay } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
@@ -10,7 +11,7 @@ import { TransactionService } from 'src/app/shared/blockchain/transaction.servic
   templateUrl: './single-portfolio-asset-container.component.html',
   styleUrls: ['./single-portfolio-asset-container.component.css']
 })
-export class SinglePortfolioAssetContainerComponent implements OnInit, AfterViewInit {
+export class SinglePortfolioAssetContainerComponent implements OnInit {
 
   @Input() contractAddress!: string
   @Input() wallet!: string
@@ -20,7 +21,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
   @Input() onlyVerified!: boolean | null
   @Input() addressSalt!: string
 
-  metadata$: Observable<TokenMetadataViewModel | null> = of(null)
+  @Input() metadata!: BalanceItem
 
   sendFormToggledSub = new BehaviorSubject(false)
   sendFormToggled$ = this.sendFormToggledSub.asObservable()
@@ -40,20 +41,6 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
 
   ngOnInit(): void { }
 
-  ngAfterViewInit(): void {
-    this.metadata$ = from(this.blockchainService.getTokenMetadata(this.contractAddress, this.chainID)).pipe(
-      map(metadata => {
-        return {
-          ...metadata, 
-          displayBalance: ethers.utils.formatUnits(
-            BigNumber.from(this.rawBalance),
-            metadata?.decimals ?? 1
-          )
-        }
-      }),
-      shareReplay()
-    )
-  }
 
   getNetworkURI(chainID: number) {
     return this.blockchainService.chains.find(chain => chain.id === chainID)?.logoUri
@@ -64,24 +51,24 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
     this.sendFormToggledSub.next(!this.sendFormToggledSub.value)
   }
 
-  matchSearch(metadata: TokenMetadataViewModel) {
+  matchSearch(metadata: BalanceItem) {
     if(!this.search) { return true }
     const adjustedSearch = this.search.toLowerCase()
-    return metadata.name?.toLowerCase()?.includes(adjustedSearch) 
-      || metadata.symbol?.toLowerCase().includes(adjustedSearch)
+    return metadata.contract_name?.toLowerCase()?.includes(adjustedSearch) 
+      || metadata.contract_ticker_symbol?.toLowerCase().includes(adjustedSearch)
       || this.contractAddress.toLowerCase().includes(adjustedSearch)
   }
 
-  checkIfVerified(metadata: TokenMetadataViewModel) {
-    return this.onlyVerified ?  metadata.logo !== null : true
+  checkIfVerified(metadata: BalanceItem) {
+    return this.onlyVerified ?  metadata.logo_url !== null : true
   }
 
-  openSendModal(metadata: TokenMetadataViewModel, chainID: number) {
+  openSendModal(metadata: BalanceItem, chainID: number) {
 
-    const decimals = metadata.decimals
-    const logo = metadata.logo
-    const name = metadata.name
-    const symbol = metadata.symbol
+    const decimals = metadata.contract_decimals
+    const logo = metadata.logo_url
+    const name = metadata.contract_display_name
+    const symbol = metadata.contract_ticker_symbol
 
     const amount = this.sendAmountForm.value
     const recipient = this.recipientAddressForm.value
@@ -95,12 +82,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit, AfterView
       return
     }
 
-    this.txService.openTxPreviewModal({
-      decimals: decimals,
-      logo: logo ?? null,
-      name: name,
-      symbol: symbol,
-    }, 
+    this.txService.openTxPreviewModal(metadata, 
       this.addressSalt,
       this.contractAddress, 
       chainID, 

@@ -5,7 +5,7 @@
     [class.my-2]="sendFormToggled$ | async"
     [class.border]="sendFormToggled$ | async"
     class="rounded-md">
-    <div *ngIf="metadata$ | async as metadata; else loading" 
+    <div 
 
     class="col-span-8 grid grid-cols-12 px-2">
     <ng-container *ngIf="matchSearch(metadata) && checkIfVerified(metadata)">
@@ -13,7 +13,7 @@
 
             <div class="relative">
                 <img class="h-9 w-9 bg-white p-1 rounded-full border" 
-                    [src]="metadata.logo" alt="" srcset="">
+                    [src]="metadata.logo_url" alt="" srcset="">
                 <div class="absolute -top-1 left-5">
                     <div class="w-6">
                         <img class="h-6 w-6 p-1 rounded-full border bg-white" 
@@ -24,11 +24,11 @@
             </div>
             <div class="flex flex-col ml-4 w-48">
                 <div>
-                    {{metadata.displayBalance ?? "" | shorten:12:0:false}}
+                    {{metadata.balance?.toString() ?? "" | shorten:12:0:false}}
                 </div>
                 <div class="text-slate-500 text-sm -mt-1 font-medium 
                     w-full whitespace-nowrap overflow-ellipsis overflow-x-hidden">
-                    {{metadata.symbol}}
+                    {{metadata.contract_ticker_symbol}}
                 </div>
             </div>
     
@@ -80,23 +80,23 @@
     [class.mb-4]="sendFormToggled$ | async"
     class="mx-2 bg-white rounded-md mt-4 gap-x-4 items-center grid grid-cols-10">
 
-    <div *ngIf="metadata$ | async as metadata" class="col-span-5 h-full">
+    <div class="col-span-5 h-full">
         <div class="flex flex-row gap-x-2 border items-center h-full px-2 rounded-md">
             <img class="h-7 w-7 p-[0.35rem] border rounded-full" src="../../../../../assets/networks/{{getNetworkURI(chainID)}}" alt="" srcset="">
             <input [formControl]="recipientAddressForm" placeholder="Recipient address" 
                 class="w-full !outline-none border-l text-xs py-3 pr-1 pl-2" type="text">
         </div>
     </div>
-    <div *ngIf="metadata$ | async as metadata" class="col-span-4 font-mono h-full">
+    <div class="col-span-4 font-mono h-full">
         <div class="flex h-full flex-row gap-x-2 rounded-md border pr-3 pl-2 items-center">
             <input [formControl]="sendAmountForm" placeholder="Amount" class="w-full !outline-none py-3 px-2 text-xs " type="text">
-            <img *ngIf="metadata.logo" class="h-7 w-7 p-[0.35rem] border rounded-full" [src]="metadata.logo" alt="" srcset="">
+            <img *ngIf="metadata.logo_url" class="h-7 w-7 p-[0.35rem] border rounded-full" [src]="metadata.logo_url" alt="" srcset="">
             <div class="text-xs font-semibold">
-                {{metadata.symbol}}
+                {{metadata.contract_ticker_symbol}}
             </div>
         </div>
     </div>
-    <div *ngIf="metadata$ | async as metadata" class="h-full py-[0.08rem]">
+    <div class="h-full py-[0.08rem]">
         <button [disabled]="!recipientAddressForm.valid" (click)="openSendModal(metadata, chainID)" class="w-full h-full flex flex-row items-center justify-center transition-all cursor-pointer rounded-md app-button text-white">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
                 <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />

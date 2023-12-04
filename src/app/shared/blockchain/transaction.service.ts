@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BigNumber, TokenMetadataResponse } from 'alchemy-sdk';
 import { BehaviorSubject, sample } from 'rxjs';
 import { BlockchainService } from './blockchain.service';
 import { ErrorService } from '../error.service';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
+import { SessionService } from '../storage/session.service';
+import { BalanceItem } from '@covalenthq/client-sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,17 @@ export class TransactionService {
   private sendTxPreviewModalSub = new BehaviorSubject<null | SendTxPreview>(null)
   sendTxPreviewModal$ = this.sendTxPreviewModalSub.asObservable()
 
-  private transactionCurrentlyProcessingSub = new BehaviorSubject(false)
-  transactionCurrentlyProcessing$ = this.transactionCurrentlyProcessingSub.asObservable()
+  private txStateSub = new BehaviorSubject<TxState>(null)
+  txState$ = this.txStateSub.asObservable()
+
+  private refreshCrossChainAccountsTriggerSub = new BehaviorSubject(null)
+  refreshCrossChainAccountsTrigger$ = this.refreshCrossChainAccountsTriggerSub.asObservable()
 
   constructor(private blockchainService: BlockchainService,
-    private errorService: ErrorService) { }
+    private errorService: ErrorService,
+    private sessionService: SessionService) { }
 
-  openTxPreviewModal(metadata: TokenMetadataResponse, addressSalt: string, tokenAddress: string, chainID: number, recipient: string, amount: string) {
+  openTxPreviewModal(metadata: BalanceItem, addressSalt: string, tokenAddress: string, chainID: number, recipient: string, amount: string) {
     this.sendTxPreviewModalSub.next({
       metadata: metadata,
       recipient: recipient,
@@ -31,6 +36,27 @@ export class TransactionService {
     })
   } 
 
+  async sendDeployTransaction(chainSelectors: string[], salt: number, fee: string) {
+
+    this.setTransactionState('signing')
+
+    try {
+      const tx = await this.blockchainService.executeContractDeployments(
+        chainSelectors,
+        salt.toString(),
+        fee
+      )
+      this.setTransactionState('processing')
+      this.addTxToHistory(tx)
+      
+      const receipt = await tx.wait(1)
+      this.refreshCrossChainAccounts()
+      this.setTransactionState(null)
+    } catch(err) {
+      this.setTransactionState(null)
+    }
+  }
+
   declineTxPreviewModal() {
     this.sendTxPreviewModalSub.next(null)
   }
@@ -38,17 +64,17 @@ export class TransactionService {
   async sendTransaction(txData: SendTxPreview) {
 
     this.sendTxPreviewModalSub.next(null)
-    this.transactionCurrentlyProcessingSub.next(true)
+    this.setTransactionState('signing')
 
     const klasterSingleton = this.blockchainService.getKlasterSingletonSigner()
 
     const erc20ABI = require('../../../assets/abis/ERC20.json')
     const erc20Interface = new ethers.utils.Interface(erc20ABI)
-    const decimals = txData.metadata.decimals
+    const decimals = txData.metadata.contract_decimals
 
     if(!decimals) { 
       this.errorService.showSimpleError("Cannot fetch decimals of ERC20 token")
-      this.transactionCurrentlyProcessingSub.next(false)
+      this.setTransactionState(null)
       return  
     }
 
@@ -61,7 +87,7 @@ export class TransactionService {
     ])
 
     if(!klasterSingleton) { 
-      this.transactionCurrentlyProcessingSub.next(false)
+      this.setTransactionState(null)
       return
     }
 
@@ -71,7 +97,7 @@ export class TransactionService {
 
     if(!chainSelector) {
       this.errorService.showSimpleError("Cannot find CCIP chain selector for the requested destination chain.")
-      this.transactionCurrentlyProcessingSub.next(false)
+      this.setTransactionState(null)
       return
     }
 
@@ -89,7 +115,7 @@ export class TransactionService {
         formatBytes32String("")
       )
       
-      const result =  await klasterSingleton['execute'](
+      const tx = await klasterSingleton['execute'](
         [chainSelector],
         txData.addressSalt,
         txData.tokenAddress,
@@ -103,20 +129,39 @@ export class TransactionService {
         }
       )
   
-      this.transactionCurrentlyProcessingSub.next(false)
+      this.setTransactionState('processing')
+      this.addTxToHistory(tx)
+
+      const res = await tx.wait(1)
+
+      this.setTransactionState(null)
   
-      return result
+      return tx
     } catch(err) {
-      this.transactionCurrentlyProcessingSub.next(false)
+      this.setTransactionState(null)
       this.errorService.showSimpleError(`Transaction processing failed: ${err}`)
       return err
       
     }
   }
+
+  setTransactionState(state: TxState) {
+    this.txStateSub.next(state)
+  }
+
+  refreshCrossChainAccounts() {
+    this.refreshCrossChainAccountsTriggerSub.next(null)
+  }
+
+  private addTxToHistory(tx: any) {
+    this.sessionService.addCcTxToHistory(tx.hash)
+  }
 }
 
+type TxState = null | 'signing' | 'processing' | 'minimized'
+
 export interface SendTxPreview {
-  metadata: TokenMetadataResponse,
+  metadata: BalanceItem,
   recipient: string,
   amount: string,
   chainID: number,

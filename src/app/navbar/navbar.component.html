@@ -1,17 +1,17 @@
 <div class="w-screen py-2 z-10 bg-[rgba(255,255,255,0.4)] backdrop-blur-[2px] border-b border-rose-100 flex flex-row justify-center fixed top-0 left-0">
-    <div class="max-w-5xl py-4 rounded-md w-full flex flex-row justify-between items-center">
+    <div class="max-w-6xl rounded-md w-full flex flex-row justify-between items-center">
         <div>
             <img routerLink="/" class="h-6 cursor-pointer" src="../../assets/klstr.png" alt="" srcset="">
         </div>
-        <div *ngIf="(isChainSupported$ | async) === false">
-            Unsupported chain
+        <div class="flex flex-row items-center gap-x-2 text-xs text-slate-700">
+            <app-tx-queue></app-tx-queue>
         </div>
     </div>
 </div>
-
-<div class="w-screen fixed top-[4.6rem] left-0 text-xs text-white z-10
+<div class="w-screen relative top-[3.7rem] left-0 text-xs text-white
  font-medium flex flex-row justify-center items-center py-2 bg-rose-700">
     <div>
         This app is using the beta implementation of Klaster, which has not been audited yet. 
     </div>
-</div>
+
+

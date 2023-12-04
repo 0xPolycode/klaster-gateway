@@ -8,11 +8,15 @@ import { TransactionService } from '../blockchain/transaction.service';
 })
 export class TransactionModalsComponent implements OnInit {
   
-  txIsProcessing$ = this.txService.transactionCurrentlyProcessing$
+  txState$ = this.txService.txState$
 
   constructor(private txService: TransactionService) { }
 
   ngOnInit(): void {
+  }
+
+  minimizeTx() {
+    this.txService.setTransactionState('minimized')
   }
 
 }

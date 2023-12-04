@@ -33,4 +33,16 @@ export class SessionService {
       }
     })
   }
+
+  addCcTxToHistory(hash: string) {
+    this.sessionStore.update(session => {
+      return {
+        savedWallets: session.savedWallets,
+        isLoggedIn: session.isLoggedIn,
+        ccTxHistoryHashList: session.ccTxHistoryHashList.concat(hash)
+      }
+    })
+  }
+  
+
 }

@@ -9,6 +9,7 @@ export class SessionQuery extends Query<SessionState> {
     
     wallets$ = this.select(state => state.savedWallets)
     isLoggedIn$ = this.select(state => state.isLoggedIn)
+    ccTxHistory$ = this.select(state => state.ccTxHistoryHashList)
   
     constructor(store: SessionStore) {
     super(store);

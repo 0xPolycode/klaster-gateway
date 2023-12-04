@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { BigNumber, ethers } from 'ethers';
 import { BehaviorSubject, combineLatest, from, map, of, startWith, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
+import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { ErrorService } from 'src/app/shared/error.service';
 import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
 import { ChainSelectors } from 'src/app/shared/variables';
@@ -64,11 +65,6 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
   )
 
   deploymentFeeString$ = this.deploymentFee$.pipe(
-    map(contractFee => {
-      return BigNumber.from(contractFee).add(
-        BigNumber.from(700000).mul(70000000000)
-      )
-    }),
     map(fee => ethers.utils.formatEther(fee))
   )
 
@@ -82,22 +78,11 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
   )
 
   deployContracts(fee: string) {
+    this.miscModalsService.dismissDeployModal()
     this.blockchainService.getNextDeploymentSalt().then(salt => {
       const chainSelectors = this.getSelectedChainSelectors()
       if(salt === null || salt === undefined) { return }
-      this.deployButtonLoadingSub.next(true)
-      this.blockchainService.executeContractDeployments(
-        chainSelectors,
-        salt.toString(),
-        fee
-      ).catch(err => {
-        this.deployButtonLoadingSub.next(false)
-        this.errorService.showError({
-          title: "Error",
-          message: err.data.message,
-          type: 'error'
-        })
-      })
+      this.txService.sendDeployTransaction(chainSelectors, salt, fee)
     })
   }
 
@@ -112,6 +97,7 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
 
   constructor(private blockchainService: BlockchainService, 
     private errorService: ErrorService,
+    private txService: TransactionService,
     private miscModalsService: MiscModalsServiceService) { }
 
   ngOnInit(): void {

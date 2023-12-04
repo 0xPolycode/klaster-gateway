@@ -5,14 +5,15 @@ import Onboard from '@web3-onboard/core'
 import chains from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import safeModule from '@web3-onboard/gnosis'
-import { ChainInfo, ChainSelectors, Chains, RPC, logoSvg } from '../variables';
+import { ChainSelectors, Chains, RPC, logoSvg } from '../variables';
 
-import { Alchemy, Network } from "alchemy-sdk";
 import { formatBytes32String } from 'ethers/lib/utils';
 import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { SessionQuery } from '../session.query';
 import { SessionService } from '../storage/session.service';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk/dist/src/sdk';
+import { SafeAppProvider } from '@safe-global/safe-apps-provider';
+import { Chain, Client, CovalentClient } from '@covalenthq/client-sdk';
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -27,16 +28,16 @@ export class BlockchainService {
 
   safeSDK = new SafeAppsSDK()
 
+  covalentSDK = new CovalentClient('cqt_rQ8ygM8XwHGhJqFCq4hRCRmGHY3R')
+
   private connectedProviderSub = new BehaviorSubject<ethers.providers.Web3Provider | null>(null)
-  connectedProvider$ = this.connectedProviderSub.asObservable().pipe(
-    tap(provider => {
-      provider?.on("network", (newNetwork, oldNetwork) => {
-        if (oldNetwork) {
-            window.location.reload();
-        }
-    });
-    })
-  )
+  connectedProvider$ = this.connectedProviderSub.asObservable()
+
+  private networkChangeHandler = (_: any, oldNetwork: any) => {
+    if (oldNetwork) {
+        window.location.reload();
+    }
+}
 
   isChainSupported$ = this.connectedProvider$.pipe(
     map(provider => {
@@ -45,7 +46,7 @@ export class BlockchainService {
       const chainId = provider?.network.chainId
       console.log("CHAIN ID: ", chainId)
       if(!chainId) { return false }
-      const chain = Chains.list.find(chain => chain.id === chainId)
+      const chain = Chains.prod.find(chain => chain.id === chainId)
       if(!chain) { return false }
       return true
     })
@@ -97,23 +98,11 @@ export class BlockchainService {
 
   apiKey = 'sB2CDInJN_t6g0Id2SkYHG5nBycaQMK9'
 
-  testChains: ChainInfo[] = [
-    {
-      id: 11155111,
-      token: 'SepETH',
-      label: 'Seplia ETH',
-      rpcUrl: 'https://radial-broken-spring.ethereum-sepolia.quiknode.pro/76fbf006752985130ff77d32d2284d2356438b61/',
-      network: Network.ETH_SEPOLIA,
-      selector: ChainSelectors.SEPETH
-    }
-  ]
-
-  chains = Chains.list
-
-
-  readProviders = this.chains.map(chain => {
+  readProviders = Chains.prod.map(chain => {
     return new ethers.providers.JsonRpcProvider(chain.rpcUrl, chain.id)
   })
+
+  chains = Chains.prod
 
   appMetadata = {
     name: 'Klaster Gateway',
@@ -159,7 +148,7 @@ export class BlockchainService {
   connectWallet() {
     const walletPromise = this.onboard.connectWallet()
     walletPromise.then(res => {
-      this.connectedProviderSub.next(new ethers.providers.Web3Provider(res[0].provider))
+      this.connectedProviderSub.next(new ethers.providers.Web3Provider(res[0].provider));
       this.sessionService.setLogin(true)
     })
     return walletPromise
@@ -197,29 +186,21 @@ export class BlockchainService {
     )
   }
 
-  getSDK(chainID: number) {
-      const chain = this.chains.find(chain => chain.id === chainID)
-      if(!chain) { return null }
-      return new Alchemy({
-        apiKey: this.apiKey,
-        network: chain.network
-      })
-  }
 
   async getPortfolio(address: string, chainID: number) {
     if(!address) { return }
-    const sdk = this.getSDK(chainID)
-    const tokenBalances = await sdk?.core.getTokenBalances(
-      address
+    const chainSDKSelector = this.chains.find(chain => chain.id === chainID)
+      ?.chainSDKSelector
+    if(!chainSDKSelector) { 
+      return 
+    }
+    const portfolio = await this.covalentSDK.BalanceService.getTokenBalancesForWalletAddress(
+      chainSDKSelector,
+      address,
+      {}
     )
-    return {...tokenBalances, tokenBalances: tokenBalances?.tokenBalances.map(balance => {
-      return {...balance, chainID: chainID}
-    })}
-  }
-
-  async getTokenMetadata(address: string, chainID: number) {
-    const sdk = this.getSDK(chainID)
-    return await sdk?.core.getTokenMetadata(address)
+    console.log(`PORTFOLIO, ${address} ${chainID}:`, portfolio)
+    return portfolio
   }
 
   // NOTE: If the user has deployed the contract through some other method (not)
@@ -252,7 +233,7 @@ export class BlockchainService {
       await address,
       0,
       [],
-      BigNumber.from("700000"),
+      BigNumber.from("2000000"),
       formatBytes32String("")
     )
   }
@@ -302,3 +283,12 @@ interface TokenBalanceModel {
   ]
 }
 
+export interface ChainInfo {
+  id: number,
+  token: string,
+  label: string,
+  rpcUrl: string
+  logoUri?: string
+  selector: string
+  chainSDKSelector: Chain
+}

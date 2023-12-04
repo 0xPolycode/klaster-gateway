@@ -49,7 +49,11 @@ export class CrossChainAccountContainerComponent implements OnInit {
       )
     }),
     map(chainPortfolios => {
-      return chainPortfolios.flatMap(portfolio => portfolio?.tokenBalances)
+      return chainPortfolios.flatMap(portfolio => {
+        return portfolio?.data?.items.map(item => {
+          return {...item, chainId: portfolio.data.chain_id }
+        })
+      })
     }),
     tap(_ => this.isRefreshingDataSub.next(false))
   )

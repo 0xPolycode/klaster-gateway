@@ -4,6 +4,8 @@
 
         <div class="grid grid-cols-12 gap-x-4">
 
+            
+
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
     
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
@@ -20,13 +22,7 @@
                                 <div>
                                     {{address | shorten:8:5}}
                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="w-4 h-4 cursor-pointer hover:text-rose-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                                </svg>
                             </div>
-
                             <div class="text-sm mt-4 uppercase font-medium text-slate-500">
                                 Connected network
                             </div>
@@ -38,11 +34,6 @@
                                 <div>
                                     {{network.label}}
                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="w-4 h-4 cursor-pointer hover:text-rose-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                                </svg>
                             </div>
                             <button (click)="logOut()" class="app-button w-full py-3 text-center mt-6 text-xs cursor-pointer">
                                 Disconnect Wallet
@@ -57,22 +48,32 @@
                             </button>
                         </ng-template>
                     </div>
+
+                    <div class="py-3 border rounded-md hover:bg-fuchsia-700 bg-fuchsia-50 uppercase font-semibold 
+                    text-fuchsia-700 border-fuchsia-200 hover:text-white hover:border-white transition-all
+                     flex flex-row gap-x-2 items-center justify-center w-full text-sm text-center cursor-pointer">
+                        <div>
+                            Learn about Klaster (30sec)
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+
+                    <div class="col-span-12 card-body">
+                        <div class="text-sm uppercase font-semibold text-rose-700">
+                            Klaster incentives programme
+                        </div>
+                        <div class="text-sm text-slate-600 mt-2">
+                            Klaster is currently running an incentives programme for early users. In order to become eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer" href="https://klaster.io" target="_blank">read the rewards programme details.</a>
+                        </div>
+        
+                    </div>
+
                     <div class="card-body text-sm text-slate-700 leading-relaxed">
                         <div class="font-semibold mb-4 text-rose-700 uppercase">Developing smart contracts?</div>
                         Add cross-chain accounts to any smart contract with the developer-friendly Klaster Solidity SDK
-                        <a target="_blank" href="https://klaster.gitbook.io/gateway"
-                            class="mt-4 border border-rose-200 py-3 text-center hover:bg-rose-700 hover:border-transparent hover:text-white
-                        rounded-md text-rose-700 flex flex-row gap-x-2 justify-center items-center transition-all uppercase font-semibold bg-[rgba(255,255,255,0.4)] cursor-pointer">
-    
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 mt-[0.12rem] h-5">
-                                <path
-                                    d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
-                            </svg>
-                            <div>
-                                Read developer docs
-                            </div>
-    
-                        </a>
+
     
                     </div>
                 </div>
@@ -182,8 +183,8 @@
                         {{txData.amount}}
                     </div>
                     <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-6 w-6 p-1 bg-white border rounded-full" [src]="txData.metadata?.logo" alt="" srcset=""> 
-                        <div class="font-semibold">{{txData.metadata?.symbol}}</div>
+                        <img class="h-6 w-6 p-1 bg-white border rounded-full" [src]="txData.metadata.logo_url" alt="" srcset=""> 
+                        <div class="font-semibold">{{txData.metadata.contract_ticker_symbol}}</div>
                     </div>
                 </div>
             </div>

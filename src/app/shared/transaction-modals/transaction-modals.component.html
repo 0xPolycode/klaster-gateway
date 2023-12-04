@@ -1,17 +1,53 @@
 
+<ng-container *ngIf="txState$ | async as state">
 
 <!-- TX Processing -->
 <div class="fixed top-0 left-0 w-screen flex flex-row justify-center items-center
-     h-screen bg-[rgba(255,255,255,0.3)] backdrop-blur-[2px]" *ngIf="txIsProcessing$ | async">
+     h-screen bg-[rgba(255,255,255,0.3)] backdrop-blur-[2px]" *ngIf="state === 'processing'">
 
-    <div class="max-w-md w-full p-6 border bg-white items-center
+    <div class="max-w-md w-full p-6 border rounded-md bg-white items-center
         flex flex-col text-sm uppercase justify-center font-medium">
 
         <div class="mt-8">
             Transaction processing...
         </div>
 
+        <div class="underline cursor-pointer hover:text-rose-600" (click)="minimizeTx()">
+            Minimize 
+        </div>
+
         <div class="loader">Loading...</div>
     </div>
 
 </div>
+
+<div class="fixed top-0 left-0 w-screen flex flex-row justify-center items-center
+     h-screen bg-[rgba(255,255,255,0.3)] backdrop-blur-[2px]" *ngIf="state === 'signing'">
+
+    <div class="max-w-md w-full p-6 border rounded-md bg-white items-center
+        flex flex-col text-sm uppercase justify-center font-medium">
+
+        <div class="mt-8">
+            Waiting for transaction signature
+        </div>
+
+        <div class="loader">Loading...</div>
+    </div>
+
+</div>
+
+<div *ngIf="state === 'minimized'" class="fixed bottom-4 left-0 w-screen flex flex-row justify-end pr-32">
+    <div class="px-8 rounded-md border py-3 flex flex-row justify-center items-center bg-[rgba(255,255,255,0.5)] backdrop-blur-[2px]">
+        <div class="text-center uppercase text-sm font-semibold">
+            TX processing
+        </div>
+        <div class="loader loader-small">Loading...</div>
+    
+    </div>
+
+</div>
+
+
+</ng-container>
+
+

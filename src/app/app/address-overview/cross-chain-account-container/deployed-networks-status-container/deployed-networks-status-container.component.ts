@@ -19,7 +19,7 @@ export class DeployedNetworksStatusContainerComponent implements OnInit {
       return from(this.blockchainService.checkDeploymentStatusForNetwork(1, address))
     })
   )
-  
+
   networkLoadingSub = new BehaviorSubject(-1)
   networkLoading$ = this.networkLoadingSub.asObservable()
 

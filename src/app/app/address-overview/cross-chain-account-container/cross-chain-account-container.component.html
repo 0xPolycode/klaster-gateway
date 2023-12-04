@@ -148,13 +148,14 @@
 
                 <div *ngFor="let item of portfolio">
                         <app-single-portfolio-asset-container *ngIf="item !== undefined" 
-                            [contractAddress]="item.contractAddress"
+                            [contractAddress]="item.contract_address"
                             [wallet]="derivedWallet"
-                            [rawBalance]="item.tokenBalance"
+                            [rawBalance]="item.balance?.toString() ?? '0'"
                             [search]="searchQuery.value"
                             [addressSalt]="salt"
                             [onlyVerified]="showOnlyVerified.value"
-                            [chainID]="item.chainID"></app-single-portfolio-asset-container>
+                            [metadata]="item"
+                            [chainID]="item.chainId"></app-single-portfolio-asset-container>
 
                 </div>
             </div>

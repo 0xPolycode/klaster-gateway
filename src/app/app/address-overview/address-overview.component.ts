@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, from, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { SendTxPreview, TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { ErrorService } from 'src/app/shared/error.service';
@@ -27,7 +27,10 @@ export class AddressOverviewComponent implements OnInit {
   sidebarCollapsedSub = new BehaviorSubject(false)
   sidebarCollapsed$ = this.sidebarCollapsedSub.asObservable()
 
-  derivedWallets$ = this.address$.pipe(
+  derivedWallets$ = combineLatest([
+    this.address$,
+    this.txService.refreshCrossChainAccountsTrigger$
+  ]).pipe(
     switchMap(_ => from(this.blockchainService.getDeployedWallets()))
   )
 

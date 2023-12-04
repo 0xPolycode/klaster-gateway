@@ -1,4 +1,4 @@
-import { Network } from "alchemy-sdk"
+import { ChainInfo } from "./blockchain/blockchain.service"
 
 export class RPC {
     static ethRPC   = 'https://flashy-few-wildflower.quiknode.pro/8d0390009c7d0b39934822aafc232dcba3cc5eb6/'
@@ -7,6 +7,7 @@ export class RPC {
     static arbRPC   = 'https://floral-proportionate-paper.arbitrum-mainnet.quiknode.pro/fb6d3584e044ee7c71eb732817db9d6c7f91d1a5/'
     static baseRPC  = 'https://black-polished-night.base-mainnet.quiknode.pro/e089b7987608d1af26dbf67a4d909035922eeef1/'
     static bscRPC   = 'https://polished-crimson-sanctuary.bsc.quiknode.pro/7456bebd296ddb17a0844b9b13ba16da14a38a64/'
+    static avaxRPC  = 'https://floral-tame-star.avalanche-mainnet.quiknode.pro/383add3484076327e01fa6d3ecec463d8f9ab55b/ext/bc/C/rpc/'
 }
 
 export class ChainSelectors {
@@ -22,67 +23,75 @@ export class ChainSelectors {
 }
 
 export class Chains {
-    static list: ChainInfo[] = [
+    static prod: ChainInfo[] = [
         {
           id: 1,
           token: 'ETH',
           label: 'Ethereum',
           rpcUrl: RPC.ethRPC!,
-          network: Network.ETH_MAINNET,
           logoUri: 'ethereum.svg',
-          selector: ChainSelectors.ETH
+          selector: ChainSelectors.ETH,
+          chainSDKSelector: 'eth-mainnet'
         },
         {
           id: 137,
           token: 'MATIC',
           label: 'Polygon',
           rpcUrl: RPC.maticRPC!,
-          network: Network.MATIC_MAINNET,
           logoUri: 'matic.svg',
-          selector: ChainSelectors.MATIC
+          selector: ChainSelectors.MATIC,
+          chainSDKSelector: 'matic-mainnet'
         },
         {
           id: 42161,
           token: 'ETH',
           label: 'Arbitrum',
           rpcUrl: RPC.arbRPC!,
-          network: Network.ARB_MAINNET,
           logoUri: 'arbitrum.svg',
-          selector: ChainSelectors.ARB
+          selector: ChainSelectors.ARB,
+          chainSDKSelector: 'arbitrum-mainnet'
         },
         {
           id: 10,
           token: 'ETH',
           label: 'Optimism',
           rpcUrl: RPC.opRPC!,
-          network: Network.OPT_MAINNET,
           logoUri: 'optimism.svg',
-          selector: ChainSelectors.OP
+          selector: ChainSelectors.OP,
+          chainSDKSelector: 'optimism-mainnet'
         },
         {
           id: 8453,
           token: 'ETH',
           label: 'Base',
           rpcUrl: RPC.baseRPC!,
-          network: Network.BASE_MAINNET,
           logoUri: 'base.svg',
-          selector: ChainSelectors.BASE
+          selector: ChainSelectors.BASE,
+          chainSDKSelector: 'base-mainnet'
         },
+        {
+            id: 43114,
+            token: 'AVAX',
+            label: 'Avalanche',
+            rpcUrl: RPC.avaxRPC,
+            logoUri: 'avalanche.svg',
+            selector: ChainSelectors.AVAX,
+            chainSDKSelector: 'avalanche-mainnet'
+        },
+        {
+            id: 56,
+            token: 'BNB',
+            label: 'BSC',
+            rpcUrl: RPC.bscRPC,
+            logoUri: 'bsc.svg',
+            selector: ChainSelectors.BNB,
+            chainSDKSelector: 'bsc-mainnet'
+        }
       ]
 }
 
-export interface ChainInfo {
-    id: number,
-    token: string,
-    label: string,
-    rpcUrl: string
-    network: Network,
-    logoUri?: string
-    selector: string
-  }
-
 export class CCIPLanes {
-    static ethLane = []
+    
 }
 
 export const logoSvg = `<svg width="4047" height="868" viewBox="0 0 4047 868" fill="none" xmlns="http://www.w3.org/2000/svg">
