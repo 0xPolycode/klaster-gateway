@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { BalanceItem } from '@covalenthq/client-sdk';
+import { TokenMetadataResponse } from 'alchemy-sdk';
 import { BigNumber, ethers } from 'ethers';
-import { BehaviorSubject, Observable, from, map, of, share, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, from, map, of, share, shareReplay, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
 
@@ -21,7 +22,23 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
   @Input() onlyVerified!: boolean | null
   @Input() addressSalt!: string
 
-  @Input() metadata!: BalanceItem
+  metadataRefreshTriggerSub = new BehaviorSubject<number | null>(null)
+  metadataRefreshTrigger$ = this.metadataRefreshTriggerSub.asObservable()
+
+  metadata$ = this.metadataRefreshTrigger$.pipe(
+    switchMap(trigger => {
+      if(!trigger) { return of(undefined) }
+      return this.blockchainService.getTokenMetadata(this.contractAddress, this.chainID)
+    }),
+    map(metadata => {
+      return {
+        ...metadata,
+        displayBalance: ethers.utils.formatUnits(
+          BigNumber.from(this.rawBalance)
+        )
+      }
+    })
+  )
 
   sendFormToggledSub = new BehaviorSubject(false)
   sendFormToggled$ = this.sendFormToggledSub.asObservable()
@@ -39,7 +56,9 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
   constructor(private blockchainService: BlockchainService,
     private txService: TransactionService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.metadataRefreshTriggerSub.next(1)
+  }
 
 
   getNetworkURI(chainID: number) {
@@ -51,24 +70,24 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
     this.sendFormToggledSub.next(!this.sendFormToggledSub.value)
   }
 
-  matchSearch(metadata: BalanceItem) {
+  matchSearch(metadata: any) {
     if(!this.search) { return true }
     const adjustedSearch = this.search.toLowerCase()
-    return metadata.contract_name?.toLowerCase()?.includes(adjustedSearch) 
-      || metadata.contract_ticker_symbol?.toLowerCase().includes(adjustedSearch)
+    return metadata.name?.toLowerCase()?.includes(adjustedSearch) 
+      || metadata.symbol?.toLowerCase().includes(adjustedSearch)
       || this.contractAddress.toLowerCase().includes(adjustedSearch)
   }
 
-  checkIfVerified(metadata: BalanceItem) {
-    return this.onlyVerified ?  metadata.logo_url !== null : true
+  checkIfVerified(metadata: any) {
+    return this.onlyVerified ?  metadata.logo !== null : true
   }
 
-  openSendModal(metadata: BalanceItem, chainID: number) {
+  openSendModal(metadata: any, chainID: number) {
 
-    const decimals = metadata.contract_decimals
-    const logo = metadata.logo_url
-    const name = metadata.contract_display_name
-    const symbol = metadata.contract_ticker_symbol
+    const decimals = metadata.decimals
+    const logo = metadata.logo
+    const name = metadata.name
+    const symbol = metadata.symbol
 
     const amount = this.sendAmountForm.value
     const recipient = this.recipientAddressForm.value

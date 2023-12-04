@@ -1,3 +1,4 @@
+import { Network } from "alchemy-sdk"
 import { ChainInfo } from "./blockchain/blockchain.service"
 
 export class RPC {
@@ -31,7 +32,7 @@ export class Chains {
           rpcUrl: RPC.ethRPC!,
           logoUri: 'ethereum.svg',
           selector: ChainSelectors.ETH,
-          chainSDKSelector: 'eth-mainnet'
+          network: Network.ETH_MAINNET
         },
         {
           id: 137,
@@ -40,7 +41,7 @@ export class Chains {
           rpcUrl: RPC.maticRPC!,
           logoUri: 'matic.svg',
           selector: ChainSelectors.MATIC,
-          chainSDKSelector: 'matic-mainnet'
+          network: Network.MATIC_MAINNET
         },
         {
           id: 42161,
@@ -49,7 +50,7 @@ export class Chains {
           rpcUrl: RPC.arbRPC!,
           logoUri: 'arbitrum.svg',
           selector: ChainSelectors.ARB,
-          chainSDKSelector: 'arbitrum-mainnet'
+          network: Network.ARB_MAINNET
         },
         {
           id: 10,
@@ -58,7 +59,7 @@ export class Chains {
           rpcUrl: RPC.opRPC!,
           logoUri: 'optimism.svg',
           selector: ChainSelectors.OP,
-          chainSDKSelector: 'optimism-mainnet'
+          network: Network.OPT_MAINNET
         },
         {
           id: 8453,
@@ -67,25 +68,7 @@ export class Chains {
           rpcUrl: RPC.baseRPC!,
           logoUri: 'base.svg',
           selector: ChainSelectors.BASE,
-          chainSDKSelector: 'base-mainnet'
-        },
-        {
-            id: 43114,
-            token: 'AVAX',
-            label: 'Avalanche',
-            rpcUrl: RPC.avaxRPC,
-            logoUri: 'avalanche.svg',
-            selector: ChainSelectors.AVAX,
-            chainSDKSelector: 'avalanche-mainnet'
-        },
-        {
-            id: 56,
-            token: 'BNB',
-            label: 'BSC',
-            rpcUrl: RPC.bscRPC,
-            logoUri: 'bsc.svg',
-            selector: ChainSelectors.BNB,
-            chainSDKSelector: 'bsc-mainnet'
+          network: Network.BASE_MAINNET
         }
       ]
 }

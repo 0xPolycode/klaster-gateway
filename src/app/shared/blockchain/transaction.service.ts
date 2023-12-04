@@ -6,6 +6,7 @@ import { BigNumber, ethers } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { SessionService } from '../storage/session.service';
 import { BalanceItem } from '@covalenthq/client-sdk';
+import { TokenMetadataResponse } from 'alchemy-sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class TransactionService {
     private errorService: ErrorService,
     private sessionService: SessionService) { }
 
-  openTxPreviewModal(metadata: BalanceItem, addressSalt: string, tokenAddress: string, chainID: number, recipient: string, amount: string) {
+  openTxPreviewModal(metadata: TokenMetadataResponse, addressSalt: string, tokenAddress: string, chainID: number, recipient: string, amount: string) {
     this.sendTxPreviewModalSub.next({
       metadata: metadata,
       recipient: recipient,
@@ -70,7 +71,7 @@ export class TransactionService {
 
     const erc20ABI = require('../../../assets/abis/ERC20.json')
     const erc20Interface = new ethers.utils.Interface(erc20ABI)
-    const decimals = txData.metadata.contract_decimals
+    const decimals = txData.metadata.decimals
 
     if(!decimals) { 
       this.errorService.showSimpleError("Cannot fetch decimals of ERC20 token")
@@ -161,7 +162,7 @@ export class TransactionService {
 type TxState = null | 'signing' | 'processing' | 'minimized'
 
 export interface SendTxPreview {
-  metadata: BalanceItem,
+  metadata: TokenMetadataResponse,
   recipient: string,
   amount: string,
   chainID: number,

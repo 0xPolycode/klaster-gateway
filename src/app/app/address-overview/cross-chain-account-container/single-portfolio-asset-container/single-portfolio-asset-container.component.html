@@ -1,4 +1,4 @@
-<div [class.-mx-6]="sendFormToggled$ | async"
+<div *ngIf="metadata$ | async as metadata" [class.-mx-6]="sendFormToggled$ | async"
     [class.my-3]="sendFormToggled$ | async"
     [class.p-2]="sendFormToggled$ | async"
     [class.bg-white]="sendFormToggled$ | async"
@@ -13,7 +13,7 @@
 
             <div class="relative">
                 <img class="h-9 w-9 bg-white p-1 rounded-full border" 
-                    [src]="metadata.logo_url" alt="" srcset="">
+                    [src]="metadata.logo" alt="" srcset="">
                 <div class="absolute -top-1 left-5">
                     <div class="w-6">
                         <img class="h-6 w-6 p-1 rounded-full border bg-white" 
@@ -24,11 +24,11 @@
             </div>
             <div class="flex flex-col ml-4 w-48">
                 <div>
-                    {{metadata.balance?.toString() ?? "" | shorten:12:0:false}}
+                    {{metadata.displayBalance ?? "" | shorten:12:0:false}}
                 </div>
                 <div class="text-slate-500 text-sm -mt-1 font-medium 
                     w-full whitespace-nowrap overflow-ellipsis overflow-x-hidden">
-                    {{metadata.contract_ticker_symbol}}
+                    {{metadata.symbol}}
                 </div>
             </div>
     
@@ -90,9 +90,9 @@
     <div class="col-span-4 font-mono h-full">
         <div class="flex h-full flex-row gap-x-2 rounded-md border pr-3 pl-2 items-center">
             <input [formControl]="sendAmountForm" placeholder="Amount" class="w-full !outline-none py-3 px-2 text-xs " type="text">
-            <img *ngIf="metadata.logo_url" class="h-7 w-7 p-[0.35rem] border rounded-full" [src]="metadata.logo_url" alt="" srcset="">
+            <img *ngIf="metadata.logo" class="h-7 w-7 p-[0.35rem] border rounded-full" [src]="metadata.logo" alt="" srcset="">
             <div class="text-xs font-semibold">
-                {{metadata.contract_ticker_symbol}}
+                {{metadata.symbol}}
             </div>
         </div>
     </div>

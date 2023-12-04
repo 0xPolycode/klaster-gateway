@@ -26,6 +26,7 @@
     "@web3-onboard/core": "^2.21.2",
     "@web3-onboard/gnosis": "^2.2.0",
     "@web3-onboard/injected-wallets": "^2.10.7",
+    "alchemy-sdk": "^3.1.0",
     "dev3-sdk": "^0.0.28",
     "ethers": "5.7",
     "rxjs": "~7.5.0",

@@ -13,7 +13,7 @@ import { SessionQuery } from '../session.query';
 import { SessionService } from '../storage/session.service';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk/dist/src/sdk';
 import { SafeAppProvider } from '@safe-global/safe-apps-provider';
-import { Chain, Client, CovalentClient } from '@covalenthq/client-sdk';
+import { Alchemy, Network } from "alchemy-sdk"
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -25,10 +25,7 @@ const KLASTER_SINLGETON_MAINNET_ADDRESS = '0xef3c8e083De1AE85afecdAf5D6AbC15427f
 })
 export class BlockchainService {
 
-
   safeSDK = new SafeAppsSDK()
-
-  covalentSDK = new CovalentClient('cqt_rQ8ygM8XwHGhJqFCq4hRCRmGHY3R')
 
   private connectedProviderSub = new BehaviorSubject<ethers.providers.Web3Provider | null>(null)
   connectedProvider$ = this.connectedProviderSub.asObservable()
@@ -189,18 +186,18 @@ export class BlockchainService {
 
   async getPortfolio(address: string, chainID: number) {
     if(!address) { return }
-    const chainSDKSelector = this.chains.find(chain => chain.id === chainID)
-      ?.chainSDKSelector
-    if(!chainSDKSelector) { 
-      return 
-    }
-    const portfolio = await this.covalentSDK.BalanceService.getTokenBalancesForWalletAddress(
-      chainSDKSelector,
-      address,
-      {}
+    const sdk = this.getSDK(chainID)
+    const tokenBalances = await sdk?.core.getTokenBalances(
+      address
     )
-    console.log(`PORTFOLIO, ${address} ${chainID}:`, portfolio)
-    return portfolio
+    return {...tokenBalances, tokenBalances: tokenBalances?.tokenBalances.map(balance => {
+      return {...balance, chainID: chainID}
+    })}
+  }
+
+  async getTokenMetadata(address: string, chainID: number) {
+    const sdk = this.getSDK(chainID)
+    return await sdk?.core.getTokenMetadata(address)
   }
 
   // NOTE: If the user has deployed the contract through some other method (not)
@@ -221,11 +218,22 @@ export class BlockchainService {
     return await klaster['getDeployedWallets'](address) as string[]
   }
 
+  getSDK(chainID: number) {
+    const chain = this.chains.find(chain => chain.id === chainID)
+    if(!chain) { return null }
+    return new Alchemy({
+      apiKey: this.apiKey,
+      network: chain.network
+    })
+}
+
   async calculateDeploymentFee(selectedChains: string[], salt: string) {
+
     const klaster = this.getKlasterSingletonSigner()
     const address = await this.getAddress()
     if(!address) { alert("No address"); return 0 }
     if(!klaster) { alert("No contract"); return 0 }
+
     return await klaster['calculateExecuteFee'](
       await address,
       selectedChains,
@@ -289,6 +297,6 @@ export interface ChainInfo {
   label: string,
   rpcUrl: string
   logoUri?: string
-  selector: string
-  chainSDKSelector: Chain
+  selector: string,
+  network: Network
 }
