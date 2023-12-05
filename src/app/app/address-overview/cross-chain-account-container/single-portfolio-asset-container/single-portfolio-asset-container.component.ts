@@ -80,7 +80,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
   }
 
   checkIfVerified(metadata: any) {
-    return this.onlyVerified ?  metadata.logo !== null : true
+    return true
   }
 
   openSendModal(metadata: any, chainID: number) {
