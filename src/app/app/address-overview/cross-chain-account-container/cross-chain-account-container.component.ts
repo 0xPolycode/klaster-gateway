@@ -44,7 +44,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
     switchMap(_ => {
       return combineLatest(
         this.blockchainService.chains.map(chain => 
-          this.blockchainService.getPortfolio(this.derivedWallet, chain.id))
+          this.blockchainService.getPortfolio(this.derivedWallet, chain.id, true))
       )
     }),
     map(chainPortfolios => {

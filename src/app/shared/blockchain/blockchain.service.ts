@@ -184,13 +184,21 @@ export class BlockchainService {
   }
 
 
-  async getPortfolio(address: string, chainID: number) {
+  async getPortfolio(address: string, chainID: number, onlyDeployed = false) {
     if(!address) { return }
     const sdk = this.getSDK(chainID)
     const tokenBalances = await sdk?.core.getTokenBalances(
       address
     )
+    if(onlyDeployed) {
+      const isDeployed = await this.checkDeploymentStatusForNetwork(chainID, address)
+      if(!isDeployed) {
+        return null
+      }
+    }
     return {...tokenBalances, tokenBalances: tokenBalances?.tokenBalances.map(balance => {
+      const tb = BigNumber.from(balance.tokenBalance)
+      if(tb.eq(0)) { return }
       return {...balance, chainID: chainID}
     })}
   }

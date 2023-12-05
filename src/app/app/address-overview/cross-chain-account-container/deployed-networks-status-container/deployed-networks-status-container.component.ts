@@ -37,8 +37,19 @@ export class DeployedNetworksStatusContainerComponent implements OnInit {
   }
 
   async deployClicked(chainID: number) {
-    this.networkLoadingSub.next(chainID)
     const chain = this.blockchainService.chains.find(chain => chain.id === chainID)
+    this.networkLoadingSub.next(chainID)
+
+    const isAlreadyDeployed = 
+      await this.blockchainService
+      .checkDeploymentStatusForNetwork(chainID, 
+        this.derivedWallet)
+
+    if(isAlreadyDeployed) { 
+      this.networkLoadingSub.next(-1);
+      return 
+    }
+
     if(!chain) {
       this.errorService.showSimpleError('Trying to call deploy to an unsupported chain')
       return
