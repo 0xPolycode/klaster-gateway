@@ -31,10 +31,11 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
       return this.blockchainService.getTokenMetadata(this.contractAddress, this.chainID)
     }),
     map(metadata => {
+      if(!metadata) { return undefined }
       return {
         ...metadata,
         displayBalance: ethers.utils.formatUnits(
-          BigNumber.from(this.rawBalance)
+          BigNumber.from(this.rawBalance), metadata.decimals ?? 0
         )
       }
     })
