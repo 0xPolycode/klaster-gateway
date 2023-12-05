@@ -19,6 +19,7 @@ export class ErrorService {
     this.errorDataSub.next({
       title: 'Error',
       type: 'error',
+      buttonText: 'Close',
       message: message
     })
   }
@@ -32,5 +33,6 @@ export class ErrorService {
 export interface ErrorModel {
   title: string,
   message: string,
+  buttonText: string
   type: 'warning' | 'error'
 }

@@ -52,8 +52,15 @@ export class AddressOverviewComponent implements OnInit {
     private errorService: ErrorService) { }
 
   ngOnInit(): void {
+    this.errorService.showError({
+      message: `This is a developers preview of the Klaster app. We provide no guarantees and using it may cause a loss of funds.
+      Please proceed with caution. To use the app for operations, please wait for a production release.`,
+      title: 'Developer build',
+      type: 'warning',
+      buttonText: 'I accept the risk'
+    })
     
-  }
+  } 
 
   sendTransaction(txData: SendTxPreview) {
     this.txService.sendTransaction(txData).then()
