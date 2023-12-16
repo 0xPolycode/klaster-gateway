@@ -14,6 +14,7 @@ import { SessionService } from '../storage/session.service';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk/dist/src/sdk';
 import { SafeAppProvider } from '@safe-global/safe-apps-provider';
 import { Alchemy, Network } from "alchemy-sdk"
+import { ErrorService } from '../error.service';
 
 const PROVIDER_STORAGE_ID = "io.klaster.gateway.provider-storage-id-key"
 
@@ -129,7 +130,9 @@ export class BlockchainService {
     }),
   })
 
-  constructor(private query: SessionQuery, private sessionService: SessionService) { 
+  constructor(private query: SessionQuery, 
+    private sessionService: SessionService,
+    private errorService: ErrorService) { 
   }
 
   logOut() {
@@ -228,8 +231,14 @@ export class BlockchainService {
   async getDeployedWallets() {
     const klaster = this.getKlasterSingletonSigner()
     const address = await this.getAddress()
-    if(!address) { return [] }
-    if(!klaster) { return }
+    if(!address) { 
+      this.errorService.showSimpleError('Address not fetched. Please contact Klaster support.')
+      return [] 
+    }
+    if(!klaster) { 
+      this.errorService.showSimpleError('Klaster singleton not fetched. Please contact Klaster support.')
+      return []
+    }
     return await klaster['getDeployedWallets'](address) as string[]
   }
 
