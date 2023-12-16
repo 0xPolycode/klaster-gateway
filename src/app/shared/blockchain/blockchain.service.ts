@@ -196,11 +196,18 @@ export class BlockchainService {
         return null
       }
     }
-    return {...tokenBalances, tokenBalances: tokenBalances?.tokenBalances.map(balance => {
+    return {...tokenBalances, 
+      tokenBalances: tokenBalances?.tokenBalances.map(balance => {
       const tb = BigNumber.from(balance.tokenBalance)
       if(tb.eq(0)) { return }
       return {...balance, chainID: chainID}
     })}
+  }
+
+  async getNativeTokenBalance(address: string, chainId: number) {
+    const provider = this.readProviders.find(provider => provider.network.chainId === chainId)
+    if(!provider) { return null }
+    return await provider.getBalance(address)
   }
 
   async getTokenMetadata(address: string, chainID: number) {
@@ -307,4 +314,5 @@ export interface ChainInfo {
   logoUri?: string
   selector: string,
   network: Network
+  shortName: string
 }

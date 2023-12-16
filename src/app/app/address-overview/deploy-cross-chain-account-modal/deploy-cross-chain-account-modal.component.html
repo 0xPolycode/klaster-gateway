@@ -36,7 +36,11 @@
         </div>
        
         <div class="grid grid-cols-3 gap-4 mt-4">
-            <div *ngFor="let network of deployableNetworks" [class.hidden]="network.id === connected.id" class="flex flex-row gap-x-4 justify-between 
+            <div *ngFor="let network of deployableNetworks" 
+            [class.hidden]="network.id === connected.id" 
+            [class.bg-indigo-400]="network.check.value"
+            [class.text-white]="network.check.value"
+            class="flex flex-row gap-x-4 justify-between 
                 rounded-md uppercase w-full
                 font-semibold text-slate-700 bg-slate-50
                  items-center text-xs py-2 px-4">

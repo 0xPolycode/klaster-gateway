@@ -6,6 +6,7 @@ import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service'
 import { PriceFeedService } from 'src/app/shared/services/price-feed.service';
 import { SessionQuery } from 'src/app/shared/session.query';
 import { SessionService } from 'src/app/shared/storage/session.service';
+import { Chains } from 'src/app/shared/variables';
 
 @Component({
   selector: 'app-cross-chain-account-container',
@@ -51,6 +52,31 @@ export class CrossChainAccountContainerComponent implements OnInit {
       return chainPortfolios.flatMap(portfolio => portfolio?.tokenBalances)
     }),
     tap(_ => this.isRefreshingDataSub.next(false))
+  )
+
+  nativeTokenBalance$ = this.portfolioFetchTrigger$.pipe(
+    switchMap(_ => {
+      return combineLatest(Chains.prod.map(chain => {
+        return from(this.blockchainService.getNativeTokenBalance(this.derivedWallet, chain.id)).pipe(
+          map(chainResult => {
+            if(!chainResult) { return null }
+            return { 
+              logoUri: chain.logoUri,
+              chainId: chain.id,
+              balance: chainResult,
+              displayBalance: ethers.utils.formatEther(chainResult),
+              token: chain.token
+            }
+          })
+        )
+      }))
+    }),
+    map(result => {
+      return result.filter(item => {
+        if(!item) { return false }
+        return item.balance.gt(0)
+      })
+    })
   )
 
   tag$ = this.sessionQuery.wallets$.pipe(

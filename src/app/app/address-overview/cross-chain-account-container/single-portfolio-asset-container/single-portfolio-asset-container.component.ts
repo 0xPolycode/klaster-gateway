@@ -6,6 +6,7 @@ import { BigNumber, ethers } from 'ethers';
 import { BehaviorSubject, Observable, from, map, of, share, shareReplay, switchMap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
+import { ErrorService } from 'src/app/shared/error.service';
 
 @Component({
   selector: 'app-single-portfolio-asset-container',
@@ -55,6 +56,7 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
   ])
 
   constructor(private blockchainService: BlockchainService,
+    private errorService: ErrorService,
     private txService: TransactionService) { }
 
   ngOnInit(): void {
@@ -109,6 +111,15 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
       recipient, 
       amount
     )
+  }
+
+  swapClicked() {
+    this.errorService.showError({
+      type: 'warning',
+      buttonText: 'OK',
+      message: 'The team is working around the clock to add new features to Klaster Safe! Cross-chain swaps, powered by Chainlink CCIP are coming soon!',
+      title: 'Coming soon'
+    })
   }
 
 }

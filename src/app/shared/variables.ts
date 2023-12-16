@@ -32,7 +32,8 @@ export class Chains {
           rpcUrl: RPC.ethRPC!,
           logoUri: 'ethereum.svg',
           selector: ChainSelectors.ETH,
-          network: Network.ETH_MAINNET
+          network: Network.ETH_MAINNET,
+          shortName: 'ETH'
         },
         {
           id: 137,
@@ -41,7 +42,8 @@ export class Chains {
           rpcUrl: RPC.maticRPC!,
           logoUri: 'matic.svg',
           selector: ChainSelectors.MATIC,
-          network: Network.MATIC_MAINNET
+          network: Network.MATIC_MAINNET,
+          shortName: 'MATIC'
         },
         {
           id: 42161,
@@ -50,7 +52,8 @@ export class Chains {
           rpcUrl: RPC.arbRPC!,
           logoUri: 'arbitrum.svg',
           selector: ChainSelectors.ARB,
-          network: Network.ARB_MAINNET
+          network: Network.ARB_MAINNET,
+          shortName: 'ARB'
         },
         {
           id: 10,
@@ -59,7 +62,8 @@ export class Chains {
           rpcUrl: RPC.opRPC!,
           logoUri: 'optimism.svg',
           selector: ChainSelectors.OP,
-          network: Network.OPT_MAINNET
+          network: Network.OPT_MAINNET,
+          shortName: 'OP'
         },
         {
           id: 8453,
@@ -68,7 +72,8 @@ export class Chains {
           rpcUrl: RPC.baseRPC!,
           logoUri: 'base.svg',
           selector: ChainSelectors.BASE,
-          network: Network.BASE_MAINNET
+          network: Network.BASE_MAINNET,
+          shortName: 'BASE'
         }
       ]
 }

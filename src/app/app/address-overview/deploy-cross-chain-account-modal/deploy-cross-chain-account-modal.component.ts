@@ -18,7 +18,7 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
 
 
   deployableNetworks = this.blockchainService.chains.map(network => {
-    return {...network, check: new FormControl(true, [])}
+    return {...network, check: new FormControl(false, [])}
   })
 
   deploymentSalt$ = from(this.blockchainService.getNextDeploymentSalt())

@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { SendTxPreview, TransactionService } from 'src/app/shared/blockchain/transaction.service';
+import { CcipService } from 'src/app/shared/ccip/ccip.service';
 import { ErrorService } from 'src/app/shared/error.service';
 import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
 import { SessionQuery } from 'src/app/shared/session.query';
 import { DerivedWalletData, SessionStore } from 'src/app/shared/session.store';
 import { SessionService } from 'src/app/shared/storage/session.service';
+import { Chains } from 'src/app/shared/variables';
 
 @Component({
   selector: 'app-address-overview',
@@ -48,18 +50,21 @@ export class AddressOverviewComponent implements OnInit {
 
   constructor(private blockchainService: BlockchainService,
     private txService: TransactionService,
+    private ccipService: CcipService,
     private miscModalsService: MiscModalsServiceService,
     private errorService: ErrorService) { }
 
   ngOnInit(): void {
     this.errorService.showError({
-      message: `This is a developers preview of the Klaster app. We provide no guarantees and using it may cause a loss of funds.
+      message: `This is a beta preview of the Klaster app. We provide no guarantees and using it may cause a loss of funds.
       Please proceed with caution. To use the app for operations, please wait for a production release.`,
       title: 'Developer build',
       type: 'warning',
       buttonText: 'I accept the risk'
     })
-    
+    this.ccipService.getWalletActivity('0x49Fa42e706d6914E44Be4855B3f52b6FB74CeA06').subscribe(res => {
+      console.log(res)
+    })
   } 
 
   sendTransaction(txData: SendTxPreview) {
@@ -68,15 +73,6 @@ export class AddressOverviewComponent implements OnInit {
 
   logOut() {
     this.blockchainService.logOut()
-  }
-
-
-  async addNewWallet(derivedWallets: DerivedWalletData[]) {
-    // const newWallet = await this.blockchainService.calculateAddress(
-    //   this.address,
-    //   derivedWallets.length.toString()
-    // )
-    // this.sessionService.addCrossChainAccount(this.address, newWallet)
   }
 
   toggleWalletToggler() {

@@ -39,6 +39,7 @@
                                 Disconnect Wallet
                             </button>
                         </div>
+                        
                         <ng-template #noAddress>
                             <button (click)="connectWallet()" class="app-button flex flex-row gap-x-2 items-center justify-center cursor-pointer col-span-12 py-3 text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mt-[0.08rem]">
@@ -48,6 +49,8 @@
                             </button>
                         </ng-template>
                     </div>
+
+                    <app-cctx-queue></app-cctx-queue>
 
                     <div class="py-3 border rounded-md hover:bg-fuchsia-700 bg-fuchsia-50 uppercase font-semibold 
                     text-fuchsia-700 border-fuchsia-200 hover:text-white hover:border-white transition-all

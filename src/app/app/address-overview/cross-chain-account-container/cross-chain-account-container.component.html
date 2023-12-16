@@ -138,14 +138,35 @@
                     </div>
     
                     <div class="col-span-3 text-start text-sm uppercase text-slate-500">
-                        Price
+                        Type
                     </div>
     
                     <div class="col-span-3 text-sm text-start uppercase text-slate-500">
-                        Value (USD)
+                        
                     </div>
                 </div>
 
+                <div *ngIf="nativeTokenBalance$ | async as native">
+                    <div class="grid grid-cols-12 px-2 py-2 items-center text-sm" *ngFor="let result of native">
+                        <div class="col-span-4 flex flex-row items-center">
+                            <img class="h-9 w-9 bg-white p-2 rounded-full border" 
+                            src="../../../../assets/networks/{{result?.logoUri}}" alt="" srcset="">
+                            <div class="col-span-3 flex flex-col pl-4">
+                                <div class="text-base">
+                                    {{result?.displayBalance}}
+                                </div>
+                                <div class="font-medium -mt-1 text-slate-500">
+                                    {{result?.token}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-3 uppercase font-medium">
+                            Native
+                        </div>
+                        
+                        
+                    </div>
+                </div>
                 <div *ngFor="let item of portfolio">
                         <app-single-portfolio-asset-container *ngIf="item !== undefined" 
                             [contractAddress]="item.contractAddress"

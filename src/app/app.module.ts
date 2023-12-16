@@ -18,6 +18,8 @@ import { ErrorModalComponent } from './shared/error-modal/error-modal.component'
 import { TransactionModalsComponent } from './shared/transaction-modals/transaction-modals.component';
 import { TxQueueComponent } from './navbar/tx-queue/tx-queue.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { HttpClientModule } from '@angular/common/http';
     DeployedNetworksStatusContainerComponent,
     ErrorModalComponent,
     TransactionModalsComponent,
-    TxQueueComponent
+    TxQueueComponent,
+    SpinnerComponent,
+    CctxQueueComponent
   ],
   imports: [
     BrowserModule,
