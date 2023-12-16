@@ -72,7 +72,7 @@
                 </div>
             </div>
     
-            <div class="py-1 mb-2 border-b" *ngFor="let response of allActivity.ccip_api_responses">
+            <div class="py-1 mb-2 border-b border-slate-100" *ngFor="let response of allActivity.ccip_api_responses">
                 <div class="w-full grid gap-x-4 grid-cols-5" *ngIf="response.data.allCcipTransactionsFlats.nodes.at(0) as node">
                     
                     <div *ngIf="formatCCTxTime(node.blockTimestamp) as datetime"
