@@ -144,6 +144,18 @@ export class BlockchainService {
     private errorService: ErrorService) { 
   }
 
+
+  autologinSafe() {
+      this.safeSDK.safe.getInfo().then(info => {
+        if(info.chainId) {
+          const provider = new SafeAppProvider(info, this.safeSDK as any)
+          this.connectedProviderSub.next(
+            new ethers.providers.Web3Provider(provider)
+          )
+        }
+      })
+  }
+
   logOut() {
     this.sessionService.setLogin(false)
     this.connectedProviderSub.next(null)
