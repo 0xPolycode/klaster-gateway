@@ -69,9 +69,18 @@ export class BlockchainService {
 
   connectedNetworkChainID$ = this.connectedProvider$.pipe(
     switchMap(provider => {
-      return provider?.network.chainId ? 
-        of(provider.network.chainId) : 
-        this.safeInfo$.pipe(map(info => info.chainId))
+      if(provider?.network.chainId) {
+        return of(provider.network.chainId)
+      }
+      return this.safeInfo$.pipe(
+        map(info => {
+          if(info.chainId) { 
+            return info.chainId
+          } else {
+            return null
+          }
+        })
+      )
     })
   )
 

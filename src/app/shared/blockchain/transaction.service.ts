@@ -54,6 +54,7 @@ export class TransactionService {
       this.refreshCrossChainAccounts()
       this.setTransactionState(null)
     } catch(err) {
+      this.errorService.showSimpleError(`Transaction deployment failed: ${err}`)
       this.setTransactionState(null)
     }
   }

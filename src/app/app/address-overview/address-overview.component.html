@@ -1,5 +1,5 @@
 <ng-container>
-    <div class="mt-32 min-h-screen" >
+    <div class="mt-20 min-h-screen" >
 
 
         <div class="grid grid-cols-12 gap-x-4">
@@ -84,7 +84,7 @@
                 <ng-container *ngIf="address$ | async">
                     <ng-container *ngIf="derivedWallets$ | async as wallets">
                         <div *ngIf="address$ | async as address; else connectPrompt" [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8 mt-4">
-                            <div *ngIf="wallets.length !== 0" class="col-span-8 flex flex-row mt-4 items-center justify-between">
+                            <div *ngIf="wallets.length !== 0" class="col-span-8 flex flex-row items-start justify-between">
                                 <div class="card-header-title">
                                     Cross-chain accounts
                                 </div>
@@ -204,11 +204,9 @@
                 <div class="font-semibold uppercase text-sm">{{txData.network.label}}</div>
             </div>
         </div>
-
             
         <div class="col-span-8">
             <div class="mt-4 col-span-8 text-sm uppercase font-semibold text-slate-700">
-
                 Recipient
             </div>
             <div class="mt-2 text-sm flex rounded-md justify-center flex-row p-2 !px-4 border gap-x-2 items-center text-slate-700">

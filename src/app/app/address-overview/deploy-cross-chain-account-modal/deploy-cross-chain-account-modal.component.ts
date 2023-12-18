@@ -18,7 +18,7 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
 
 
   deployableNetworks = this.blockchainService.chains.map(network => {
-    return {...network, check: new FormControl(false, [])}
+    return {...network, check: new FormControl(true, [])}
   })
 
   deploymentSalt$ = from(this.blockchainService.getNextDeploymentSalt())
@@ -81,8 +81,15 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
     this.miscModalsService.dismissDeployModal()
     this.blockchainService.getNextDeploymentSalt().then(salt => {
       const chainSelectors = this.getSelectedChainSelectors()
-      if(salt === null || salt === undefined) { return }
-      this.txService.sendDeployTransaction(chainSelectors, salt, fee)
+      if(salt === null || salt === undefined) { 
+        this.errorService.showSimpleError(`Can't fetch next deploymetn salt. Please check connected network. If problem perists, please contact Klaster support.`)
+        return
+      }
+      this.txService.sendDeployTransaction(chainSelectors, salt, fee).catch(err => {
+        this.errorService.showSimpleError(`A deployment error ocurred: ${err}`)
+      })
+    }).catch(err => {
+      this.errorService.showSimpleError(`A deployment error ocurred: ${err}`)
     })
   }
 
