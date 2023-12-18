@@ -70,7 +70,7 @@ export class BlockchainService {
   injected = injectedModule()
 
   safeInfo$ = from(this.safeSDK.safe.getInfo()).pipe(
-    tap(info => console.log(`Safe Info: ${info}`))
+    tap(info => console.log(`Safe Info: ${JSON.stringify(info)}`))
   )
 
   connectedNetworkChainID$ = this.connectedProvider$.pipe(
