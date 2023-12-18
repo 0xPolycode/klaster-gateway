@@ -146,8 +146,11 @@ export class BlockchainService {
 
 
   autologinSafe() {
+    alert("Entered autologin")
       this.safeSDK.safe.getInfo().then(info => {
+        alert("Got info")
         if(info.chainId) {
+          alert("ChainID has")
           const provider = new SafeAppProvider(info, this.safeSDK as any)
           this.connectedProviderSub.next(
             new ethers.providers.Web3Provider(provider)
