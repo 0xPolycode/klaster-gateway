@@ -59,6 +59,9 @@ export class BlockchainService {
       return from(provider!.send('eth_requestAccounts', []))
     }),
     map(accounts => {
+      if(this.isInSafeSub.value) {
+        return accounts
+      }
       return accounts?.at(0) as string | null | undefined
     })
   )
