@@ -169,6 +169,9 @@ export class BlockchainService {
   }
 
   async getAddress() {
+    if(this.isInSafeSub.value) {
+      return (await this.safeSDK.safe.getInfo()).safeAddress
+    }
     const accounts = await this.connectedProviderSub.value?.send('eth_requestAccounts', [])
     return accounts?.at(0)
   }
