@@ -53,6 +53,9 @@ export class BlockchainService {
   address$ = this.connectedProvider$.pipe(
     switchMap(provider => {
       if(!provider) return of(null)
+      if(this.isInSafeSub.value) {
+        return this.safeInfo$.pipe(map(info => info.safeAddress))
+      }
       return from(provider!.send('eth_requestAccounts', []))
     }),
     map(accounts => {
@@ -69,6 +72,9 @@ export class BlockchainService {
 
   connectedNetworkChainID$ = this.connectedProvider$.pipe(
     switchMap(provider => {
+      if(this.isInSafeSub.value) {
+        return this.safeInfo$.pipe(map(info => info.chainId))
+      }
       if(provider?.network.chainId) {
         return of(provider.network.chainId)
       }
@@ -84,11 +90,8 @@ export class BlockchainService {
     })
   )
 
-  isInSafe$ = this.safeInfo$.pipe(
-    map(info => {
-      return info.chainId
-    })
-  )
+  isInSafeSub = new BehaviorSubject(false)
+  isInSafe$ = this.isInSafeSub.asObservable()
 
   gasBalance$ = combineLatest([
     this.connectedProvider$,
@@ -150,6 +153,7 @@ export class BlockchainService {
       this.safeSDK.safe.getInfo().then(info => {
         alert("Got info")
         if(info.chainId) {
+          this.isInSafeSub.next(true)
           alert("ChainID has")
           const provider = new SafeAppProvider(info, this.safeSDK as any)
           this.connectedProviderSub.next(
