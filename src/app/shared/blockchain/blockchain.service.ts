@@ -42,7 +42,6 @@ export class BlockchainService {
       if(!provider) { return false }
       if(!provider.network) { return false }
       const chainId = provider?.network.chainId
-      console.log("CHAIN ID: ", chainId)
       if(!chainId) { return false }
       const chain = Chains.prod.find(chain => chain.id === chainId)
       if(!chain) { return false }
@@ -69,9 +68,7 @@ export class BlockchainService {
   safe = safeModule()
   injected = injectedModule()
 
-  safeInfo$ = from(this.safeSDK.safe.getInfo()).pipe(
-    tap(info => console.log(`Safe Info: ${JSON.stringify(info)}`))
-  )
+  safeInfo$ = from(this.safeSDK.safe.getInfo())
 
   connectedNetworkChainID$ = this.connectedProvider$.pipe(
     switchMap(provider => {
@@ -152,12 +149,9 @@ export class BlockchainService {
 
 
   autologinSafe() {
-    alert("Entered autologin")
       this.safeSDK.safe.getInfo().then(info => {
-        alert("Got info")
         if(info.chainId) {
           this.isInSafeSub.next(true)
-          alert("ChainID has")
           const provider = new SafeAppProvider(info, this.safeSDK as any)
           this.connectedProviderSub.next(
             new ethers.providers.Web3Provider(provider)
@@ -256,7 +250,7 @@ export class BlockchainService {
   // this frontend, then this method cannot be used to derive the "next" salt.
   async getNextDeploymentSalt() {
     const klaster = this.getKlasterSingletonSigner()
-    if(!klaster) { alert("No contract"); return }
+    if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return }
     const address = await this.getAddress()
     const accounts = await klaster['getDeployedWallets'](address) as string[]
     return accounts.length ?? 0
@@ -289,8 +283,8 @@ export class BlockchainService {
 
     const klaster = this.getKlasterSingletonSigner()
     const address = await this.getAddress()
-    if(!address) { alert("No address"); return 0 }
-    if(!klaster) { alert("No contract"); return 0 }
+    if(!address) { this.errorService.showSimpleError("Can't fetch wallet address"); return 0 }
+    if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
 
     return await klaster['calculateExecuteFee'](
       await address,
@@ -306,7 +300,7 @@ export class BlockchainService {
 
   async checkDeploymentStatusForNetwork(chainID: number, address: string) {
     const readProvider = this.readProviders.find(provider => provider.network.chainId === chainID)
-    if(!readProvider) { alert(`Provider not found for network ${chainID}`); return null }
+    if(!readProvider) { this.errorService.showSimpleError(`Provider not found for network ${chainID}`); return null }
     const klaster = this.getKlasterSingletonForNetwork(readProvider)
 
     const connectedWallet = await this.getAddress()

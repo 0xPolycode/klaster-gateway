@@ -62,10 +62,13 @@ export class AddressOverviewComponent implements OnInit {
       type: 'warning',
       buttonText: 'I accept the risk'
     })
-    this.ccipService.getWalletActivity('0x49Fa42e706d6914E44Be4855B3f52b6FB74CeA06').subscribe(res => {
-      console.log(res)
-    })
     this.blockchainService.autologinSafe()
+    console.log(`
+      --------------------------------------------------------------------------------------------------
+       | YOU ARE USING KLASTER SAFE - A CROSS-CHAIN ACCOUNT EXTENSION FOR SAFE AND OTHER SMART WALLETS.|
+       | DO NOT PASTE ANY CODES PROVIDED BY OTHER PERSONS HERE, AS IT COULD BE UNSAFE.                 |
+      --------------------------------------------------------------------------------------------------
+    `)
   } 
 
   sendTransaction(txData: SendTxPreview) {

@@ -29,8 +29,8 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
     this.address$
   ]).pipe(
     switchMap(([salt, address]) => {
-      if(!address) { alert("No address"); return of(null) }
-      if(salt === null || salt === undefined) { alert("No salt"); return of(null) }
+      if(!address) { this.errorService.showSimpleError("Can't fetch address"); return of(null) }
+      if(salt === null || salt === undefined) { this.errorService.showSimpleError("No salt"); return of(null) }
       return this.blockchainService.calculateAddress(address, salt.toString())
     })
   )
@@ -56,7 +56,7 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
   ]).pipe(
     switchMap(([salt, eth, matic, op, arb, base]) => {
       var chainSelectors = this.getSelectedChainSelectors()
-      if(salt === null || salt === undefined) { alert("No salt"); return of(null) }
+      if(salt === null || salt === undefined) { this.errorService.showSimpleError("Can't fetch account salt"); return of(null) }
       return this.blockchainService.calculateDeploymentFee(
         chainSelectors,
         salt.toString()

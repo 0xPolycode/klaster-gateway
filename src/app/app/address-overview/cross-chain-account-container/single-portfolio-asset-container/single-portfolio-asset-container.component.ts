@@ -96,11 +96,13 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
     const recipient = this.recipientAddressForm.value
 
     if(!decimals || !name || !symbol || !amount || !recipient) {
-      alert(`Metadata missing: Decimals ${decimals}, 
+      this.errorService.showSimpleError(
+        `Metadata missing: Decimals ${decimals}, 
         Name: ${name}, 
         Symbol: ${symbol}, 
         Amount: ${amount}, 
-        Recipient: ${recipient}`)
+        Recipient: ${recipient}`
+      )
       return
     }
 

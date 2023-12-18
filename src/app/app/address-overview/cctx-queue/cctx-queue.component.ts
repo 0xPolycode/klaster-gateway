@@ -17,8 +17,7 @@ export class CctxQueueComponent implements OnInit {
     switchMap(address => {
       if(!address) { return of(null) }
       return this.ccipService.getWalletActivity(address)
-    }),
-    tap(item => console.log(item))
+    })
   )
 
   walletActivityDisplay$ = this.walletActivity$.pipe(
@@ -43,7 +42,6 @@ export class CctxQueueComponent implements OnInit {
   formatCCTxTime(time: string) {
     const baseDate = Date.parse(time)
     const date = new Date(baseDate)
-    console.log(date)
     return {
       month: date.toLocaleDateString('en-us', { month: 'short' }),
       day: date.toLocaleDateString('en-us', { day: '2-digit' }),
