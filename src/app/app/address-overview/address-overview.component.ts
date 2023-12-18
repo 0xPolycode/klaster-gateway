@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ethers } from 'ethers';
 import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
 import { SendTxPreview, TransactionService } from 'src/app/shared/blockchain/transaction.service';
@@ -45,6 +46,13 @@ export class AddressOverviewComponent implements OnInit {
       const network = this.blockchainService.chains.find(chain => chain.id === txData?.chainID)
       if(!network) { this.errorService.showSimpleError("Network variable not provided. Cannot execute transaction."); return null }
       return {...txData, network: network }
+    })
+  )
+
+  displayBalance$ = this.blockchainService.balance$.pipe(
+    map(balance => {
+      if(!balance) { return null }
+      return ethers.utils.formatEther(balance)
     })
   )
 

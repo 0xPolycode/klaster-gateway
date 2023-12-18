@@ -65,6 +65,8 @@ export class BlockchainService {
     })
   )
 
+
+
   safe = safeModule()
   injected = injectedModule()
 
@@ -141,6 +143,17 @@ export class BlockchainService {
       }
     }),
   })
+
+  balance$ = this.connectedProvider$.pipe(
+    switchMap(provider => {
+      if(!provider) { return of(null) }
+      return this.address$.pipe(
+        switchMap(address => {
+          return from(provider.getBalance(address))
+        })
+      )
+    })
+  )
 
   constructor(private query: SessionQuery, 
     private sessionService: SessionService,

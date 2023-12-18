@@ -1,11 +1,6 @@
 <ng-container>
     <div class="mt-20 min-h-screen" >
-
-
         <div class="grid grid-cols-12 gap-x-4">
-
-            
-
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
     
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
@@ -29,6 +24,14 @@
                                           </svg>
                                           
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-sm uppercase font-medium text-slate-500">
+                                    Controller gas balance
+                                </div>
+                                <div>
+                                    {{displayBalance$ | async}}
                                 </div>
                             </div>
                             <div class="text-sm mt-4 uppercase font-medium text-slate-500">
