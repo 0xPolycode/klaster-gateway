@@ -52,10 +52,10 @@ export class BlockchainService {
 
   address$ = this.connectedProvider$.pipe(
     switchMap(provider => {
-      if(!provider) return of(null)
       if(this.isInSafeSub.value) {
         return this.safeInfo$.pipe(map(info => info.safeAddress))
       }
+      if(!provider) return of(null)
       return from(provider!.send('eth_requestAccounts', []))
     }),
     map(accounts => {
