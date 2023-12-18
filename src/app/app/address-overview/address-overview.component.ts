@@ -65,6 +65,7 @@ export class AddressOverviewComponent implements OnInit {
     this.ccipService.getWalletActivity('0x49Fa42e706d6914E44Be4855B3f52b6FB74CeA06').subscribe(res => {
       console.log(res)
     })
+    this.blockchainService.autologinSafe()
   } 
 
   sendTransaction(txData: SendTxPreview) {
