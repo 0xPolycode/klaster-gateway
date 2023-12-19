@@ -1,5 +1,5 @@
 {
-    "name": "Klaster Gateway",
-    "description": "Multi-chain MultiSig",
-    "iconPath": "./src/assets/klstr.png"
+    "name": "Klaster Safe",
+    "description": "Cross-chain accounts for your Safe",
+    "iconPath": "src/assets/klaster-icon.png"
   }
