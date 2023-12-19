@@ -10,7 +10,7 @@ import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.ser
 import { SessionQuery } from 'src/app/shared/session.query';
 import { DerivedWalletData, SessionStore } from 'src/app/shared/session.store';
 import { SessionService } from 'src/app/shared/storage/session.service';
-import { Chains } from 'src/app/shared/variables';
+import { Chains, ErrorMessages } from 'src/app/shared/variables';
 
 @Component({
   selector: 'app-address-overview',
@@ -82,7 +82,7 @@ export class AddressOverviewComponent implements OnInit {
       }, 1000);
     } catch(error) {
       this.errorService.showSimpleError(
-        "Safe security policy prevents writing to clipboard on certain browsers. Please copy the address manually."
+        ErrorMessages.clipboardError
       )
     }
     

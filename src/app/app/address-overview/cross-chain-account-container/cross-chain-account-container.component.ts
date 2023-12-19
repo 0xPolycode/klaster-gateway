@@ -3,10 +3,11 @@ import { FormControl, Validators } from '@angular/forms';
 import { BigNumber, ethers } from 'ethers';
 import { BehaviorSubject, Observable, combineLatest, forkJoin, from, map, of, share, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
+import { ErrorService } from 'src/app/shared/error.service';
 import { PriceFeedService } from 'src/app/shared/services/price-feed.service';
 import { SessionQuery } from 'src/app/shared/session.query';
 import { SessionService } from 'src/app/shared/storage/session.service';
-import { Chains } from 'src/app/shared/variables';
+import { Chains, ErrorMessages } from 'src/app/shared/variables';
 
 @Component({
   selector: 'app-cross-chain-account-container',
@@ -94,6 +95,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
 
   constructor(private blockchainService: BlockchainService,
     private storageService: SessionService,
+    private errorService: ErrorService,
     private sessionQuery: SessionQuery) { }
 
   ngOnInit(): void {
@@ -106,9 +108,14 @@ export class CrossChainAccountContainerComponent implements OnInit {
   }
 
   copyAddress(address: string) {
-    this.tooltipTextSub.next("Copied")
-    navigator.clipboard.writeText(address)
-    setTimeout(() => { this.tooltipTextSub.next("Copy address") }, 500)
+    try {
+      this.tooltipTextSub.next("Copied")
+      navigator.clipboard.writeText(address)
+      setTimeout(() => { this.tooltipTextSub.next("Copy address") }, 500)
+    } catch(error) {
+      this.errorService.showSimpleError(ErrorMessages.clipboardError)
+    }
+    
   }
 
   toggleTagInput() {

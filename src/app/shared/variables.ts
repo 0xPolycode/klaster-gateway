@@ -88,6 +88,10 @@ export class CCIPLanes {
     }
 }
 
+export class ErrorMessages {
+  static clipboardError = "Safe security policy prevents writing to clipboard on certain browsers. Please copy the address manually"
+}
+
 export const logoSvg = `<svg width="4047" height="868" viewBox="0 0 4047 868" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_60_43)">
 <rect x="761.667" y="64.8032" width="882.371" height="80" rx="40" transform="rotate(144.1 761.667 64.8032)" fill="url(#paint0_linear_60_43)"/>
