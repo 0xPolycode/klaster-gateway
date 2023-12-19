@@ -13,12 +13,15 @@ export class SessionService {
     this.sessionStore.reset()
   }
 
+
   tagWallet(address: string, tag: string) {
     this.sessionStore.update(session => {
       return {
-        savedWallets: session.savedWallets.concat({
-          address: address,
-          tag: tag
+        savedWallets: session.savedWallets
+          .filter(savedWallet => savedWallet.address !== address)
+          .concat({
+            address: address,
+            tag: tag
         }),
         isLoggedIn: session.isLoggedIn,
         pendingDeployments: session.pendingDeployments
