@@ -79,7 +79,13 @@ export class Chains {
 }
 
 export class CCIPLanes {
-    
+    static lanes: Record<number, number[]> = {
+      1: [137, 42161, 10, 8453],
+      8453: [1, 42161, 10],
+      42161: [1],
+      10: [1, 137],
+      137: [1, 10]
+    }
 }
 
 export const logoSvg = `<svg width="4047" height="868" viewBox="0 0 4047 868" fill="none" xmlns="http://www.w3.org/2000/svg">

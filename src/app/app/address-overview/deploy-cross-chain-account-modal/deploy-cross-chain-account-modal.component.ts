@@ -7,7 +7,7 @@ import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service'
 import { TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { ErrorService } from 'src/app/shared/error.service';
 import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
-import { ChainSelectors } from 'src/app/shared/variables';
+import { CCIPLanes, ChainSelectors } from 'src/app/shared/variables';
 
 @Component({
   selector: 'app-deploy-cross-chain-account-modal',
@@ -38,6 +38,14 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
   connectedNetwork$ = this.blockchainService.connectedNetworkChainID$.pipe(
     map(id => {
       return this.blockchainService.chains.find(chain => chain.id === id)
+    })
+  )
+
+  directLanes$ = this.connectedNetwork$.pipe(
+    map(connectedNetwork => {
+      const id = connectedNetwork?.id
+      if(!id) { return null }
+      return CCIPLanes.lanes[connectedNetwork.id]
     })
   )
 
@@ -76,6 +84,10 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
       return balance?.lt(BigNumber.from(fee))
     })
   )
+
+  checkIfDoesntContain(numberArray: number[], number: number) {
+    return !numberArray.includes(number)
+  }
 
   deployContracts(fee: string) {
     this.miscModalsService.dismissDeployModal()

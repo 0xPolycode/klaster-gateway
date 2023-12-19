@@ -309,6 +309,12 @@ export class BlockchainService {
     if(!address) { this.errorService.showSimpleError("Can't fetch wallet address"); return 0 }
     if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
 
+    const selectedChainIds = selectedChains.map(selectedChain => 
+        this.chains.find(chain => chain.selector === selectedChain))
+        .map(chainInfo => chainInfo?.id)
+        .filter(chainID => chainID !== undefined) as number[]
+
+
     return await klaster['calculateExecuteFee'](
       await address,
       selectedChains,
@@ -316,7 +322,7 @@ export class BlockchainService {
       await address,
       0,
       [],
-      BigNumber.from("2000000"),
+      BigNumber.from("900000"),
       formatBytes32String("")
     )
   }

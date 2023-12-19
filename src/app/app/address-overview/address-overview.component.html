@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                <ng-container *ngIf="address$ | async">
+                <ng-container *ngIf="address$ | async; else notConnected">
                     <ng-container *ngIf="derivedWallets$ | async as wallets">
                         <div *ngIf="address$ | async as address; else connectPrompt"
                             [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8 mt-4">
@@ -209,6 +209,18 @@
                     </ng-container>
                 </ng-container>
 
+                <ng-template #notConnected>
+                    <div class="card-body col-span-8 mt-4 text-center flex flex-col items-center gap-y-4">
+                        <div class="mt-8">
+                            Please connect your wallet to use the Klaster App.
+                        </div>
+                        
+                        <button (click)="connectWallet()" class="app-button mt-8 px-12 py-3 text-sm">
+                            Connect wallet
+                        </button>
+                    </div>
+                   
+                </ng-template>
 
             </ng-container>
 
