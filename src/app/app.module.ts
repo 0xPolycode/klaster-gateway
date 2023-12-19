@@ -16,7 +16,6 @@ import { DeployCrossChainAccountModalComponent } from './app/address-overview/de
 import { DeployedNetworksStatusContainerComponent } from './app/address-overview/cross-chain-account-container/deployed-networks-status-container/deployed-networks-status-container.component';
 import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 import { TransactionModalsComponent } from './shared/transaction-modals/transaction-modals.component';
-import { TxQueueComponent } from './navbar/tx-queue/tx-queue.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue.component';
@@ -34,7 +33,6 @@ import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue
     DeployedNetworksStatusContainerComponent,
     ErrorModalComponent,
     TransactionModalsComponent,
-    TxQueueComponent,
     SpinnerComponent,
     CctxQueueComponent
   ],

@@ -6,8 +6,6 @@ import { Wallet, ethers } from 'ethers';
 export interface SessionState {
    savedWallets: DerivedWalletData[]
    isLoggedIn: boolean
-   ccTxHistoryHashList: string[]
-   pendingDeployments: { address: string, chainID: number }[]
 }
 
 export interface DerivedWalletData {
@@ -19,8 +17,6 @@ export function createInitialState(): SessionState {
   return {
     savedWallets: [],
     isLoggedIn: false,
-    ccTxHistoryHashList: [],
-    pendingDeployments: []
   };
 }
 

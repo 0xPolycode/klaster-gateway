@@ -48,7 +48,6 @@ export class TransactionService {
         fee
       )
       this.setTransactionState('processing')
-      this.addTxToHistory(tx)
       
       const receipt = await tx.wait(1)
       this.refreshCrossChainAccounts()
@@ -132,7 +131,6 @@ export class TransactionService {
       )
   
       this.setTransactionState('processing')
-      this.addTxToHistory(tx)
 
       const res = await tx.wait(1)
 
@@ -153,10 +151,6 @@ export class TransactionService {
 
   refreshCrossChainAccounts() {
     this.refreshCrossChainAccountsTriggerSub.next(null)
-  }
-
-  private addTxToHistory(tx: any) {
-    this.sessionService.addCcTxToHistory(tx.hash)
   }
 }
 

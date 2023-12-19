@@ -13,6 +13,10 @@ export class SessionService {
     this.sessionStore.reset()
   }
 
+  setHasAcceptedTerms() {
+    
+  }
+
 
   tagWallet(address: string, tag: string) {
     this.sessionStore.update(session => {
@@ -24,7 +28,6 @@ export class SessionService {
             tag: tag
         }),
         isLoggedIn: session.isLoggedIn,
-        pendingDeployments: session.pendingDeployments
       }
     })
   }
@@ -34,48 +37,6 @@ export class SessionService {
       return {
         savedWallets: session.savedWallets,
         isLoggedIn: isLoggedIn,
-        pendingDeployments: session.pendingDeployments
-      }
-    })
-  }
-
-  addCcTxToHistory(hash: string) {
-    this.sessionStore.update(session => {
-      return {
-        savedWallets: session.savedWallets,
-        isLoggedIn: session.isLoggedIn,
-        ccTxHistoryHashList: session.ccTxHistoryHashList.concat(hash),
-        pendingDeployments: session.pendingDeployments
-      }
-    })
-  }
-
-  addPendingDeployment(chainID: number, address: string) {
-    this.sessionStore.update(session => {
-      return {
-        savedWallets: session.savedWallets,
-        isLoggedIn: session.isLoggedIn,
-        ccTxHistoryHashList: session.ccTxHistoryHashList,
-        pendingDeployments: session.pendingDeployments.concat({
-          address: address,
-          chainID: chainID
-        })
-      }
-    })
-  }
-
-  removePendingDeployment(address: string, chainID: number) {
-    this.sessionStore.update(session => {
-      return {
-        savedWallets: session.savedWallets,
-        isLoggedIn: session.isLoggedIn,
-        ccTxHistoryHashList: session.ccTxHistoryHashList,
-        pendingDeployments: session.pendingDeployments.filter(deployment => {
-          if(deployment.chainID === chainID && deployment.address === address) {
-            return false
-          }
-          return true
-        })
       }
     })
   }
