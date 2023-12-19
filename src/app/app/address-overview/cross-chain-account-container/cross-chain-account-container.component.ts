@@ -108,14 +108,11 @@ export class CrossChainAccountContainerComponent implements OnInit {
   }
 
   copyAddress(address: string) {
-    try {
-      this.tooltipTextSub.next("Copied")
-      navigator.clipboard.writeText(address)
-      setTimeout(() => { this.tooltipTextSub.next("Copy address") }, 500)
-    } catch(error) {
+    this.tooltipTextSub.next("Copied")
+    navigator.clipboard.writeText(address).catch(error => {
       this.errorService.showSimpleError(ErrorMessages.clipboardError)
-    }
-    
+    })
+    setTimeout(() => { this.tooltipTextSub.next("Copy address") }, 500)
   }
 
   toggleTagInput() {
