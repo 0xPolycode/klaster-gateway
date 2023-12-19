@@ -4,8 +4,20 @@
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
 
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-                    <div class="card-body grid grid-cols-12 mt-4 text-slate-600">
-                        <img class="h-6 col-span-12 mb-4" src="../../../assets/klstr.png" alt="" srcset="">
+                    <div class="mt-4 card-body flex flex-row justify-between">
+                        <img class="h-6 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
+                        <div class="flex flex-row gap-x-4 items-center">
+                            <div class="text-xs uppercase font-semibold text-slate-600">
+                                Powered by
+                            </div>
+                            <a href="https://ccip.chain.link">
+                                <img class="h-6" src="../../../assets/ccip.svg" alt="" srcset="">
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body grid grid-cols-12 mt-2 text-slate-600">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
                             <div class="text-sm uppercase font-medium text-slate-500">
                                 Controller Safe
@@ -72,11 +84,9 @@
                         </ng-template>
                     </div>
 
-                    <app-cctx-queue></app-cctx-queue>
-
                     <div class="py-3 border rounded-md hover:bg-fuchsia-700 bg-fuchsia-50 uppercase font-semibold 
                     text-fuchsia-700 border-fuchsia-200 hover:text-white hover:border-white transition-all
-                     flex flex-row gap-x-2 items-center justify-center w-full text-sm text-center cursor-pointer">
+                     flex flex-row gap-x-2 items-center justify-center mt-2 w-full text-sm text-center cursor-pointer">
                         <div>
                             Learn about Klaster (30sec)
                         </div>
@@ -87,6 +97,9 @@
                         </svg>
                     </div>
 
+                    <app-cctx-queue></app-cctx-queue>
+
+                
                     <div class="col-span-12 card-body">
                         <div class="text-sm uppercase font-semibold text-rose-700">
                             Klaster incentives programme
