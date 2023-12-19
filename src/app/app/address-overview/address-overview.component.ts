@@ -74,11 +74,18 @@ export class AddressOverviewComponent implements OnInit {
   isCopyConfirmVisible$ = this.isCopyConfirmVisibleSub.asObservable()
 
   copyAddressClicked(address: string) {
-    navigator.clipboard.writeText(address)
-    this.isCopyConfirmVisibleSub.next(true)
-    setTimeout(() => {
-      this.isCopyConfirmVisibleSub.next(false)
-    }, 1000);
+    try {
+      navigator.clipboard.writeText(address)
+      this.isCopyConfirmVisibleSub.next(true)
+      setTimeout(() => {
+        this.isCopyConfirmVisibleSub.next(false)
+      }, 1000);
+    } catch(error) {
+      this.errorService.showSimpleError(
+        "Safe security policy prevents writing to clipboard on certain browsers. Please copy the address manually."
+      )
+    }
+    
   }
 
   constructor(private blockchainService: BlockchainService,
