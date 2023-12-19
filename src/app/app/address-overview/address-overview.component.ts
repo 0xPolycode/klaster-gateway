@@ -34,6 +34,23 @@ export class AddressOverviewComponent implements OnInit {
 
   supportedChains = this.blockchainService.chains
 
+  connectedChain$ = this.blockchainService.connectedNetworkChainID$.pipe(
+    map(chainID => {
+      const chainDisplay = this.blockchainService.chains.find(chain => chain.id === chainID)
+      if(!chainDisplay) { return null }
+      return chainDisplay
+    })
+  )
+
+  balance$ = this.blockchainService.gasBalance$
+
+  displayBalance$ = this.balance$.pipe(
+    map(balance => {
+      if(!balance) { return null }
+      return ethers.utils.formatEther(balance)
+    })
+  )
+
   derivedWallets$ = combineLatest([
     this.address$,
     this.txService.refreshCrossChainAccountsTrigger$
@@ -50,13 +67,6 @@ export class AddressOverviewComponent implements OnInit {
       const network = this.blockchainService.chains.find(chain => chain.id === txData?.chainID)
       if(!network) { this.errorService.showSimpleError("Network variable not provided. Cannot execute transaction."); return null }
       return {...txData, network: network }
-    })
-  )
-
-  displayBalance$ = this.blockchainService.balance$.pipe(
-    map(balance => {
-      if(!balance) { return null }
-      return ethers.utils.formatEther(balance)
     })
   )
 
