@@ -112,7 +112,7 @@ export class CrossChainAccountContainerComponent implements OnInit {
     navigator.clipboard.writeText(address).catch(error => {
       this.errorService.showError({
         buttonText: 'OK',
-        message: `Address:  ${address}`,
+        message: `Please copy manually:  ${address}`,
         title: 'Copy blocked by Safe security policy',
         type: 'warning'
       })
