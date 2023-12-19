@@ -1,10 +1,10 @@
 <div *ngIf="address$ | async" class="card-body">
     <div class=" text-xs" *ngIf="walletActivityDisplay$ | async as activity; else loading">
         <div class="uppercase font-medium text-slate-500 mb-4">
-            Cross-Chain Transactions
+            Transactions
         </div>
         <div class="py-1 mb-2 border-b" *ngFor="let response of activity.ccip_api_responses; let i = index">
-            <div class="w-full grid gap-x-4 grid-cols-9" *ngIf="response.data.allCcipTransactionsFlats.nodes.at(0) as node">
+            <div class="w-full grid gap-x-4 grid-cols-10" *ngIf="response.data.allCcipTransactionsFlats.nodes.at(0) as node">
                 
                 <div *ngIf="formatCCTxTime(node.blockTimestamp) as datetime"
                      class="flex flex-col justify-center col-span-1">
@@ -16,15 +16,35 @@
                     </div>
                 </div>
 
+                <div *ngIf="formatCCTxTime(node.blockTimestamp) as datetime" 
+                    class="col-span-3 flex flex-row items-center">
+                    <div>
+                        {{datetime.time.hourWMinute}} 
+                    </div>
+                </div>
 
-                <div class="col-span-5 gap-x-4 flex flex-row text-xs uppercase font-semibold
-                 items-center justify-center bg-rose-100 text-rose-600 rounded-md"> 
-                    <div *ngIf="getChainInfo(node.destChainId) as chainInfo" class="flex flex-row gap-x-2 font-semibold items-center justify-start">
-                        <img class="h-5" src="../../../assets/networks/{{chainInfo.logoUri}}" alt="" srcset=""> 
+                <div class="col-span-1 gap-x-4 flex flex-row text-xs uppercase font-semibold
+                 items-center justify-center rounded-md"> 
+                    <div *ngIf="getChainInfo(node.sourceChainId) as chainInfo" class="flex flex-row gap-x-2 font-semibold items-center justify-start">
+                        <img class="h-6" src="../../../assets/networks/{{chainInfo.logoUri}}" alt="" srcset=""> 
                     </div> 
                 </div>
 
+                <div class="flex flex-row items-center justify-center text-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" clip-rule="evenodd" />
+                      </svg>
+                      
+                </div>
 
+                <div class="col-span-1 gap-x-4 flex flex-row text-xs uppercase font-semibold
+                 items-center justify-center rounded-md"> 
+                    <div *ngIf="getChainInfo(node.destChainId) as chainInfo" class="flex flex-row gap-x-2 font-semibold items-center justify-start">
+                        <img class="h-6" src="../../../assets/networks/{{chainInfo.logoUri}}" alt="" srcset=""> 
+                    </div> 
+                </div>
+
+                
                       
                 
                 <a target="_blank"

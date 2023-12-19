@@ -14,14 +14,19 @@
                                 <div>
                                     <img class="h-4" src="../../../assets/safelogo.png" alt="" srcset="">
                                 </div>
-                                <div class="flex flex-row gap-x-2">
+                                <div class="flex flex-row items-center gap-x-4">
                                     <div>
                                         {{address | shorten:10:7}}
                                     </div>
-                                    <div class="bg-slate-50 flex flex-row items-center justify-center rounded-full w-6 h-6 p-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <div (click)="copyAddressClicked(address)" class="bg-slate-50 flex flex-row items-center cursor-pointer 
+                                    hover:bg-rose-100 hover:text-rose-700 hover:border-rose-200 transition-all
+                                     justify-center rounded-full w-8 h-8 border p-2">
+                                        <svg *ngIf="(isCopyConfirmVisible$ | async) === false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                                          </svg>
+                                        </svg>
+                                        <svg *ngIf="isCopyConfirmVisible$ | async" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                                        </svg>                                          
                                           
                                     </div>
                                 </div>
@@ -257,3 +262,27 @@
 </ng-template>
 
 <app-transaction-modals></app-transaction-modals>
+
+<div *ngIf="isUnsupportedChain$ | async" 
+class="fixed top-0 left-0 w-screen z-50 h-screen bg-[rgba(255,255,255,0.3)]
+     backdrop-blur-[2px] flex flex-row items-center justify-center">
+
+    <div class="max-w-2xl w-full text-center bg-white p-8 border rounded-md">
+        <div class="text-slate-700 uppercase text-sm font-semibold">
+            You are connected to an unsupported chain.
+        </div>
+        <div class="mt-4 text-slate-500">
+            Please switch your network to one of the <br> following & reload the app.
+        </div>
+
+        <div class="grid grid-cols-5 gap-x-4 mt-4">
+            <div class="text-xs font-medium text-slate-600 uppercase gap-x-2 flex rounded-md flex-row justify-center
+            items-center border px-2 py-2" *ngFor="let chain of supportedChains">
+                <div>{{chain.label}}</div>
+                <img class="h-4" src="../../../assets/networks/{{chain.logoUri}}" alt="" srcset="">
+            </div>
+        </div>
+        
+    </div>
+
+</div>

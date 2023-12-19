@@ -47,7 +47,8 @@ export class CctxQueueComponent implements OnInit {
       day: date.toLocaleDateString('en-us', { day: '2-digit' }),
       time: {
         hour: date.toLocaleTimeString('en-us', { hour: '2-digit'}),
-        minute: date.toLocaleDateString('en-us', { minute: '2-digit' })
+        minute: date.toLocaleTimeString('en-us', { minute: '2-digit' }),
+        hourWMinute: date.toLocaleTimeString('en-us', { hour: '2-digit', minute: '2-digit' })
       }
     }
   }

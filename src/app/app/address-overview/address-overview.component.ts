@@ -30,6 +30,10 @@ export class AddressOverviewComponent implements OnInit {
   sidebarCollapsedSub = new BehaviorSubject(false)
   sidebarCollapsed$ = this.sidebarCollapsedSub.asObservable()
 
+  isUnsupportedChain$ = this.blockchainService.isUnsupportedChain$
+
+  supportedChains = this.blockchainService.chains
+
   derivedWallets$ = combineLatest([
     this.address$,
     this.txService.refreshCrossChainAccountsTrigger$
@@ -55,6 +59,17 @@ export class AddressOverviewComponent implements OnInit {
       return ethers.utils.formatEther(balance)
     })
   )
+
+  isCopyConfirmVisibleSub = new BehaviorSubject(false)
+  isCopyConfirmVisible$ = this.isCopyConfirmVisibleSub.asObservable()
+
+  copyAddressClicked(address: string) {
+    navigator.clipboard.writeText(address)
+    this.isCopyConfirmVisibleSub.next(true)
+    setTimeout(() => {
+      this.isCopyConfirmVisibleSub.next(false)
+    }, 1000);
+  }
 
   constructor(private blockchainService: BlockchainService,
     private txService: TransactionService,

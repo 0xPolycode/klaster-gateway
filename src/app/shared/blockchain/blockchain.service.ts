@@ -65,6 +65,8 @@ export class BlockchainService {
     })
   )
 
+  private isUnsupportedChain = new BehaviorSubject<null | boolean>(null)
+  isUnsupportedChain$ = this.isUnsupportedChain.asObservable()
 
 
   safe = safeModule()
@@ -89,6 +91,14 @@ export class BlockchainService {
           }
         })
       )
+    }),
+    tap(chainID => {
+      const chain = this.chains.find(chain => chain.id === chainID)
+      if(chain) {
+        this.isUnsupportedChain.next(false)
+      } else {
+        this.isUnsupportedChain.next(true)
+      }
     })
   )
 
