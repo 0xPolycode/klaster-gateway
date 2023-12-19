@@ -42,6 +42,10 @@ export class AddressOverviewComponent implements OnInit {
     })
   )
 
+  isntInSafe$ = this.blockchainService.isInSafe$.pipe(
+    map(isInSafe => !isInSafe)
+  )
+
   balance$ = this.blockchainService.gasBalance$
 
   displayBalance$ = this.balance$.pipe(

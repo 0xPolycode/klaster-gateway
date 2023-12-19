@@ -52,7 +52,7 @@
                                     {{network.label}}
                                 </div>
                             </div>
-                            <button (click)="logOut()"
+                            <button *ngIf="isntInSafe$ | async" (click)="logOut()"
                                 class="app-button w-full py-3 text-center mt-6 text-xs cursor-pointer">
                                 Disconnect Wallet
                             </button>
