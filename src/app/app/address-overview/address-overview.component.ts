@@ -75,7 +75,12 @@ export class AddressOverviewComponent implements OnInit {
 
   copyAddressClicked(address: string) {
     navigator.clipboard.writeText(address).catch(error => {
-      this.errorService.showSimpleError(ErrorMessages.clipboardError)
+      this.errorService.showError({
+        buttonText: 'OK',
+        message: `Address:  ${address}`,
+        title: 'Copy blocked by Safe security policy',
+        type: 'warning'
+      })
     })
     this.isCopyConfirmVisibleSub.next(true)
     setTimeout(() => {

@@ -110,7 +110,12 @@ export class CrossChainAccountContainerComponent implements OnInit {
   copyAddress(address: string) {
     this.tooltipTextSub.next("Copied")
     navigator.clipboard.writeText(address).catch(error => {
-      this.errorService.showSimpleError(ErrorMessages.clipboardError)
+      this.errorService.showError({
+        buttonText: 'OK',
+        message: `Address:  ${address}`,
+        title: 'Copy blocked by Safe security policy',
+        type: 'warning'
+      })
     })
     setTimeout(() => { this.tooltipTextSub.next("Copy address") }, 500)
   }
