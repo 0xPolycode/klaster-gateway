@@ -1,10 +1,11 @@
 <ng-container>
-    <div class="mt-20 min-h-screen">
+    <div class="min-h-screen">
         <div class="grid grid-cols-12 gap-x-4">
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
 
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
                     <div class="card-body grid grid-cols-12 mt-4 text-slate-600">
+                        <img class="h-6 col-span-12 mb-4" src="../../../assets/klstr.png" alt="" srcset="">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
                             <div class="text-sm uppercase font-medium text-slate-500">
                                 Controller Safe
@@ -97,13 +98,6 @@
                         </div>
 
                     </div>
-
-                    <div class="card-body text-sm text-slate-700 leading-relaxed">
-                        <div class="font-semibold mb-4 text-rose-700 uppercase">Developing smart contracts?</div>
-                        Add cross-chain accounts to any smart contract with the developer-friendly Klaster Solidity SDK
-
-
-                    </div>
                 </div>
 
                 <ng-container *ngIf="address$ | async; else notConnected">
@@ -177,25 +171,29 @@
 
                             <div *ngIf="wallets.length === 0">
                                 <div
-                                    class="w-full h-full mt-4 card-body text-slate-600 flex flex-col items-center justify-center">
-                                    You haven't deployed any cross-chain accounts yet.
+                                    class="w-full h-full card-body text-slate-600 flex flex-col items-center justify-center">
 
-
-                                    <div class="flex mt-8 rounded-md
-                                    flex-row gap-x-3 items-center text-sm"
-                                        *ngIf="connectedChain$ | async as connectedChain">
-                                        To deploy a cross-chain account, your <b>Safe</b> needs to have {{connectedChain.token}} on
-
-                                        <div
-                                            class="px-4 py-2 border gap-x-2 bg-white rounded-md text-xs flex flex-row items-center justify-center">
-                                            <div>{{connectedChain.label}}</div>
-                                            <img class="h-4" src="../../../assets/networks/{{connectedChain.logoUri}}"
-                                                alt="" srcset="">
-                                        </div>
+                                    <div class="text-sm">
+                                        You haven't deployed any cross-chain accounts yet.
                                     </div>
 
-                                    <div class="mt-4 text-sm">
-                                        Your current balance is {{displayBalance$ | async}} {{(connectedChain$ | async)?.token}}
+
+                                    <div class="mt-8 rounded-md leading-[3] text-center text-sm"
+                                        *ngIf="connectedChain$ | async as connectedChain">
+                                        To get started with Klaster, your address or Safe with address
+                                        <span class="py-1 px-3 bg-white border rounded-md">{{address$ | async}}</span>
+                                        needs to have
+                                        <span class="py-1 px-3 bg-white border rounded-md">{{connectedChain.token}}</span>
+                                        on
+                                        <span class="py-1 px-3 bg-white border rounded-md">
+                                            <img class="h-4 inline" src="../../../assets/networks/{{connectedChain.logoUri}}" alt="" srcset="">
+                                            <span class="ml-2">{{connectedChain.label}}</span>
+                                        </span>.
+
+                                        The current balance is 
+                                        <span class="py-1 px-3 bg-white border rounded-md">{{displayBalance$ | async}} {{connectedChain.token}}</span>.
+
+
                                     </div>
 
                                     <button [disabled]="(balance$ | async)?.eq(0)" (click)="deployWallet()"
@@ -214,12 +212,12 @@
                         <div class="mt-8">
                             Please connect your wallet to use the Klaster App.
                         </div>
-                        
+
                         <button (click)="connectWallet()" class="app-button mt-8 px-12 py-3 text-sm">
                             Connect wallet
                         </button>
                     </div>
-                   
+
                 </ng-template>
 
             </ng-container>
