@@ -322,7 +322,7 @@ export class BlockchainService {
       await address,
       0,
       [],
-      BigNumber.from("1500000"),
+      BigNumber.from("2000000"),
       formatBytes32String("")
     )
   }
