@@ -6,8 +6,8 @@
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
                     <div class="mt-4 card-body flex flex-row justify-between">
                         <img class="h-6 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
-                        <div class="flex flex-row gap-x-4 items-center">
-                            <div class="text-xs uppercase font-semibold text-slate-600">
+                        <div class="flex flex-row gap-x-2 items-center">
+                            <div class="text-xs uppercase font-regular text-slate-600">
                                 Powered by
                             </div>
                             <a href="https://ccip.chain.link">
@@ -191,20 +191,20 @@
                                     </div>
 
 
-                                    <div class="mt-8 rounded-md leading-[3] text-center text-sm"
+                                    <div class="mt-8 rounded-md leading-[3.3] text-center text-sm"
                                         *ngIf="connectedChain$ | async as connectedChain">
-                                        To get started with Klaster, your address or Safe with address
-                                        <span class="py-1 px-3 bg-white border rounded-md">{{address$ | async}}</span>
+                                        To get started with Klaster, your wallet or Safe with address
+                                        <span class="py-1 px-3 bg-white border rounded-md">{{address$ | async}}</span> <br>
                                         needs to have
                                         <span class="py-1 px-3 bg-white border rounded-md">{{connectedChain.token}}</span>
                                         on
                                         <span class="py-1 px-3 bg-white border rounded-md">
                                             <img class="h-4 inline" src="../../../assets/networks/{{connectedChain.logoUri}}" alt="" srcset="">
                                             <span class="ml-2">{{connectedChain.label}}</span>
-                                        </span>.
-
+                                        </span>
+                                        <br>
                                         The current balance is 
-                                        <span class="py-1 px-3 bg-white border rounded-md">{{displayBalance$ | async}} {{connectedChain.token}}</span>.
+                                        <span class="py-1 px-3 bg-white border rounded-md">{{displayBalance$ | async}} {{connectedChain.token}}</span>
 
 
                                     </div>
@@ -221,9 +221,9 @@
                 </ng-container>
 
                 <ng-template #notConnected>
-                    <div class="card-body col-span-8 mt-4 text-center flex flex-col items-center gap-y-4">
-                        <div class="mt-8">
-                            Please connect your wallet to use the Klaster App.
+                    <div class="card-body col-span-8 my-4 text-center flex flex-col items-center gap-y-4">
+                        <div class="mt-8 text-sm text-slate-700">
+                            Please connect your wallet to use Klaster Safe.
                         </div>
 
                         <button (click)="connectWallet()" class="app-button mt-8 px-12 py-3 text-sm">
