@@ -4,7 +4,7 @@
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
 
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-                    <div class="mt-4 mb-8 flex flex-row justify-between">
+                    <div class="mt-4 mb-4 flex flex-row justify-between">
                         <img class="h-8 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
                         <!-- <div class="flex flex-row gap-x-2 items-center">
                             <div class="text-xs uppercase font-regular text-slate-600">
@@ -32,7 +32,7 @@
 
                     <div class="card-body grid grid-cols-12 mt-2 text-slate-600">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
-                            <div class="text-sm uppercase font-medium text-slate-500">
+                            <div class="text-xs  uppercase font-medium text-slate-500">
                                 Controller Safe
                             </div>
                             <div class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-sm mt-4 uppercase font-medium text-slate-500">
+                            <div class="text-xs mt-4 uppercase font-medium text-slate-500">
                                 Connected network
                             </div>
                             <div *ngIf="network$ | async as network"
