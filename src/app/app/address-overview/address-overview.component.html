@@ -6,25 +6,16 @@
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
                     <div class="mt-4 mb-4 flex flex-row justify-between">
                         <img class="h-8 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
-                        <!-- <div class="flex flex-row gap-x-2 items-center">
-                            <div class="text-xs uppercase font-regular text-slate-600">
-                                Powered by
-                            </div>
-                            <a href="https://ccip.chain.link">
-                                <img class="h-6" src="../../../assets/ccip.svg" alt="" srcset="">
-                            </a>
-
-                        </div> -->
                     </div>
 
-                    <div class="card-body text-xs text-red-600 grid grid-cols-12 gap-x-4 leading-relaxed font-medium">
-                        <div class="flex flex-row items-center col-span-2">
+                    <div class="card-body !py-4 !px-6 text-xs text-red-600 grid grid-cols-12 leading-relaxed font-medium">
+                        <div class="flex flex-row items-center col-span-1">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                                 <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
                               </svg>
                               
                         </div>
-                        <div class="col-span-10">
+                        <div class="col-span-11 pl-3">
                             This is a beta preview of the Klaster app. It is meant to be used only for testing purposes. To use the app for operations, please wait for a production release. 
                         </div>
                         
@@ -245,8 +236,14 @@
                             Please connect your wallet to use Klaster Safe.
                         </div>
 
-                        <button (click)="connectWallet()" class="app-button mt-8 px-12 py-3 text-sm">
-                            Connect wallet
+                        <button (click)="connectWallet()" class="app-button mt-8 px-12
+                        flex flex-row gap-x-2 py-3 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                          </svg>
+                            <div>
+                                Connect wallet
+                            </div>                          
                         </button>
                     </div>
 
