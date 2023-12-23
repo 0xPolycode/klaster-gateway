@@ -19,6 +19,7 @@ import { TransactionModalsComponent } from './shared/transaction-modals/transact
 import { HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue.component';
+import { NativePortfolioAssetContainerComponent } from './app/address-overview/cross-chain-account-container/native-portfolio-asset-container/native-portfolio-asset-container.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue
     ErrorModalComponent,
     TransactionModalsComponent,
     SpinnerComponent,
-    CctxQueueComponent
+    CctxQueueComponent,
+    NativePortfolioAssetContainerComponent
   ],
   imports: [
     BrowserModule,

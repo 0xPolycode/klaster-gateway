@@ -87,6 +87,8 @@ export class SinglePortfolioAssetContainerComponent implements OnInit {
 
   openSendModal(metadata: any, chainID: number) {
 
+    this.sendFormToggledSub.next(false)
+
     const decimals = metadata.decimals
     const logo = metadata.logo
     const name = metadata.name

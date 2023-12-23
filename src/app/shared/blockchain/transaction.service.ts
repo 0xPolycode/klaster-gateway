@@ -22,6 +22,9 @@ export class TransactionService {
   private refreshCrossChainAccountsTriggerSub = new BehaviorSubject(null)
   refreshCrossChainAccountsTrigger$ = this.refreshCrossChainAccountsTriggerSub.asObservable()
 
+  private sendNativeTxPreviewModalSub = new BehaviorSubject<null | NativeTxPreview>(null)
+  sendNativeTxPreviewModal$ = this.sendNativeTxPreviewModalSub.asObservable()
+
   constructor(private blockchainService: BlockchainService,
     private errorService: ErrorService,
     private sessionService: SessionService) { }
@@ -35,7 +38,11 @@ export class TransactionService {
       tokenAddress: tokenAddress,
       addressSalt: addressSalt
     })
-  } 
+  }
+  
+  openNativeTxPreviewModal(txData: NativeTxPreview) {
+    this.sendNativeTxPreviewModalSub.next(txData)
+  }
 
   async sendDeployTransaction(chainSelectors: string[], salt: number, fee: string) {
 
@@ -61,7 +68,11 @@ export class TransactionService {
   declineTxPreviewModal() {
     this.sendTxPreviewModalSub.next(null)
   }
-
+  
+  declineNativeTxPreviewModal() {
+    this.sendNativeTxPreviewModalSub.next(null)
+  }
+  
   async sendTransaction(txData: SendTxPreview) {
 
     this.sendTxPreviewModalSub.next(null)
@@ -145,6 +156,76 @@ export class TransactionService {
     }
   }
 
+  async sendNativeTransaction(txData: NativeTxPreview) {
+
+    this.sendNativeTxPreviewModalSub.next(null)
+    this.setTransactionState('signing')
+
+    const amount = ethers.utils.parseUnits(txData.amount, 18)
+
+    const klasterSingleton = this.blockchainService.getKlasterSingletonSigner()
+    const chainSelector = this.blockchainService.chains
+      .find(chain => chain.id === txData.chainID)?.selector
+
+    if(!klasterSingleton) {
+      this.errorService.showSimpleError(
+        `Unexpected error: Can't find Klaster singleton contract for chain ${txData.chainID}`
+      )
+      return
+    }
+
+    if(!chainSelector) {
+      this.errorService.showSimpleError(
+        `Unexpected error: Can't find chain selector for chain: ${txData.chainID}.`
+      )
+      return
+    }
+
+    try {
+
+      const address = await this.blockchainService.getAddress()
+      
+      const fee = await klasterSingleton['calculateExecuteFee'](
+        address,
+        [chainSelector],
+        txData.addressSalt,
+        txData.recipient,
+        amount,
+        [],
+        BigNumber.from(150000),
+        formatBytes32String("")
+      )
+
+      const tx = await klasterSingleton['execute'](
+        [chainSelector],
+        txData.addressSalt,
+        txData.recipient,
+        amount,
+        [],
+        BigNumber.from(150000),
+        formatBytes32String(""),
+        {
+          value: BigNumber.from(fee),
+          gasLimit: BigNumber.from(300000)
+        }
+      )
+
+      this.setTransactionState('processing')
+
+      const res = await tx.wait(1)
+
+      this.setTransactionState(null)
+
+      return tx
+
+    } catch(error) {
+      this.setTransactionState(null)
+      this.errorService.showSimpleError(`Transaction processing failed: ${error}`)
+      return error
+    }
+
+  }
+
   setTransactionState(state: TxState) {
     this.txStateSub.next(state)
   }
@@ -162,5 +243,13 @@ export interface SendTxPreview {
   amount: string,
   chainID: number,
   tokenAddress: string,
+  addressSalt: string
+}
+
+export interface NativeTxPreview {
+  tokenName: string
+  recipient: string,
+  amount: string,
+  chainID: number,
   addressSalt: string
 }

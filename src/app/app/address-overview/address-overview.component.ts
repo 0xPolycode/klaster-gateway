@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ethers } from 'ethers';
 import { BehaviorSubject, combineLatest, from, map, of, switchMap, tap } from 'rxjs';
 import { BlockchainService } from 'src/app/shared/blockchain/blockchain.service';
-import { SendTxPreview, TransactionService } from 'src/app/shared/blockchain/transaction.service';
+import { NativeTxPreview, SendTxPreview, TransactionService } from 'src/app/shared/blockchain/transaction.service';
 import { CcipService } from 'src/app/shared/ccip/ccip.service';
 import { ErrorService } from 'src/app/shared/error.service';
 import { MiscModalsServiceService } from 'src/app/shared/misc-modals-service.service';
@@ -74,6 +74,8 @@ export class AddressOverviewComponent implements OnInit {
     })
   )
 
+  nativeTxPreviewModal$ = this.txService.sendNativeTxPreviewModal$
+
   isCopyConfirmVisibleSub = new BehaviorSubject(false)
   isCopyConfirmVisible$ = this.isCopyConfirmVisibleSub.asObservable()
 
@@ -119,6 +121,10 @@ export class AddressOverviewComponent implements OnInit {
     this.txService.sendTransaction(txData).then()
   }
 
+  sendNativeTx(txData: NativeTxPreview) {
+    this.txService.sendNativeTransaction(txData).then()
+  }
+
   logOut() {
     this.blockchainService.logOut()
   }
@@ -137,6 +143,10 @@ export class AddressOverviewComponent implements OnInit {
 
   declineTxPreview() {
     this.txService.declineTxPreviewModal()
+  }
+
+  declineNativePreview() {
+    this.txService.declineNativeTxPreviewModal()
   }
 
   deployWallet() {

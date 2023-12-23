@@ -146,25 +146,16 @@
                 </div>
 
                 <div *ngIf="nativeTokenBalance$ | async as native">
-                    <div class="grid grid-cols-12 px-2 py-2 items-center text-sm" *ngFor="let result of native">
-                        <div class="col-span-4 flex flex-row items-center">
-                            <img class="h-9 w-9 bg-white p-2 rounded-full border" 
-                            src="../../../../assets/networks/{{result?.logoUri}}" alt="" srcset="">
-                            <div class="col-span-3 flex flex-col pl-4">
-                                <div class="text-base">
-                                    {{result?.displayBalance}}
-                                </div>
-                                <div class="font-medium -mt-1 text-slate-500">
-                                    {{result?.token}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-3 uppercase font-medium">
-                            Native
-                        </div>
-                        
-                        
-                    </div>
+                    <ng-container *ngFor="let result of native">
+                        <app-native-portfolio-asset-container *ngIf="result as token"
+                        [balance]="token.balance"
+                        [displayBalance]="token.displayBalance"
+                        [chainId]="token.chainId"
+                        [balance]="token.balance"
+                        [addressSalt]="salt"
+                        [token]="token.token"
+                        [logoUri]="token.logoUri"></app-native-portfolio-asset-container>
+                    </ng-container>
                 </div>
                 <div *ngFor="let item of portfolio">
                         <app-single-portfolio-asset-container *ngIf="item !== undefined" 
@@ -175,7 +166,6 @@
                             [addressSalt]="salt"
                             [onlyVerified]="showOnlyVerified.value"
                             [chainID]="item.chainID"></app-single-portfolio-asset-container>
-
                 </div>
             </div>
 
