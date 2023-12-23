@@ -152,5 +152,8 @@ export class AddressOverviewComponent implements OnInit {
   deployWallet() {
     this.miscModalsService.openDeployModal()
   }
-
+  
+  getNetworkInfo(chainID: number) {
+    return this.blockchainService.chains.find(chain => chain.id === chainID)
+  }
 }
