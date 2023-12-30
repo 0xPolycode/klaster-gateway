@@ -6,7 +6,7 @@
             
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
 
-                <div class="col-span-12 mb-2 !py-4 justify-start items-center
+                <div class="col-span-12 mb-2 !py-4 items-center border-b border-rose-100 justify-center
                  text-xs text-red-600 flex flex-row gap-x-2 leading-relaxed font-medium">
                     <div class="flex flex-row items-center col-span-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -15,19 +15,19 @@
                           
                     </div>
                     <div class="col-span-11 pl-3">
-                        This is a beta preview of the Klaster app. It's built for testing purposes only. For operations usage, please wait for a production release. 
+                        This is a beta preview of the Klaster app. It's built for testing purposes only, do not use for operations.
                     </div>
                     
                 </div>
 
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-                    <div class="mt-4 mb-4 flex flex-row justify-between">
+                    <div class="mt-4 pb-2 mb-2 flex flex-row items-center justify-between">
                         <img class="h-8 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
                     </div>
 
                     
 
-                    <div class="card-body grid grid-cols-12 mt-2 text-slate-600">
+                    <div class="card-body grid grid-cols-12 text-slate-600">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
                             <div class="text-xs  uppercase font-medium text-slate-500">
                                 Controller Safe
@@ -81,7 +81,7 @@
                         </div>
 
                         <ng-template #noAddress>
-                            <button (click)="connectWallet()"
+                            <!-- <button (click)="connectWallet()"
                                 class="app-button flex flex-row gap-x-2 items-center justify-center cursor-pointer col-span-12 py-3 text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                     class="w-5 h-5 mt-[0.08rem]">
@@ -90,7 +90,10 @@
                                         clip-rule="evenodd" />
                                 </svg>
                                 <div>Connect wallet</div>
-                            </button>
+                            </button> -->
+                            <div class="col-span-12 text-rose-700 text-sm uppercase font-semibold">
+                                Wallet not connected
+                            </div>
                         </ng-template>
                     </div>
 
@@ -129,7 +132,7 @@
                         <div *ngIf="address$ | async as address; else connectPrompt"
                             [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8 mt-4">
                             <div *ngIf="wallets.length !== 0"
-                                class="col-span-8 flex flex-row items-start justify-between">
+                                class="col-span-8 flex flex-row items-center justify-between">
                                 <div class="card-header-title">
                                     Cross-chain accounts
                                 </div>
