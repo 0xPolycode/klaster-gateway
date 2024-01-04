@@ -1,41 +1,55 @@
 <ng-container>
     <div class="min-h-screen">
+        <div class="col-span-12 mb-2 pb-3 items-center border-b border-rose-50 justify-center
+                 text-xs text-red-600 flex flex-row gap-x-2 leading-relaxed font-medium">
+            <div class="flex flex-row items-center col-span-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd"
+                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd" />
+                </svg>
+
+            </div>
+            <div class="col-span-11 pl-3">
+                This is a beta preview of the Klaster app. It's built for testing purposes only, do not use for
+                operations.
+            </div>
+
+        </div>
         <div class="grid grid-cols-12 gap-x-4">
 
-            
-            
+
+
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
 
-                <div class="col-span-12 mb-2 !py-4 items-center border-b border-rose-100 justify-center
-                 text-xs text-red-600 flex flex-row gap-x-2 leading-relaxed font-medium">
-                    <div class="flex flex-row items-center col-span-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                          </svg>
-                          
-                    </div>
-                    <div class="col-span-11 pl-3">
-                        This is a beta preview of the Klaster app. It's built for testing purposes only, do not use for operations.
-                    </div>
-                    
-                </div>
+
 
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
                     <div class="mt-4 pb-2 mb-2 flex flex-row items-center justify-between">
                         <img class="h-8 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
                     </div>
 
-                    
 
-                    <div class="card-body grid grid-cols-12 text-slate-600">
+
+                    <div class="card-body !py-5 grid grid-cols-12 text-slate-600">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
-                            <div class="text-xs  uppercase font-medium text-slate-500">
+                            <div class="text-sm font-medium text-slate-500">
                                 Controller Safe
                             </div>
-                            <div class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
+                            <div class="mt-4 text-slate-500 flex flex-row items-center gap-x-2">
 
-                                <div>
-                                    <img class="h-4" src="../../../assets/safelogo.png" alt="" srcset="">
+                                <div class="relative">
+                                    <img class="h-8" src="../../../assets/safelogo.png" alt="" srcset="">
+                                    <div *ngIf="network$ | async as network"
+                                        class="absolute -top-2 -right-2 text-slate-500 z-50
+                                         flex flex-row items-center">
+
+                                        <div>
+                                            <img class="h-5" src="../../../assets/networks/{{network.logoUri}}" alt=""
+                                                srcset="">
+                                        </div>
+    
+                                    </div>
                                 </div>
                                 <div class="flex flex-row items-center gap-x-4">
                                     <div>
@@ -60,64 +74,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-xs mt-4 uppercase font-medium text-slate-500">
-                                Connected network
-                            </div>
-                            <div *ngIf="network$ | async as network"
-                                class="mt-2 text-slate-500 flex flex-row items-center gap-x-2">
 
-                                <div>
-                                    <img class="h-4" src="../../../assets/networks/{{network.logoUri}}" alt=""
-                                        srcset="">
-                                </div>
-                                <div>
-                                    {{network.label}}
-                                </div>
-                            </div>
-                            <button *ngIf="isntInSafe$ | async" (click)="logOut()"
+
+                            <!-- <button *ngIf="isntInSafe$ | async" (click)="logOut()"
                                 class="app-button w-full py-3 text-center mt-6 text-xs cursor-pointer">
                                 Disconnect Wallet
-                            </button>
+                            </button> -->
                         </div>
 
                         <ng-template #noAddress>
-                            <!-- <button (click)="connectWallet()"
-                                class="app-button flex flex-row gap-x-2 items-center justify-center cursor-pointer col-span-12 py-3 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                    class="w-5 h-5 mt-[0.08rem]">
-                                    <path fill-rule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <div>Connect wallet</div>
-                            </button> -->
-                            <div class="col-span-12 text-rose-700 text-sm uppercase font-semibold">
+
+                            <div class="col-span-12 text-rose-700 text-base font-semibold">
                                 Wallet not connected
                             </div>
                         </ng-template>
                     </div>
 
-                    <!-- <div class="py-3 border rounded-md hover:bg-fuchsia-700 bg-fuchsia-50 uppercase font-semibold 
-                    text-fuchsia-700 border-fuchsia-200 hover:text-white hover:border-white transition-all
-                     flex flex-row gap-x-2 items-center justify-center mt-2 w-full text-sm text-center cursor-pointer">
-                        <div>
-                            Learn about Klaster (30sec)
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd"
-                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm14.024-.983a1.125 1.125 0 010 1.966l-5.603 3.113A1.125 1.125 0 019 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div> -->
 
                     <app-cctx-queue></app-cctx-queue>
 
 
                     <div class="col-span-12 card-body">
-                        <div class="text-sm uppercase font-semibold text-rose-700">
+                        <div class="text-base font-semibold text-rose-700">
                             Klaster incentives programme
                         </div>
-                        <div class="text-sm text-slate-600 mt-2">
+                        <div class="text-sm leading-relaxed text-slate-600 mt-2">
                             Klaster is currently running an incentives programme for early users. In order to become
                             eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer"
                                 href="https://klaster.beehiiv.com/p/klaster-quests" target="_blank">read the rewards
@@ -139,7 +120,7 @@
                                 <div class="relative">
 
                                     <div [class.!opacity-0]="(walletTogglerVisible$ | async)" (click)="deployWallet()"
-                                        class="uppercase px-8 text-sm flex flex-row py-3 gap-x-2 bg-white
+                                        class="px-8 text-sm flex flex-row py-3 gap-x-2 bg-white
                                                 border-rose-100 border rounded-md text-rose-700 items-center 
                                                 hover:border-transparent transition-all font-medium hover:bg-rose-700 
                                                 hover:text-white cursor-pointer">
@@ -241,18 +222,21 @@
 
                 <ng-template #notConnected>
                     <div class="card-body col-span-8 my-4 text-center flex flex-col items-center gap-y-4">
-                        <div class="mt-8 text-sm text-slate-700">
+                        <div class="mt-8 text-base text-slate-700">
                             Please connect your wallet to use Klaster Safe.
                         </div>
 
                         <button (click)="connectWallet()" class="app-button mt-8 px-12
                         flex flex-row gap-x-2 py-3 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
-                          </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-5 h-5">
+                                <path fill-rule="evenodd"
+                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                                    clip-rule="evenodd" />
+                            </svg>
                             <div>
                                 Connect wallet
-                            </div>                          
+                            </div>
                         </button>
                     </div>
 
@@ -348,11 +332,11 @@
 h-screen flex flex-row justify-center items-center">
 
     <div class="max-w-xl gap-x-4 w-full bg-white rounded-md p-8 border border-rose-100 grid grid-cols-8">
-        <div class="w-full col-span-8 mb-4 uppercase font-semibold text-rose-600">
+        <div class="w-full col-span-8 mb-4 font-bold text-rose-600">
             Send tokens
         </div>
         <div class="col-span-4">
-            <div class="text-sm uppercase font-semibold text-slate-700">
+            <div class="text-sm font-bold text-slate-700">
                 Amount
             </div>
             <div class="mt-2 flex flex-row gap-x-2 items-center text-slate-700">
@@ -371,7 +355,7 @@ h-screen flex flex-row justify-center items-center">
         </div>
 
         <div class="col-span-4">
-            <div class="text-sm uppercase font-semibold text-slate-700">Network</div>
+            <div class="text-sm font-bold text-slate-700">Network</div>
             <div
                 class="flex flex-row gap-x-2 items-center justify-center px-2 py-2 mt-2 border rounded-md text-sm text-slate-700">
                 <img class="h-6 w-6 p-1 bg-white border rounded-full"
@@ -381,7 +365,7 @@ h-screen flex flex-row justify-center items-center">
         </div>
 
         <div class="col-span-8">
-            <div class="mt-4 col-span-8 text-sm uppercase font-semibold text-slate-700">
+            <div class="mt-4 col-span-8 text-sm font-bold text-slate-700">
                 Recipient
             </div>
             <div
@@ -394,7 +378,7 @@ h-screen flex flex-row justify-center items-center">
 
         <div class="col-span-8 grid grid-cols-2 gap-x-4">
             <div (click)="declineNativePreview()"
-                class="w-full text-center rounded-md uppercase border text-slate-500 hover:bg-slate-100 font-semibold mt-4 cursor-pointer text-sm flex flex-row gap-x-2 justify-center items-center hover:text-slate-800">
+                class="w-full text-center rounded-md border text-slate-500 hover:bg-slate-100 font-semibold mt-4 cursor-pointer text-sm flex flex-row gap-x-2 justify-center items-center hover:text-slate-800">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -404,7 +388,7 @@ h-screen flex flex-row justify-center items-center">
                 Decline
             </div>
             <div (click)="sendNativeTx(txData)"
-                class="w-full mt-4 py-3 app-button text-center uppercase text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
+                class="w-full mt-4 py-3 app-button text-center text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd"
                         d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"

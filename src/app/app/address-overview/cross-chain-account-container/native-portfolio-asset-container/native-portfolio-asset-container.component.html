@@ -24,8 +24,8 @@
     
     
     <div *ngIf="(sendFormToggled$ | async) === false" class="col-span-2 flex flex-row justify-end">
-        <button (click)="toggleSendForm()" class="px-4 rounded-md border py-2 text-xs font-semibold flex flex-row items-center justify-center
-            uppercase text-rose-700 border-rose-100 gap-x-2 hover:border-transparent transition-all
+        <button (click)="toggleSendForm()" class="px-4 rounded-md border py-2 text-xs font-bold flex flex-row items-center justify-center
+             text-rose-700 border-rose-100 gap-x-2 hover:border-transparent transition-all
             hover:bg-rose-700 hover:text-white">
         
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 -mt-[0.06rem]">
@@ -69,7 +69,7 @@
         <div class="flex flex-row gap-x-2 border items-center h-full px-2 rounded-md">
             <img class="h-7 w-7 p-[0.35rem] border rounded-full" src="../../../../../assets/networks/{{getNetoworkLogo(chainId)}}" alt="" srcset="">
             <input [formControl]="recipientAddressForm" placeholder="Recipient address" 
-                class="w-full !outline-none border-l text-xs py-3 pr-1 pl-2" type="text">
+                class="w-full !outline-none border-l text-xs py-3 pr-1 pl-2 font-mono !tracking-normal" type="text">
         </div>
     </div>
     <div class="col-span-4 font-mono h-full">

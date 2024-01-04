@@ -40,7 +40,7 @@
     
         <div class="col-span-3 flex flex-row items-center justify-start">
             <div (click)="swapClicked()" *ngIf="(sendFormToggled$ | async) === false"
-            class="w-full border uppercase font-semibold py-2 hover:bg-rose-700 hover:text-white gap-x-2
+            class="w-full border font-bold py-2 hover:bg-rose-700 hover:text-white gap-x-2
              text-xs rounded-md border-rose-100 text-rose-700 cursor-pointer transition-all hover:border-transparent
               flex flex-row items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
@@ -55,7 +55,7 @@
         <div class="col-span-2 flex flex-row items-center gap-x-2 justify-end pl-8">
     
             <div *ngIf="(sendFormToggled$ | async) === false; else close" (click)="toggleSendForm()" 
-            class="w-full border uppercase font-semibold py-2 hover:bg-rose-700 hover:text-white gap-x-2
+            class="w-full border font-bold py-2 hover:bg-rose-700 hover:text-white gap-x-2
              text-xs rounded-md border-rose-100 text-rose-700 cursor-pointer transition-all hover:border-transparent
               flex flex-row items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 -mt-[0.06rem]">
@@ -94,7 +94,7 @@
         <div class="flex flex-row gap-x-2 border items-center h-full px-2 rounded-md">
             <img class="h-7 w-7 p-[0.35rem] border rounded-full" src="../../../../../assets/networks/{{getNetworkURI(chainID)}}" alt="" srcset="">
             <input [formControl]="recipientAddressForm" placeholder="Recipient address" 
-                class="w-full !outline-none border-l text-xs py-3 pr-1 pl-2" type="text">
+                class="w-full !outline-none border-l font-mono text-xs py-3 pr-1 pl-2" type="text">
         </div>
     </div>
     <div class="col-span-4 font-mono h-full">

@@ -1,6 +1,6 @@
 <div *ngIf="connectedNetwork$ | async as connected" class="fixed top-0 left-0 w-screen flex flex-row items-center justify-center h-screen bg-[rgba(0,0,0,0.2)] z-50 backdrop-blur-[1px]">
     <div class="max-w-2xl w-full bg-white border rounded-md p-8">
-        <div class="uppercase font-medium mb-4 text-rose-600 text-lg">
+        <div class="font-semibold mb-4 text-rose-600 text-lg">
             Deploy a cross-chain account
         </div>
 
@@ -17,7 +17,7 @@
             Connected network (always deployed)
         </div>
         <div *ngIf="connectedNetwork$ | async as network" class="flex mt-2 flex-row gap-x-4 justify-between 
-                rounded-md uppercase w-full
+                rounded-md w-full
                 font-semibold text-slate-700 bg-slate-50
                  items-center text-xs py-2 px-4">
                  <div class="flex flex-row gap-x-2 w-full items-center justify-center">
@@ -35,9 +35,9 @@
             <div *ngFor="let network of deployableNetworks" 
             [class.hidden]="network.id === connected.id" 
             class="flex flex-row gap-x-4 justify-between 
-                rounded-md uppercase w-full
+                rounded-md w-full
                 font-semibold text-slate-700 bg-slate-50
-                 items-center text-xs py-2 px-4">
+                 items-center text-sm py-2 px-4">
                  <div class="flex flex-row gap-x-2 items-center">
                     <img class="h-7 w-7 border p-1 bg-white rounded-full" src="../../../assets/networks/{{network.logoUri}}" alt="" srcset="">
                     <div>{{network.label}}</div>
@@ -75,24 +75,6 @@
                 have enough gas to deploy. You can always add them later.
             </div>
         </div>
-        
-
-        <!-- <div class="mt-4 text-slate-600  grid grid-cols-2">
-            <div class="flex flex-col text-xs text-indigo-700">
-                <div class="bg-indigo-50 rounded-md py-3 px-5">
-                    <b>Expensive deployment?</b> Try selecting fewer remote networks. 
-                </div>
-            </div>
-            <div class="flex flex-col items-end justify-end">
-                <div class="uppercase text-slate-500 text-xs font-medium">
-                    Deployment gas
-                </div>
-                <div class="font-bold">
-                    {{deploymentFeeString$ | async}} {{(connectedNetwork$ | async)?.token}}
-                </div> 
-            </div>
-            
-        </div> -->
 
         <div class="grid grid-cols-5 mt-4 gap-x-4">
 
@@ -112,7 +94,9 @@
                 Cancel
             </div>
 
-            <button [disabled]="(deployButtonLoading$ | async) || (notEnoughFundsToDeploy$ | async)" *ngIf="deploymentFee$ | async as fee" (click)="deployContracts(fee)" 
+            <button [disabled]="(deployButtonLoading$ | async) || (notEnoughFundsToDeploy$ | async)" 
+            *ngIf="deploymentFee$ | async as fee" 
+            (click)="deployContracts(fee.toString())" 
             class="app-button py-3 w-full flex flex-row gap-x-3 col-span-2 justify-center items-center text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
@@ -132,6 +116,11 @@
                   </ng-template>
                   
             </button>
+
+            <div class="flex flex-row justify-end col-span-5 mt-4 text-sm text-slate-500">
+                <div>Estimated gas fee:</div>
+                <div>{{deploymentFeeString$ | async}}</div>
+            </div>
         </div>
         
     </div>

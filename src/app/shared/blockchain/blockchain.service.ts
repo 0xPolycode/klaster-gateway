@@ -269,6 +269,14 @@ export class BlockchainService {
     return await sdk?.core.getTokenMetadata(address)
   }
 
+  async getTokenMetadataOnConnectedChain(address: string) {
+
+    const connectedChainID = this.connectedProviderSub.value?.network.chainId
+    if(!connectedChainID) { this.errorService.showSimpleError("Can't fetch network from provider"); return undefined }
+    const sdk = this.getSDK(connectedChainID)
+    return await sdk?.core.getTokenMetadata(address)
+  }
+
   // NOTE: If the user has deployed the contract through some other method (not)
   // this frontend, then this method cannot be used to derive the "next" salt.
   async getNextDeploymentSalt() {
@@ -309,12 +317,6 @@ export class BlockchainService {
     if(!address) { this.errorService.showSimpleError("Can't fetch wallet address"); return 0 }
     if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
 
-    const selectedChainIds = selectedChains.map(selectedChain => 
-        this.chains.find(chain => chain.selector === selectedChain))
-        .map(chainInfo => chainInfo?.id)
-        .filter(chainID => chainID !== undefined) as number[]
-
-
     return await klaster['calculateExecuteFee'](
       await address,
       selectedChains,
@@ -325,6 +327,35 @@ export class BlockchainService {
       BigNumber.from("2000000"),
       formatBytes32String("")
     )
+  }
+
+  async estimateDeploymentTxGas(selectedChains: string[], salt: string, fee: string) {
+
+    const klaster = this.getKlasterSingletonSigner()
+    const address = await this.getAddress()
+    if(!address) { this.errorService.showSimpleError("Can't fetch wallet address"); return 0 }
+    if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
+
+    const gasEstimate = await klaster.estimateGas['execute'](
+      selectedChains,
+      salt,
+      await this.getAddress(),
+      0,
+      [],
+      BigNumber.from("2000000"),
+      formatBytes32String(""),
+      {
+        value: BigNumber.from(fee)
+      }
+    )
+
+    const feeData = await this.connectedProviderSub.value?.getFeeData()
+    const gasPrice = feeData?.gasPrice
+
+    if(!gasPrice) { this.errorService.showSimpleError("Can't fetch gas price"); return 0 }
+
+    return BigNumber.from(gasEstimate).mul(BigNumber.from(gasPrice))
+
   }
 
   async checkDeploymentStatusForNetwork(chainID: number, address: string) {
