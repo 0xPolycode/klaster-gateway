@@ -75,7 +75,9 @@
 </div>
 
 <ng-template #loading>
-    <app-spinner></app-spinner>
+    <div class="my-8">
+        <app-spinner></app-spinner>
+    </div>   
 </ng-template>
 
 <div *ngIf="isSeeAllVisible$ | async" class="fixed top-0 left-0 bg-[rgba(255,255,255,0.4)]
