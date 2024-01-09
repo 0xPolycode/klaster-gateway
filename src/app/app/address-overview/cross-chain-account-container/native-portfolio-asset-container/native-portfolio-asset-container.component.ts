@@ -32,7 +32,6 @@ export class NativePortfolioAssetContainerComponent implements OnInit {
     private errorService: ErrorService) { }
 
   ngOnInit(): void {
-    console.log(this.token)
   }
 
   getNetoworkLogo(chainID: number) {

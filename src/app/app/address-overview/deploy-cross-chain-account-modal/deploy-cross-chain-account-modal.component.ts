@@ -65,28 +65,23 @@ export class DeployCrossChainAccountModalComponent implements OnInit {
     switchMap(([salt, eth, matic, op, arb, base]) => {
       var chainSelectors = this.getSelectedChainSelectors()
       if(salt === null || salt === undefined) { this.errorService.showSimpleError("Can't fetch account salt"); return of() }
-      return combineLatest([
-        from(
+      return from(
           this.blockchainService.calculateDeploymentFee(
             chainSelectors,
             salt.toString()
           )
-        ),
-        of(chainSelectors),
-        of(salt)
-      ])
-      
+        )
     }),
-    switchMap(([cctxFee, selectors, salt]) => {
-      return from(this.blockchainService.estimateDeploymentTxGas(selectors,
-        salt.toString(),
-        cctxFee
-      )).pipe(
-        map(gasFee => {
-          return BigNumber.from(cctxFee).add(BigNumber.from(gasFee))
-        })
-      )
-    })
+    // switchMap(([cctxFee, selectors, salt]) => {
+    //   return from(this.blockchainService.estimateDeploymentTxGas(selectors,
+    //     salt.toString(),
+    //     cctxFee.toString()
+    //   )).pipe(
+    //     map(gasFee => {
+    //       return BigNumber.from(cctxFee).add(BigNumber.from(gasFee))
+    //     })
+    //   )
+    // })
   )
 
   deploymentFeeString$ = this.deploymentFee$.pipe(

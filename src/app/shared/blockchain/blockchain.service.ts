@@ -317,7 +317,7 @@ export class BlockchainService {
     if(!address) { this.errorService.showSimpleError("Can't fetch wallet address"); return 0 }
     if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
 
-    return await klaster['calculateExecuteFee'](
+    const fee: BigNumberish = await klaster['calculateExecuteFee'](
       await address,
       selectedChains,
       salt,
@@ -327,6 +327,7 @@ export class BlockchainService {
       BigNumber.from("2000000"),
       formatBytes32String("")
     )
+    return fee
   }
 
   async estimateDeploymentTxGas(selectedChains: string[], salt: string, fee: string) {
@@ -337,24 +338,24 @@ export class BlockchainService {
     if(!klaster) { this.errorService.showSimpleError("Can't fetch Klaster contracts"); return 0 }
 
     const gasEstimate = await klaster.estimateGas['execute'](
-      selectedChains,
-      salt,
-      await this.getAddress(),
-      0,
-      [],
-      BigNumber.from("2000000"),
-      formatBytes32String(""),
-      {
-        value: BigNumber.from(fee)
-      }
-    )
-
-    const feeData = await this.connectedProviderSub.value?.getFeeData()
-    const gasPrice = feeData?.gasPrice
-
-    if(!gasPrice) { this.errorService.showSimpleError("Can't fetch gas price"); return 0 }
-
-    return BigNumber.from(gasEstimate).mul(BigNumber.from(gasPrice))
+        selectedChains,
+        salt,
+        await this.getAddress(),
+        0,
+        [],
+        BigNumber.from("2000000"),
+        formatBytes32String(""),
+        {
+          value: BigNumber.from(fee)
+        }
+      )
+  
+      const feeData = await this.connectedProviderSub.value?.getFeeData()
+      const gasPrice = feeData?.gasPrice
+  
+      if(!gasPrice) { this.errorService.showSimpleError("Can't fetch gas price"); return 0 }
+  
+      return BigNumber.from(gasEstimate).mul(BigNumber.from(gasPrice))
 
   }
 
