@@ -24,7 +24,7 @@
     
     
     <div *ngIf="(sendFormToggled$ | async) === false" class="col-span-2 flex flex-row justify-end">
-        <button (click)="toggleSendForm()" class="px-4 rounded-md border py-2 text-xs font-bold flex flex-row items-center justify-center
+        <button (click)="toggleSendForm()" class="px-4 rounded-md border py-2 text-xs font-medium flex flex-row items-center justify-center
              text-rose-700 border-rose-100 gap-x-2 hover:border-transparent transition-all
             hover:bg-rose-700 hover:text-white">
         
@@ -42,7 +42,7 @@
     <div class="col-span-2 w-full flex flex-row justify-end">
         <div *ngIf="(sendFormToggled$ | async)" class="col-span-2 flex flex-row justify-end">
             <button (click)="toggleSendForm()" class="px-4 rounded-md border py-2 text-xs font-semibold flex flex-row items-center justify-center
-                uppercase text-rose-700 border-rose-100 gap-x-2 hover:border-transparent transition-all
+                uppercase text-rose-700 border-slate-100 gap-x-2 hover:border-transparent transition-all
                 hover:bg-rose-700 hover:text-white">
             
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 -mt-[0.06rem]">

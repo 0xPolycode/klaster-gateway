@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;300;400;500;600;700;800;900&display=swap');
 
+
 * {
     font-family: 'Source Sans 3', sans-serif;
     @apply !tracking-wider
@@ -14,7 +15,10 @@
 }
 
 .card-body {
-    @apply bg-[rgba(255,255,255,0.6)] backdrop-blur-[2px] lg:p-8 p-4 rounded-lg border border-rose-100 lg:mx-0 mx-4
+    @apply bg-[rgba(255,255,255,0.6)] backdrop-blur-[2px] border
+     lg:p-8 p-4 rounded-lg bg-white lg:mx-0 mx-4;
+    box-shadow: 0px 2px 4px rgba(22,22,26,0.02);
+    border: 1px solid #edeeef;
 }
 
 .app-button {

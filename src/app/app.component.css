@@ -18,3 +18,7 @@
 .animate-bg {
     animation: animatedBackground 30s linear infinite alternate;
 }
+
+.bg-lslate {
+    background-color: #fdfdfd;
+}

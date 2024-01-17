@@ -22,9 +22,7 @@ export class CctxQueueComponent implements OnInit {
       return this.ccipService.getWalletActivity(address)
     }),
     map(walletActivity => {
-      return walletActivity?.tx_infos.sort((a,b) => 
-        { return b.block_number - a.block_number }
-      )
+      return walletActivity?.tx_infos
     }),
     tap(_ => this.isRefreshingSub.next(false))
   )

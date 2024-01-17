@@ -12,15 +12,7 @@ export class CcipService {
   constructor(private http: HttpClient) { }
 
   getWalletActivity(address: string) {
-    return this.http.get<CCIPResponseWrapper>(`${this.baseUrl}/get-activity?wallet=${address}`).pipe(
-      map(result => {
-        return {...result, ccip_api_responses: result.ccip_api_responses.sort((a, b) => {
-          const dateA = Date.parse(a.data.allCcipTransactionsFlats.nodes.at(0)!.blockTimestamp)
-          const dateB = Date.parse(b.data.allCcipTransactionsFlats.nodes.at(0)!.blockTimestamp)
-          return dateB - dateA
-        })}
-      })
-    )
+    return this.http.get<CCIPResponseWrapper>(`${this.baseUrl}/get-activity?wallet=${address}`)
   }
 
   private refreshTriggerSub = new BehaviorSubject(null)

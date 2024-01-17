@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12">
 
         <div (click)="copyAddress(derivedWallet)"
-            class="border-b group relative border-r border-rose-100 z-50 flex flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
+            class="border-b group relative border-r border-slate-100 z-50 flex flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -18,7 +18,7 @@
 
         <div class="relative h-full">
             <div (click)="toggleTagInput()"
-            class="border-b group relative border-r h-full border-rose-100 flex
+            class="border-b group relative border-r h-full border-slate-100 flex
              flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
@@ -42,7 +42,7 @@
 
         <div class="relative h-full">
             <div (click)="refreshData()"
-            class="border-b group relative border-r h-full border-rose-100 flex
+            class="border-b group relative border-r h-full border-slate-100 flex
              flex-row items-center justify-center hover:text-rose-400 text-slate-500 cursor-pointer hover:bg-rose-50">
              <svg [class.animate-spin]="(isRefreshingData$ | async)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -68,7 +68,7 @@
 
         <div (click)="toggleVisibility()" class="col-span-9 px-5 flex flex-row hover:bg-rose-50 
         cursor-pointer text-slate-500 text-sm rounded-tr-md items-center
-         justify-between py-3 border-b border-rose-100">
+         justify-between py-3 border-b border-slate-100">
             <div *ngIf="tag$ | async as tag; else noTagWallet">
                 <span class="font-semibold text-slate-700">{{tag.tag}}</span> ({{derivedWallet | shorten:8:6}})
             </div>
