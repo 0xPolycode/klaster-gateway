@@ -8,14 +8,14 @@
               </svg>
               
         </div>
-        <div class="mt-2">
+        <div class="mt-2 uppercase font-semibold text-sm">
             {{data.title}}
         </div>
-        <div class="mt-4 text-slate-500 w-full flex-wrap break-words max-h-40 overflow-y-scroll text-sm font-normal">
+        <div class="mt-4 text-slate-500 w-full leading-relaxed flex-wrap break-words max-h-40 overflow-y-scroll text-sm font-normal">
             {{data.message}}
         </div>
 
-        <button (click)="dismiss()" class="app-button mt-8 w-full py-2">
+        <button (click)="dismiss()" class="app-button mt-8 w-full py-3">
             {{data.buttonText}}
         </button>
     

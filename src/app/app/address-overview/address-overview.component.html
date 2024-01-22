@@ -1,62 +1,40 @@
 <ng-container>
     <div class="min-h-screen">
-        <!-- <div class="col-span-12 mb-2 pb-3 items-center border-b border-slate-50 justify-center
-                 text-xs text-red-600 flex flex-row gap-x-2 leading-relaxed font-medium">
-            <div class="flex flex-row items-center col-span-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                    <path fill-rule="evenodd"
-                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                        clip-rule="evenodd" />
-                </svg>
 
-            </div>
-            <div class="col-span-11 pl-3">
-                This is a beta preview of the Klaster app. It's built for testing purposes only, do not use for
-                operations.
-            </div>
-
-        </div> -->
         <div class="grid grid-cols-12 gap-x-4">
 
 
 
             <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
-
-
-
                 <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-                    <div class="mt-4 pb-2 mb-2 flex flex-row items-center justify-between">
-                        <img class="h-7 object-contain" src="../../../assets/klstr.png" alt="" srcset="">
-                    </div>
-
 
 
                     <div class="card-body !py-5 grid grid-cols-12 text-slate-600">
                         <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
-                            <div class="text-sm font-medium text-slate-500">
-                                Controller Safe
+                            <div class="text-xs font-semibold text-slate-800 uppercase">
+                                Connected wallet
                             </div>
-                            <div class="mt-4 text-slate-500 flex flex-row items-center gap-x-2">
+                            <div class="mt-4 text-slate-500 flex flex-row items-center gap-x-4">
 
                                 <div class="relative">
-                                    <img class="h-8" src="../../../assets/safelogo.png" alt="" srcset="">
+                                    <img class="h-6" src="../../../assets/safelogo.png" alt="" srcset="">
                                     <div *ngIf="network$ | async as network"
                                         class="absolute -top-2 -right-2 text-slate-500 z-50
                                          flex flex-row items-center">
 
                                         <div>
-                                            <img class="h-5" src="../../../assets/networks/{{network.logoUri}}" alt=""
+                                            <img class="h-5 w-5 p-1 border bg-white rounded-full" src="../../../assets/networks/{{network.logoUri}}" alt=""
                                                 srcset="">
                                         </div>
     
                                     </div>
                                 </div>
-                                <div class="flex flex-row items-center gap-x-4">
+                                <div class="flex flex-row text-sm items-center gap-x-4">
                                     <div>
                                         {{address | shorten:10:7}}
                                     </div>
                                     <div (click)="copyAddressClicked(address)" class="bg-slate-50 flex flex-row items-center cursor-pointer 
-                                    hover:bg-rose-100 hover:text-rose-700 hover:border-slate-200 transition-all
+                                    hover:bg-rose-100 hover:text-rose-600 hover:border-slate-200 transition-all
                                      justify-center rounded-full w-8 h-8 border p-2">
                                         <svg *ngIf="(isCopyConfirmVisible$ | async) === false"
                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -84,7 +62,7 @@
 
                         <ng-template #noAddress>
 
-                            <div class="col-span-12 text-rose-700 text-base font-semibold">
+                            <div class="col-span-12 text-slate-800 text-xs uppercase font-semibold">
                                 Wallet not connected
                             </div>
                         </ng-template>
@@ -95,10 +73,10 @@
 
 
                     <div class="col-span-12 card-body">
-                        <div class="text-base font-semibold text-rose-700">
+                        <div class="font-semibold uppercase text-xs text-slate-800">
                             Klaster incentives programme
                         </div>
-                        <div class="text-sm leading-relaxed text-slate-600 mt-2">
+                        <div class="text-sm leading-relaxed text-slate-500 mt-2">
                             Klaster is currently running an incentives programme for early users. In order to become
                             eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer"
                                 href="https://klaster.beehiiv.com/p/klaster-quests" target="_blank">read the rewards
@@ -114,36 +92,18 @@
                     <ng-container *ngIf="derivedWallets$ | async as wallets">
                         <div *ngIf="address$ | async as address; else connectPrompt"
                             [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8">
-                            <!-- <div class="col-span-8 mb-4 mt-10 uppercase flex flex-row
-                             gap-x-8 text-sm text-slate-700 font-semibold">
-                                <div class="flex cursor-pointer border-b-2 text-rose-600 border-slate-600 w-44 justify-center py-4 flex-row gap-x-2 items-center">
-                                    <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-                                          </svg>                                          
-                                    </div>
-                                    <div>Accounts</div>
-                                </div>
-                                <div class="flex cursor-pointer border-b-2 w-44 justify-center flex-row gap-x-2 items-center">
-                                    <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-2.25-1.313M21 7.5v2.25m0-2.25-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3 2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75 2.25-1.313M12 21.75V19.5m0 2.25-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
-                                          </svg>                                          
-                                    </div>
-                                    <div>Asset Manager</div>
-                                </div>
-                            </div> -->
+
                             <div *ngIf="wallets.length !== 0"
                                 class="col-span-8 flex flex-row items-center pt-2 pb-1 justify-between">
-                                <div class="text-slate-900 !text-lg uppercase !font-bold">
+                                <div class="text-slate-900 !text-sm uppercase !font-bold">
                                     My cross-chain accounts
                                 </div>
                                 <div class="relative">
 
                                     <div [class.!opacity-0]="(walletTogglerVisible$ | async)" (click)="deployWallet()"
-                                        class="px-8 text-sm flex flex-row py-3 gap-x-2 bg-rose-50
-                                            rounded-md text-rose-700 items-center  border border-rose-200
-                                                hover:border-transparent transition-all font-medium hover:bg-rose-700 
+                                        class="px-8 text-xs uppercase font-semibold flex flex-row py-3 gap-x-2 bg-rose-50
+                                            rounded-md text-rose-600 items-center  border border-rose-100
+                                                hover:border-transparent transition-all hover:bg-rose-600 
                                                 hover:text-white cursor-pointer">
 
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -158,7 +118,7 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf="walletTogglerVisible$ | async" (click)="toggleWalletToggler()" class="bg-white z-50 text-rose-700 hover:bg-rose-700 
+                                    <div *ngIf="walletTogglerVisible$ | async" (click)="toggleWalletToggler()" class="bg-white z-50 text-rose-600 hover:bg-rose-600 
                                                 hover:text-white cursor-pointer py-3 px-3 top-0
                                                     border border-slate-100 rounded-md absolute right-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -200,37 +160,13 @@
 
                             <div *ngIf="wallets.length === 0">
                                 <div
-                                    class="w-full mt-16 h-full card-body text-slate-600 flex flex-col items-center justify-center">
+                                    class="w-full h-full card-body text-slate-600 flex flex-col items-center justify-center">
 
                                     <div class="text-sm">
-                                        You haven't deployed any cross-chain accounts yet.
+                                        You don't have any cross-chain accounts
                                     </div>
 
-
-                                    <div class="mt-8 rounded-md leading-[3.3] text-center text-sm"
-                                        *ngIf="connectedChain$ | async as connectedChain">
-                                        To get started with Klaster, your wallet or Safe with address
-                                        <span class="py-1 px-3 bg-white border rounded-md">{{address$ | async}}</span>
-                                        <br>
-                                        needs to have
-                                        <span
-                                            class="py-1 px-3 bg-white border rounded-md">{{connectedChain.token}}</span>
-                                        on
-                                        <span class="py-1 px-3 bg-white border rounded-md">
-                                            <img class="h-4 inline"
-                                                src="../../../assets/networks/{{connectedChain.logoUri}}" alt=""
-                                                srcset="">
-                                            <span class="ml-2">{{connectedChain.label}}</span>
-                                        </span>
-                                        <br>
-                                        The current balance is
-                                        <span class="py-1 px-3 bg-white border rounded-md">{{displayBalance$ | async}}
-                                            {{connectedChain.token}}</span>
-
-
-                                    </div>
-
-                                    <button [disabled]="(balance$ | async)?.eq(0)" (click)="deployWallet()"
+                                    <button (click)="deployWallet()"
                                         class="app-button px-16 mt-8 py-3 text-sm cursor-pointer">
                                         Deploy now
                                     </button>
@@ -242,20 +178,20 @@
                 </ng-container>
 
                 <ng-template #notConnected>
-                    <div class="card-body col-span-8 my-4 text-center flex flex-col items-center gap-y-4">
-                        <div class="mt-8 text-base text-slate-700">
+                    <div class="card-body col-span-8 mb-4 text-center flex flex-col items-center gap-y-4">
+                        <div class=" text-sm text-slate-800 mt-8">
                             Please connect your wallet to use Klaster Safe.
                         </div>
 
                         <button (click)="connectWallet()" class="app-button mt-8 px-12
-                        flex flex-row gap-x-2 py-3 text-sm">
+                        flex flex-row items-center gap-x-2 py-3 !text-xs">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-5 h-5">
                                 <path fill-rule="evenodd"
                                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <div>
+                            <div class="tracking-widest">
                                 Connect wallet
                             </div>
                         </button>

@@ -1,6 +1,6 @@
 <div *ngIf="address$ | async" class="card-body">
     <div class=" text-xs" *ngIf="walletActivityDisplay$ | async as activity; else loading">
-        <div class="font-medium text-base flex flex-row justify-between text-slate-500 mb-4">
+        <div class="font-semibold text-xs uppercase flex flex-row justify-between text-slate-800 mb-4">
             <div>Klaster Transactions</div>
             <div class="cursor-pointer" (click)="refresh()">
                 <svg [class.animate-spin]="isRefreshing$ | async" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div
-            class="px-4 py-2 mb-2 -mx-4 flex flex-row items-center gap-x-3 text-sm text-indigo-600 bg-indigo-50 rounded-md">
+            class="px-4 py-4 mb-2 -mx-4 flex flex-row items-center gap-x-3 text-xs text-indigo-600 bg-indigo-50 rounded-md">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" data-slot="icon"
                     class="w-5 h-5">
@@ -32,7 +32,8 @@
 
 
                     <div
-                        class="col-span-4 flex text-sm text-slate-600 flex-row items-center font-semibold justify-start">
+                        class="col-span-4 flex text-xs text-slate-800 uppercase
+                         flex-row items-center font-semibold justify-start">
                         <ng-container *ngIf="response.tx_type === 'WALLET_CREATE'">
                             Deploy
                         </ng-container>
@@ -94,11 +95,11 @@
     flex flex-row items-center justify-center z-50 backdrop-blur-[2px] w-screen h-screen">
 
 
-    <div class="max-w-lg w-full bg-white border text-slate-700 rounded-md p-8 text-sm">
+    <div class="max-w-lg w-full bg-white border text-slate-800 rounded-md p-8 text-sm">
         <div *ngIf="walletActivity$ | async as allActivity; else loading">
 
             <div class="mb-5 font-semibold flex flex-row justify-between w-full">
-                <div class="text-base">
+                <div class="text-sm uppercase">
                     Klaster Transactions
                 </div>
                 <div class="cursor-pointer hover:text-rose-600" (click)="toggleSeeAllVisible()">
@@ -111,7 +112,8 @@
             </div>
 
 
-            <div class="w-full grid grid-cols-11 gap-x-4 uppercase mb-3 items-center">
+            <div class="w-full grid grid-cols-11 text-xs uppercase font-semibold 
+            text-slate-800 gap-x-4 mb-3 items-center">
                 <div class="col-span-3">
                     Tx Hash
                 </div>
@@ -140,7 +142,8 @@
                         </div>
     
                         <div
-                            class="col-span-3 flex text-sm text-slate-600 flex-row items-center font-semibold justify-start">
+                            class="col-span-3 flex text-xs uppercase
+                             text-slate-800 flex-row items-center font-semibold justify-start">
                             <ng-container *ngIf="response.tx_type === 'WALLET_CREATE'">
                                 Deploy
                             </ng-container>

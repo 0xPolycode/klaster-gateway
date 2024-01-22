@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
 * {
-    font-family: 'Source Sans 3', sans-serif;
-    @apply !tracking-wider
+    font-family: 'Montserrat', sans-serif;
+    @apply tracking-wider
 }
 
 @tailwind base;
@@ -15,15 +15,13 @@
 }
 
 .card-body {
-    @apply bg-[rgba(255,255,255,0.6)] backdrop-blur-[2px] border
+    @apply bg-[rgba(255,255,255,0.6)] backdrop-blur-[2px] border border-fuchsia-100
      lg:p-8 p-4 rounded-lg bg-white lg:mx-0 mx-4;
-    box-shadow: 0px 2px 4px rgba(22,22,26,0.02);
-    border: 1px solid #edeeef;
 }
 
 .app-button {
-    @apply bg-gradient-to-r from-rose-600 to-fuchsia-700 text-white rounded-md font-bold hover:from-rose-700 hover:to-fuchsia-800
-    transition-all disabled:from-slate-300 disabled:to-slate-300 tracking-wide
+    @apply bg-gradient-to-r from-rose-600 to-fuchsia-700 text-white rounded-md font-semibold hover:from-rose-700 hover:to-fuchsia-800
+    transition-all disabled:from-slate-300 disabled:to-slate-300 tracking-widest text-xs uppercase
 }
 
 .flex-rgic {

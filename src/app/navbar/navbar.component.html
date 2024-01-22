@@ -1,18 +1,39 @@
-<div class="w-screen py-2 z-10 bg-[rgba(255,255,255,0.4)] backdrop-blur-[2px] border-b border-slate-100 flex flex-row justify-center fixed top-0 left-0">
+<div class="w-screen py-2 z-10 bg-[rgba(255,255,255,0.8)] backdrop-blur-[2px] border-b border-fuchsia-100 flex flex-row justify-center fixed top-0 left-0">
     <div class="max-w-6xl rounded-md w-full flex flex-row justify-between items-center">
         <div>
             <img routerLink="/" class="h-6 cursor-pointer" src="../../assets/klstr.png" alt="" srcset="">
         </div>
-        <div class="flex py-3 flex-row items-center gap-x-2 text-xs text-slate-700">
-            Built on Chainlink CCIP
-            <img class="h-4" src="../../assets/link.png" alt="" srcset="">
+        <div class="flex flex-row gap-x-12 text-xs uppercase font-semibold items-center">
+            <div class="font-bold cursor-pointer text-rose-600 py-2 text-center flex flex-row gap-x-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M4.125 3C3.089 3 2.25 3.84 2.25 4.875V18a3 3 0 0 0 3 3h15a3 3 0 0 1-3-3V4.875C17.25 3.839 16.41 3 15.375 3H4.125ZM12 9.75a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H12Zm-.75-2.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H12a.75.75 0 0 1-.75-.75ZM6 12.75a.75.75 0 0 0 0 1.5h7.5a.75.75 0 0 0 0-1.5H6Zm-.75 3.75a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5H6a.75.75 0 0 1-.75-.75ZM6 6.75a.75.75 0 0 0-.75.75v3c0 .414.336.75.75.75h3a.75.75 0 0 0 .75-.75v-3A.75.75 0 0 0 9 6.75H6Z" clip-rule="evenodd" />
+                    <path d="M18.75 6.75h1.875c.621 0 1.125.504 1.125 1.125V18a1.5 1.5 0 0 1-3 0V6.75Z" />
+                  </svg>
+                  
+                Accounts
+            </div>
+            <div (click)="comingSoon()" class="cursor-pointer text-slate-600 hover:text-slate-800 py-2 text-center flex flex-row gap-x-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path d="M21 6.375c0 2.692-4.03 4.875-9 4.875S3 9.067 3 6.375 7.03 1.5 12 1.5s9 2.183 9 4.875Z" />
+                    <path d="M12 12.75c2.685 0 5.19-.586 7.078-1.609a8.283 8.283 0 0 0 1.897-1.384c.016.121.025.244.025.368C21 12.817 16.97 15 12 15s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.285 8.285 0 0 0 1.897 1.384C6.809 12.164 9.315 12.75 12 12.75Z" />
+                    <path d="M12 16.5c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 0 0 1.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 0 0 1.897 1.384C6.809 15.914 9.315 16.5 12 16.5Z" />
+                    <path d="M12 20.25c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 0 0 1.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 0 0 1.897 1.384C6.809 19.664 9.315 20.25 12 20.25Z" />
+                  </svg>
+                  
+                Tokens
+            </div>
+            <div (click)="comingSoon()" class=" cursor-pointer text-slate-600 hover:text-slate-800 py-2 text-center flex flex-row gap-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M2.25 6a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V6Zm3.97.97a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 0 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Zm4.28 4.28a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+                  </svg>
+                  
+                Issuer Portal
+            </div>
+        </div>
+        <div class="flex py-3 flex-row items-center gap-x-3 text-xs">
+            <div class="text-[10px] uppercase font-semibold text-slate-800">Powered by CCIP</div>
+            <img class="h-6" src="../../assets/ccip.svg" alt="">
         </div>
     </div>
 </div>
-<div class="w-screen relative top-[3.7rem] left-0 text-xs text-white
- font-medium flex flex-row justify-center items-center py-2 bg-rose-700">
-<div>
-    This is a beta preview of the Klaster app. Use at your own risk, proceed with caution. Klaster is not liable for any loss of funds.
-</div>
-
 

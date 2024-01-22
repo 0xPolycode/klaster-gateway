@@ -70,7 +70,7 @@
         cursor-pointer text-slate-500 text-sm rounded-tr-md items-center
          justify-between py-3 border-b border-slate-100">
             <div *ngIf="tag$ | async as tag; else noTagWallet">
-                <span class="font-semibold text-slate-700">{{tag.tag}}</span> ({{derivedWallet | shorten:8:6}})
+                <span class="font-semibold text-slate-800">{{tag.tag}}</span> ({{derivedWallet | shorten:8:6}})
             </div>
             <ng-template #noTagWallet>
                 <div class="">
@@ -102,9 +102,9 @@
         
 
 
-        <div class="grid grid-cols-8 -mx-2 text-slate-700 px-4 py-2">
+        <div class="grid grid-cols-8 -mx-2 text-slate-800 px-4 py-2">
 
-            <div class="w-ful !hidden l mb-2 mt-2 col-span-8 px-2 flex flex-row text-slate-500
+            <div class="w-ful !hidden l mb-2 mt-2 col-span-8 px-2 flex-row text-slate-500
                 justify-start items-center text-xs font-medium gap-x-3">
                 <input [formControl]="showOnlyVerified" type="checkbox">
 
@@ -112,7 +112,7 @@
             </div>
 
             <input [formControl]="searchQuery"
-            class="col-span-8 border py-3 px-4 rounded-md mx-2 !outline-none font-medium text-sm bg-transparent" 
+            class="col-span-8 border py-3 px-4 rounded-md mx-2 !outline-none font-medium text-xs bg-transparent" 
             placeholder="Search by name, symbol or address" type="text" name="" id="">
 
 
@@ -132,11 +132,11 @@
             <div *ngIf="portfolio$ | async as portfolio; else noItems" class="flex flex-col col-span-8">
 
                 <div class="col-span-8 grid px-2 grid-cols-12 mb-2 mt-4">
-                    <div class="col-span-4 text-sm uppercase text-slate-500">
+                    <div class="col-span-4 text-xs font-semibold uppercase text-slate-800">
                         Asset
                     </div>
     
-                    <div class="col-span-3 text-start text-sm uppercase text-slate-500">
+                    <div class="col-span-3 text-start text-xs font-semibold uppercase text-slate-800">
                         Type
                     </div>
     
