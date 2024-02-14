@@ -1,395 +1,423 @@
 <ng-container>
-    <div class="min-h-screen">
+  <div class="min-h-screen">
+    <div class="grid grid-cols-12 gap-x-4">
+      <ng-container
+        *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed"
+      >
+        <div class="col-span-4 flex flex-col gap-y-2 pb-4">
+          <div class="card-body grid grid-cols-12 !py-5 !px-5 text-slate-600">
+            <div
+              *ngIf="address$ | async as address; else noAddress"
+              class="col-span-12"
+            >
+              <div class="flex flex-col text-slate-500 w-full">
+                <div class="flex rounded-lg w-full py-1 flex-row items-center justify-between gap-x-2">
+                  <div *ngIf="network$ | async as network" class="relative">
+                    <img
+                      class="h-8 w-8 p-1 border rounded-md"
+                      src="../../../assets/networks/{{ network.logoUri }}"
+                      alt=""
+                      srcset=""
+                    />
+                  </div>
+                  <div class="flex flex-row items-center gap-x-4 text-sm">
+                    <div>
+                      {{ address | shorten: 10 : 7 }}
+                    </div>
+                    
+                  </div>
+                  <div
+                      (click)="copyAddressClicked(address)"
+                      class="flex h-8 w-8 cursor-pointer flex-row items-center justify-center rounded-md border bg-slate-50 p-2 transition-all hover:border-slate-200 hover:bg-rose-100 hover:text-rose-600"
+                    >
+                      <svg
+                        *ngIf="(isCopyConfirmVisible$ | async) === false"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="h-4 w-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
+                        />
+                      </svg>
+                      <svg
+                        *ngIf="isCopyConfirmVisible$ | async"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        class="h-5 w-5"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                </div>
 
-        <div class="grid grid-cols-12 gap-x-4">
+                <hr class="mt-2 border-slate-100">
+                <div
+                  class="mt-4 rounded-md text-xs flex flex-col gap-x-2 font-semibold uppercase text-slate-800"
+                >
+                <div class="flex flex-row items-center gap-x-2 pr-2">
 
+                  
+                  <div class="">
+                    Balance
+                  </div>
+                </div>
+                
+                  
 
+                  <div class="text-sm mt-1 font-normal text-slate-500">
+                    {{ displayBalance$ | async }} {{ (network$ | async)?.token }}
+                  </div>
+                </div>
+                
+              </div>
 
-            <ng-container *ngIf="{ value: sidebarCollapsed$ | async } as sidebarCollapsed">
-                <div *ngIf="!sidebarCollapsed.value" class="col-span-4 flex flex-col gap-y-2 pb-4">
-
-
-                    <div class="card-body !py-5 grid grid-cols-12 text-slate-600">
-                        <div *ngIf="address$ | async as address; else noAddress" class="col-span-12 pr-4">
-                            <div class="text-xs font-semibold text-slate-800 uppercase">
-                                Connected wallet
-                            </div>
-                            <div class="mt-4 text-slate-500 flex flex-row items-center gap-x-4">
-
-                                <div class="relative">
-                                    <img class="h-6" src="../../../assets/safelogo.png" alt="" srcset="">
-                                    <div *ngIf="network$ | async as network"
-                                        class="absolute -top-2 -right-2 text-slate-500 z-50
-                                         flex flex-row items-center">
-
-                                        <div>
-                                            <img class="h-5 w-5 p-1 border bg-white rounded-full" src="../../../assets/networks/{{network.logoUri}}" alt=""
-                                                srcset="">
-                                        </div>
-    
-                                    </div>
-                                </div>
-                                <div class="flex flex-row text-sm items-center gap-x-4">
-                                    <div>
-                                        {{address | shorten:10:7}}
-                                    </div>
-                                    <div (click)="copyAddressClicked(address)" class="bg-slate-50 flex flex-row items-center cursor-pointer 
-                                    hover:bg-rose-100 hover:text-rose-600 hover:border-slate-200 transition-all
-                                     justify-center rounded-full w-8 h-8 border p-2">
-                                        <svg *ngIf="(isCopyConfirmVisible$ | async) === false"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                                        </svg>
-                                        <svg *ngIf="isCopyConfirmVisible$ | async" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                            <path fill-rule="evenodd"
-                                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- <button *ngIf="isntInSafe$ | async" (click)="logOut()"
+              <!-- <button *ngIf="isntInSafe$ | async" (click)="logOut()"
                                 class="app-button w-full py-3 text-center mt-6 text-xs cursor-pointer">
                                 Disconnect Wallet
                             </button> -->
-                        </div>
+            </div>
 
-                        <ng-template #noAddress>
+            <ng-template #noAddress>
+              <div
+                class="col-span-12 text-xs font-semibold uppercase text-slate-800"
+              >
+                Wallet not connected
+              </div>
+            </ng-template>
+          </div>
 
-                            <div class="col-span-12 text-slate-800 text-xs uppercase font-semibold">
-                                Wallet not connected
-                            </div>
-                        </ng-template>
-                    </div>
+          <app-cctx-queue></app-cctx-queue>
 
-
-                    <app-cctx-queue></app-cctx-queue>
-
-
-                    <div class="col-span-12 card-body">
-                        <div class="font-semibold uppercase text-xs text-slate-800">
-                            Klaster incentives programme
-                        </div>
-                        <div class="text-sm leading-relaxed text-slate-500 mt-2">
-                            Klaster is currently running an incentives programme for early users. In order to become
-                            eligible for protocol rewards, please <a class="underline text-rose-600 cursor-pointer"
-                                href="https://klaster.beehiiv.com/p/klaster-quests" target="_blank">read the rewards
-                                programme details.</a>
-                        </div>
-
-                    </div>
-                </div>
-
-
-
-                <ng-container *ngIf="address$ | async; else notConnected">
-                    <ng-container *ngIf="derivedWallets$ | async as wallets">
-                        <div *ngIf="address$ | async as address; else connectPrompt"
-                            [class.!col-span-12]="sidebarCollapsed.value" class="col-span-8">
-
-                            <div *ngIf="wallets.length !== 0"
-                                class="col-span-8 flex flex-row items-center pt-2 pb-1 justify-between">
-                                <div class="text-slate-900 !text-sm uppercase !font-bold">
-                                    My cross-chain accounts
-                                </div>
-                                <div class="relative">
-
-                                    <div [class.!opacity-0]="(walletTogglerVisible$ | async)" (click)="deployWallet()"
-                                        class="px-8 text-xs uppercase font-semibold flex flex-row py-3 gap-x-2 bg-rose-50
-                                            rounded-md text-rose-600 items-center  border border-rose-100
-                                                hover:border-transparent transition-all hover:bg-rose-600 
-                                                hover:text-white cursor-pointer">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-
-
-                                        <div>
-                                            Deploy New Account
-                                        </div>
-                                    </div>
-
-                                    <div *ngIf="walletTogglerVisible$ | async" (click)="toggleWalletToggler()" class="bg-white z-50 text-rose-600 hover:bg-rose-600 
-                                                hover:text-white cursor-pointer py-3 px-3 top-0
-                                                    border border-slate-100 rounded-md absolute right-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="w-5 h-5">
-                                            <path fill-rule="evenodd"
-                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-
-                                    <div *ngIf="walletTogglerVisible$ | async" class="absolute right-0 z-20 px-8 py-8 flex flex-col gap-y-6
-                                    bg-white mt-2 border border-slate-100 rounded-md">
-
-                                        <div *ngFor="let wallet of wallets"
-                                            class="text-sm text-slate-600 flex flex-row items-center gap-x-4">
-                                            <div>
-                                                {{wallet | shorten:10:8}}
-                                            </div>
-                                            <div>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor"
-                                                    class="w-4 h-4 cursor-pointer hover:text-rose-600">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="app-button text-xs py-3 cursor-pointer text-center">
-                                            Deploy new
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div *ngFor="let derivedWallet of wallets; let i = index">
-                                <app-cross-chain-account-container [salt]="i.toString()" [isCollapsed]="!(i === 0)"
-                                    [derivedWallet]="derivedWallet"></app-cross-chain-account-container>
-                            </div>
-
-                            <div *ngIf="wallets.length === 0">
-                                <div
-                                    class="w-full h-full card-body text-slate-600 flex flex-col items-center justify-center">
-
-                                    <div class="text-sm">
-                                        You don't have any cross-chain accounts
-                                    </div>
-
-                                    <button (click)="deployWallet()"
-                                        class="app-button px-16 mt-8 py-3 text-sm cursor-pointer">
-                                        Deploy now
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </ng-container>
-                </ng-container>
-
-                <ng-template #notConnected>
-                    <div class="card-body col-span-8 mb-4 text-center flex flex-col items-center gap-y-4">
-                        <div class=" text-sm text-slate-800 mt-8">
-                            Please connect your wallet to use Klaster Safe.
-                        </div>
-
-                        <button (click)="connectWallet()" class="app-button mt-8 px-12
-                        flex flex-row items-center gap-x-2 py-3 !text-xs">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-5 h-5">
-                                <path fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <div class="tracking-widest">
-                                Connect wallet
-                            </div>
-                        </button>
-                    </div>
-
-                </ng-template>
-
-            </ng-container>
-
+          <div class="card-body col-span-12">
+            <div class="text-xs font-semibold uppercase text-slate-800">
+              Klaster incentives programme
+            </div>
+            <div class="mt-2 text-sm leading-relaxed text-slate-500">
+              Klaster is currently running an incentives programme for early
+              users. In order to become eligible for protocol rewards, please
+              <a
+                class="cursor-pointer text-rose-600 underline"
+                href="https://klaster.beehiiv.com/p/klaster-quests"
+                target="_blank"
+                >read the rewards programme details.</a
+              >
+            </div>
+          </div>
         </div>
 
+        <ng-container *ngIf="address$ | async; else notConnected">
+          <div
+            class="col-span-8"
+            *ngIf="address$ | async as address; else connectPrompt"
+          >
+            <router-outlet></router-outlet>
+          </div>
+        </ng-container>
 
+        <ng-template #notConnected>
+          <div
+            class="card-body col-span-8 mb-4 flex flex-col items-center gap-y-4 text-center"
+          >
+            <div class="mt-8 text-sm text-slate-800">
+              Please connect your wallet to use Klaster Safe.
+            </div>
+
+            <button
+              (click)="connectWallet()"
+              class="app-button mt-8 flex flex-row items-center gap-x-2 px-12 py-3 !text-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-5 w-5"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <div class="tracking-widest">Connect wallet</div>
+            </button>
+          </div>
+        </ng-template>
+      </ng-container>
     </div>
+  </div>
 </ng-container>
 
-
-<div (click)="toggleWalletToggler()" *ngIf="walletTogglerVisible$ | async"
-    class="fixed top-0 left-0 z-10 bg-[rgba(255,255,255,0.2)] backdrop-blur-[2px] w-screen h-screen"></div>
-
 <!-- ERC20 Transaction Send Preview Modal -->
-<div *ngIf="sendTxPreviewModal$ | async as txData" class="fixed top-0 left-0 z-10 bg-[rgba(0,0,0,0.2)] backdrop-blur-[2px] w-screen
-     h-screen flex flex-row justify-center items-center">
-    <div class="max-w-xl gap-x-4 w-full bg-white rounded-md p-8 border border-slate-100 grid grid-cols-8">
-        <div class="w-full col-span-8 mb-4 uppercase font-semibold text-rose-600">
-            Send tokens
-        </div>
-        <div class="col-span-4">
-            <div class="text-sm uppercase font-semibold text-slate-700">
-                Amount
-            </div>
-            <div class="mt-2 flex flex-row gap-x-2 items-center text-slate-700">
-                <div
-                    class="flex  w-full flex-row justify-center gap-x-2 px-4 py-2 items-center border rounded-md text-sm">
-                    <div>
-                        {{txData.amount}}
-                    </div>
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-6 w-6 p-1 bg-white border rounded-full" [src]="txData.metadata.logo" alt=""
-                            srcset="">
-                        <div class="font-semibold">{{txData.metadata.symbol}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-span-4">
-            <div class="text-sm uppercase font-semibold text-slate-700">Network</div>
-            <div
-                class="flex flex-row gap-x-2 items-center justify-center px-2 py-2 mt-2 border rounded-md text-sm text-slate-700">
-                <img class="h-6 w-6 p-1 bg-white border rounded-full"
-                    src="../../../assets/networks/{{txData.network.logoUri}}" alt="" srcset="">
-                <div class="font-semibold uppercase text-sm">{{txData.network.label}}</div>
-            </div>
-        </div>
-
-        <div class="col-span-8">
-            <div class="mt-4 col-span-8 text-sm uppercase font-semibold text-slate-700">
-                Recipient
-            </div>
-            <div
-                class="mt-2 text-sm flex rounded-md justify-center flex-row p-2 !px-4 border gap-x-2 items-center text-slate-700">
-                {{txData.recipient}}
-            </div>
-        </div>
-
-        <hr class="col-span-8 my-6">
-
-        <div class="col-span-8 grid grid-cols-2 gap-x-4">
-            <div (click)="declineTxPreview()"
-                class="w-full text-center rounded-md uppercase border text-slate-500 hover:bg-slate-100 font-semibold mt-4 cursor-pointer text-sm flex flex-row gap-x-2 justify-center items-center hover:text-slate-800">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-
-                Decline
-            </div>
-            <div (click)="sendTransaction(txData)"
-                class="w-full mt-4 py-3 app-button text-center uppercase text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                    <path fill-rule="evenodd"
-                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-                        clip-rule="evenodd" />
-                </svg>
-                Confirm
-            </div>
-        </div>
-
+<div
+  *ngIf="sendTxPreviewModal$ | async as txData"
+  class="fixed left-0 top-0 z-10 flex h-screen w-screen flex-row items-center justify-center bg-[rgba(0,0,0,0.2)] backdrop-blur-[2px]"
+>
+  <div
+    class="grid w-full max-w-xl grid-cols-8 gap-x-4 rounded-md border border-slate-100 bg-white p-8"
+  >
+    <div class="col-span-8 mb-4 w-full font-semibold uppercase text-rose-600">
+      Send tokens
     </div>
+    <div class="col-span-4">
+      <div class="text-sm font-semibold uppercase text-slate-700">Amount</div>
+      <div class="mt-2 flex flex-row items-center gap-x-2 text-slate-700">
+        <div
+          class="flex w-full flex-row items-center justify-center gap-x-2 rounded-md border px-4 py-2 text-sm"
+        >
+          <div>
+            {{ txData.amount }}
+          </div>
+          <div class="flex flex-row items-center gap-x-2">
+            <img
+              class="h-6 w-6 rounded-full border bg-white p-1"
+              [src]="txData.metadata.logo"
+              alt=""
+              srcset=""
+            />
+            <div class="font-semibold">{{ txData.metadata.symbol }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-4">
+      <div class="text-sm font-semibold uppercase text-slate-700">Network</div>
+      <div
+        class="mt-2 flex flex-row items-center justify-center gap-x-2 rounded-md border px-2 py-2 text-sm text-slate-700"
+      >
+        <img
+          class="h-6 w-6 rounded-full border bg-white p-1"
+          src="../../../assets/networks/{{ txData.network.logoUri }}"
+          alt=""
+          srcset=""
+        />
+        <div class="text-sm font-semibold uppercase">
+          {{ txData.network.label }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-8">
+      <div
+        class="col-span-8 mt-4 text-sm font-semibold uppercase text-slate-700"
+      >
+        Recipient
+      </div>
+      <div
+        class="mt-2 flex flex-row items-center justify-center gap-x-2 rounded-md border p-2 !px-4 text-sm text-slate-700"
+      >
+        {{ txData.recipient }}
+      </div>
+    </div>
+
+    <hr class="col-span-8 my-6" />
+
+    <div class="col-span-8 grid grid-cols-2 gap-x-4">
+      <div
+        (click)="declineTxPreview()"
+        class="mt-4 flex w-full cursor-pointer flex-row items-center justify-center gap-x-2 rounded-md border text-center text-sm font-semibold uppercase text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+
+        Decline
+      </div>
+      <div
+        (click)="sendTransaction(txData)"
+        class="app-button mt-4 flex w-full cursor-pointer flex-row items-center justify-center gap-x-2 py-3 text-center text-sm uppercase"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Confirm
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Native Token Send Preview Modal -->
-<div *ngIf="nativeTxPreviewModal$ | async as txData" class="fixed top-0 left-0 z-10 bg-[rgba(0,0,0,0.2)] backdrop-blur-[2px] w-screen
-h-screen flex flex-row justify-center items-center">
-
-    <div class="max-w-xl gap-x-4 w-full bg-white rounded-md p-8 border border-slate-100 grid grid-cols-8">
-        <div class="w-full col-span-8 mb-4 font-bold text-rose-600">
-            Send tokens
+<div
+  *ngIf="nativeTxPreviewModal$ | async as txData"
+  class="fixed left-0 top-0 z-10 flex h-screen w-screen flex-row items-center justify-center bg-[rgba(0,0,0,0.2)] backdrop-blur-[2px]"
+>
+  <div
+    class="grid w-full max-w-xl grid-cols-8 gap-x-4 rounded-md border border-slate-100 bg-white p-8"
+  >
+    <div class="col-span-8 mb-4 w-full font-bold uppercase text-rose-600">
+      Send tokens
+    </div>
+    <div class="col-span-4">
+      <div class="text-sm font-semibold uppercase text-slate-800">Amount</div>
+      <div class="mt-2 flex flex-row items-center gap-x-2 text-slate-700">
+        <div
+          class="flex w-full flex-row items-center justify-center gap-x-2 rounded-md border px-4 py-2 text-sm"
+        >
+          <div>
+            {{ txData.amount }}
+          </div>
+          <div class="flex flex-row items-center gap-x-2">
+            <img
+              class="h-6 w-6 rounded-full border bg-white p-1"
+              src="../../../assets/networks/{{
+                getNetworkInfo(txData.chainID)?.logoUri
+              }}"
+              alt=""
+              srcset=""
+            />
+            <div class="font-semibold">{{ txData.tokenName }}</div>
+          </div>
         </div>
-        <div class="col-span-4">
-            <div class="text-sm font-bold text-slate-700">
-                Amount
-            </div>
-            <div class="mt-2 flex flex-row gap-x-2 items-center text-slate-700">
-                <div
-                    class="flex  w-full flex-row justify-center gap-x-2 px-4 py-2 items-center border rounded-md text-sm">
-                    <div>
-                        {{txData.amount}}
-                    </div>
-                    <div class="flex flex-row gap-x-2 items-center">
-                        <img class="h-6 w-6 p-1 bg-white border rounded-full"
-                            src="../../../assets/networks/{{getNetworkInfo(txData.chainID)?.logoUri}}" alt="" srcset="">
-                        <div class="font-semibold">{{txData.tokenName}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-span-4">
-            <div class="text-sm font-bold text-slate-700">Network</div>
-            <div
-                class="flex flex-row gap-x-2 items-center justify-center px-2 py-2 mt-2 border rounded-md text-sm text-slate-700">
-                <img class="h-6 w-6 p-1 bg-white border rounded-full"
-                    src="../../../assets/networks/{{getNetworkInfo(txData.chainID)?.logoUri}}" alt="" srcset="">
-                <div class="font-semibold uppercase text-sm">{{getNetworkInfo(txData.chainID)?.label}}</div>
-            </div>
-        </div>
-
-        <div class="col-span-8">
-            <div class="mt-4 col-span-8 text-sm font-bold text-slate-700">
-                Recipient
-            </div>
-            <div
-                class="mt-2 text-sm flex rounded-md justify-center flex-row p-2 !px-4 border gap-x-2 items-center text-slate-700">
-                {{txData.recipient}}
-            </div>
-        </div>
-
-        <hr class="col-span-8 my-6">
-
-        <div class="col-span-8 grid grid-cols-2 gap-x-4">
-            <div (click)="declineNativePreview()"
-                class="w-full text-center rounded-md border text-slate-500 hover:bg-slate-100 font-semibold mt-4 cursor-pointer text-sm flex flex-row gap-x-2 justify-center items-center hover:text-slate-800">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-
-                Decline
-            </div>
-            <div (click)="sendNativeTx(txData)"
-                class="w-full mt-4 py-3 app-button text-center text-sm cursor-pointer flex flex-row gap-x-2 items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                    <path fill-rule="evenodd"
-                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-                        clip-rule="evenodd" />
-                </svg>
-                Confirm
-            </div>
-        </div>
-
+      </div>
     </div>
 
+    <div class="col-span-4">
+      <div class="text-sm font-semibold uppercase text-slate-800">Network</div>
+      <div
+        class="mt-2 flex flex-row items-center justify-center gap-x-2 rounded-md border px-2 py-2 text-sm text-slate-700"
+      >
+        <img
+          class="h-6 w-6 rounded-full border bg-white p-1"
+          src="../../../assets/networks/{{
+            getNetworkInfo(txData.chainID)?.logoUri
+          }}"
+          alt=""
+          srcset=""
+        />
+        <div class="text-sm font-semibold uppercase">
+          {{ getNetworkInfo(txData.chainID)?.label }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-8">
+      <div
+        class="col-span-8 mt-4 text-sm font-semibold uppercase text-slate-800"
+      >
+        Recipient
+      </div>
+      <div
+        class="mt-2 flex flex-row items-center justify-center gap-x-2 rounded-md border p-2 !px-4 text-sm text-slate-700"
+      >
+        {{ txData.recipient }}
+      </div>
+    </div>
+
+    <div class="col-span-8 grid grid-cols-2 gap-x-4">
+      <div
+        (click)="declineNativePreview()"
+        class="mt-4 flex w-full cursor-pointer flex-row items-center justify-center gap-x-2 rounded-md border text-center text-sm font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+
+        Decline
+      </div>
+      <div
+        (click)="sendNativeTx(txData)"
+        class="app-button mt-4 flex w-full cursor-pointer flex-row items-center justify-center gap-x-2 py-3 text-center text-sm"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-6 w-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Confirm
+      </div>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="deployShouldBeVisible$ | async">
-    <app-deploy-cross-chain-account-modal></app-deploy-cross-chain-account-modal>
+  <app-deploy-cross-chain-account-modal></app-deploy-cross-chain-account-modal>
 </div>
 
 <ng-template #connectPrompt>
-    <div class="w-full text-slate-500 card-body mt-4 col-span-8 h-full flex flex-row items-center justify-center">
-        Please connect your wallet to use the Klaster app.
-    </div>
+  <div
+    class="card-body col-span-8 mt-4 flex h-full w-full flex-row items-center justify-center text-slate-500"
+  >
+    Please connect your wallet to use the Klaster app.
+  </div>
 </ng-template>
 
 <app-transaction-modals></app-transaction-modals>
 
-<div *ngIf="isUnsupportedChain$ | async" class="fixed top-0 left-0 w-screen z-50 h-screen bg-[rgba(255,255,255,0.3)]
-     backdrop-blur-[2px] flex flex-row items-center justify-center">
-
-    <div class="max-w-2xl w-full text-center bg-white p-8 border rounded-md">
-        <div class="text-slate-700 uppercase text-sm font-semibold">
-            You are connected to an unsupported chain.
-        </div>
-        <div class="mt-4 text-slate-500">
-            Please switch your network to one of the <br> following & reload the app.
-        </div>
-
-        <div class="grid grid-cols-5 gap-x-4 mt-4">
-            <div class="text-xs font-medium text-slate-600 uppercase gap-x-2 flex rounded-md flex-row justify-center
-            items-center border px-2 py-2" *ngFor="let chain of supportedChains">
-                <div>{{chain.label}}</div>
-                <img class="h-4" src="../../../assets/networks/{{chain.logoUri}}" alt="" srcset="">
-            </div>
-        </div>
-
+<div
+  *ngIf="isUnsupportedChain$ | async"
+  class="fixed left-0 top-0 z-50 flex h-screen w-screen flex-row items-center justify-center bg-[rgba(255,255,255,0.3)] backdrop-blur-[2px]"
+>
+  <div class="w-full max-w-2xl rounded-md border bg-white p-8 text-center">
+    <div class="text-sm font-semibold uppercase text-slate-700">
+      You are connected to an unsupported chain.
+    </div>
+    <div class="mt-4 text-slate-500">
+      Please switch your network to one of the <br />
+      following & reload the app.
     </div>
 
+    <div class="mt-4 grid grid-cols-5 gap-x-4">
+      <div
+        class="flex flex-row items-center justify-center gap-x-2 rounded-md border px-2 py-2 text-xs font-medium uppercase text-slate-600"
+        *ngFor="let chain of supportedChains"
+      >
+        <div>{{ chain.label }}</div>
+        <img
+          class="h-4"
+          src="../../../assets/networks/{{ chain.logoUri }}"
+          alt=""
+          srcset=""
+        />
+      </div>
+    </div>
+  </div>
 </div>

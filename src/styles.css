@@ -31,3 +31,7 @@
 .app-gradient-bg {
     @apply bg-gradient-to-r from-rose-600 to-fuchsia-700
 }
+
+.title {
+    @apply !text-sm !font-bold uppercase text-slate-900
+}

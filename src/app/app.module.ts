@@ -20,6 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { CctxQueueComponent } from './app/address-overview/cctx-queue/cctx-queue.component';
 import { NativePortfolioAssetContainerComponent } from './app/address-overview/cross-chain-account-container/native-portfolio-asset-container/native-portfolio-asset-container.component';
+import { CrossChainTransferComponent } from './tokens/cross-chain-transfer/cross-chain-transfer.component';
+import { CrossChainAccountsOverviewComponent } from './accounts/cross-chain-accounts-overview/cross-chain-accounts-overview.component';
+import { IssuerPortalComponent } from './tokens/issuer-portal/issuer-portal.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,10 @@ import { NativePortfolioAssetContainerComponent } from './app/address-overview/c
     TransactionModalsComponent,
     SpinnerComponent,
     CctxQueueComponent,
-    NativePortfolioAssetContainerComponent
+    NativePortfolioAssetContainerComponent,
+    CrossChainTransferComponent,
+    CrossChainAccountsOverviewComponent,
+    IssuerPortalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,244 @@
+<div class="card-body col-span-2 w-full !px-8 !py-6">
+  <div class="title">Cross-chain send</div>
+  <div
+    class="mt-4 rounded-md border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs text-indigo-700"
+  >
+    Cross-chain send only works with Klaster cross-chain tokens.
+  </div>
+  <div class="mt-6 grid grid-cols-7 gap-x-8 gap-y-6">
+    <div class="col-span-3 flex flex-col gap-y-2">
+      <div class="text-xs font-medium uppercase text-slate-500">Source</div>
+      <div
+        class="relative flex w-full cursor-pointer flex-row items-center justify-center gap-x-3 text-xs font-semibold uppercase hover:bg-slate-50"
+        type="text"
+      >
+        <div
+          *ngIf="sourceChain$ | async as sourceChain"
+          (click)="toggleSourceChainSelector()"
+          class="flex w-full flex-row items-center justify-center gap-x-3 rounded-md border border-slate-100 px-4 py-3"
+        >
+          <img
+            class="h-5"
+            src="../../../assets/networks/{{ sourceChain.logoUri }}"
+            alt=""
+            srcset=""
+          />
+          {{ sourceChain.label }}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+            />
+          </svg>
+        </div>
+
+        <div
+          *ngIf="sourceChainSelectorToggled$ | async"
+          class="absolute left-0 top-14 z-50 flex w-full flex-col items-center gap-y-2 rounded-md border border-slate-100 bg-white py-2 shadow-sm"
+        >
+          <div
+            (click)="selectChain('source', network.id)"
+            class="flex w-full flex-row items-center gap-x-4 px-8 py-4 hover:bg-slate-50"
+            *ngFor="let network of networks"
+          >
+            <img
+              class="h-5"
+              src="../../../assets/networks/{{ network.logoUri }}"
+              alt=""
+              srcset=""
+            />
+            {{ network.label }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex h-full flex-row items-center justify-center pt-5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="h-6 w-6 text-rose-600"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </div>
+    <div
+      *ngIf="destChain$ | async as destChain"
+      class="col-span-3 flex flex-col gap-y-2"
+    >
+      <div class="text-xs font-medium uppercase text-slate-500">
+        Destination
+      </div>
+      <div
+        class="relative flex w-full cursor-pointer flex-row items-center justify-center gap-x-3 rounded-md border border-slate-100 px-4 py-3 text-xs font-semibold uppercase hover:bg-slate-50"
+        type="text"
+      >
+        <div
+          *ngIf="destChain$ | async as destChain"
+          (click)="toggleDestChainSelector()"
+          class="flex w-full flex-row items-center justify-center gap-x-3"
+        >
+          <img
+            class="h-5"
+            src="../../../assets/networks/{{ destChain.logoUri }}"
+            alt=""
+            srcset=""
+          />
+          {{ destChain.label }}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+            />
+          </svg>
+        </div>
+
+        <div
+          *ngIf="destChainSelectorToggled$ | async"
+          class="absolute left-0 top-14 z-50 flex w-full flex-col items-center gap-y-2 rounded-md border border-slate-100 bg-white py-2 shadow-sm"
+        >
+          <div
+            (click)="selectChain('dest', network.id)"
+            class="flex w-full flex-row items-center gap-x-4 px-8 py-4 hover:bg-slate-50"
+            *ngFor="let network of networks"
+          >
+            <img
+              class="h-5"
+              src="../../../assets/networks/{{ network.logoUri }}"
+              alt=""
+              srcset=""
+            />
+            {{ network.label }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="relative col-span-7 flex flex-col gap-y-2">
+      <div class="text-xs font-medium uppercase text-slate-500">Token</div>
+      <div *ngIf="selectedToken$ | async as token" class="flex flex-row">
+        <div
+          (click)="toggleTokenSelector()"
+          class="flex cursor-pointer flex-row items-center justify-center gap-x-4 rounded-md border border-slate-100 px-12 py-4 text-sm font-semibold text-slate-800 !outline-none hover:bg-slate-50"
+        >
+          <img
+            class="h-5 w-5 rounded-full"
+            src="https://images.unsplash.com/photo-1617957689233-207e3cd3c610?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVycGxlJTIwZ3JhZGllbnR8ZW58MHx8MHx8fDA%3D"
+            alt=""
+            srcset=""
+          />
+          <div class="flex flex-col">
+            <div class="font-normal">
+              {{ token.name }}
+            </div>
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        *ngIf="tokenSelectorToggled$ | async"
+        class="absolute left-0 top-20 w-96 rounded-md border border-slate-100 bg-white px-4 pt-4 shadow-sm"
+      >
+        <div class="flex w-full flex-col gap-y-2">
+          <div class="text-xs font-semibold uppercase text-slate-800">
+            Custom token
+          </div>
+          <input
+            placeholder="Token address"
+            class="w-full rounded-md border border-slate-100 px-4 py-3 text-xs !outline-none"
+            type="text"
+          />
+        </div>
+        <hr class="my-2 border-slate-100" />
+        <div
+          (click)="selectToken(token.address)"
+          class="-mx-4 flex cursor-pointer flex-row gap-x-4 border-b border-slate-100 px-4 py-3 hover:bg-slate-50"
+          *ngFor="let token of tokens"
+        >
+          <div class="flex flex-col justify-center">
+            <img
+              class="h-5 w-5 rounded-full"
+              src="https://images.unsplash.com/photo-1617957689233-207e3cd3c610?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVycGxlJTIwZ3JhZGllbnR8ZW58MHx8MHx8fDA%3D"
+              alt=""
+              srcset=""
+            />
+          </div>
+
+          <div class="flex flex-col">
+            <div class="text-sm text-slate-800">{{ token.name }}</div>
+            <div class="text-xs font-semibold text-slate-600">
+              {{ token.symbol }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-7 flex flex-col gap-y-2">
+      <div class="text-xs font-medium uppercase text-slate-500">
+        Receiver address or ENS
+      </div>
+      <input
+        placeholder="0x..."
+        class="w-full rounded-md border border-slate-100 px-6 py-3 font-mono text-sm text-slate-700 !outline-none"
+        type="text"
+      />
+    </div>
+    <div class="col-span-7 flex flex-col gap-y-2">
+      <div class="text-xs font-medium uppercase text-slate-500">
+        Amount to send
+      </div>
+      <input
+        placeholder="0.00"
+        class="w-full rounded-md border border-slate-100 px-6 py-3 font-mono text-sm text-slate-700 !outline-none"
+        type="text"
+      />
+    </div>
+    <button
+      class="app-button col-span-7 flex flex-row items-center justify-center gap-x-2 py-3"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="h-5 w-5"
+      >
+        <path
+          d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"
+        />
+      </svg>
+      Send
+    </button>
+  </div>
+</div>

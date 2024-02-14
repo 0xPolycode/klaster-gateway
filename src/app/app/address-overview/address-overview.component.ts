@@ -20,6 +20,7 @@ import { Chains, ErrorMessages } from 'src/app/shared/variables';
 export class AddressOverviewComponent implements OnInit {
 
   address$ = this.blockchainService.address$
+
   network$ = this.address$.pipe(
     switchMap(_ => this.blockchainService.connectedNetworkChainID$),
     map(chainID => this.blockchainService.chains.find(network => network.id === chainID)),
@@ -54,16 +55,6 @@ export class AddressOverviewComponent implements OnInit {
       return ethers.utils.formatEther(balance)
     })
   )
-
-  derivedWallets$ = combineLatest([
-    this.address$,
-    this.txService.refreshCrossChainAccountsTrigger$
-  ]).pipe(
-    switchMap(_ => from(this.blockchainService.getDeployedWallets()))
-  )
-
-  walletTogglerVisibleSub = new BehaviorSubject(false)
-  walletTogglerVisible$ = this.walletTogglerVisibleSub.asObservable()
 
   sendTxPreviewModal$ = this.txService.sendTxPreviewModal$.pipe(
     map(txData => {
@@ -128,10 +119,6 @@ export class AddressOverviewComponent implements OnInit {
   logOut() {
     this.blockchainService.logOut()
   }
-
-  toggleWalletToggler() {
-    this.walletTogglerVisibleSub.next(!this.walletTogglerVisibleSub.value)
-  }
   
   toggleSidebar() {
     this.sidebarCollapsedSub.next(!this.sidebarCollapsedSub.value)
@@ -147,10 +134,6 @@ export class AddressOverviewComponent implements OnInit {
 
   declineNativePreview() {
     this.txService.declineNativeTxPreviewModal()
-  }
-
-  deployWallet() {
-    this.miscModalsService.openDeployModal()
   }
   
   getNetworkInfo(chainID: number) {

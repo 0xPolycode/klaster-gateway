@@ -1,121 +1,192 @@
-<div *ngIf="metadata$ | async as metadata" [class.-mx-6]="sendFormToggled$ | async"
-    [class.my-3]="sendFormToggled$ | async"
-    [class.p-2]="sendFormToggled$ | async"
-    [class.bg-white]="sendFormToggled$ | async"
-    [class.my-2]="sendFormToggled$ | async"
-    [class.border]="sendFormToggled$ | async"
-    class="rounded-md">
-    <div 
-
-    class="col-span-8 grid grid-cols-12 px-2">
+<div
+  *ngIf="metadata$ | async as metadata"
+  [class.-mx-6]="sendFormToggled$ | async"
+  [class.my-3]="sendFormToggled$ | async"
+  [class.p-2]="sendFormToggled$ | async"
+  [class.bg-white]="sendFormToggled$ | async"
+  [class.my-2]="sendFormToggled$ | async"
+  [class.border]="sendFormToggled$ | async"
+  class="rounded-md"
+>
+  <div class="col-span-8 grid grid-cols-12 px-2">
     <ng-container *ngIf="matchSearch(metadata) && checkIfVerified(metadata)">
-        <div class="!py-2 col-span-4 flex flex-row shrink-0 items-center">
+      <div class="col-span-4 flex shrink-0 flex-row items-center !py-2">
+        <div class="relative">
+          <img
+            class="h-9 w-9 rounded-full border bg-white p-1"
+            [src]="metadata.logo"
+            alt=""
+            srcset=""
+          />
+          <div class="absolute -top-1 left-5">
+            <div class="w-6">
+              <img
+                class="h-6 w-6 rounded-full border bg-white p-1"
+                src="../../../assets/networks/{{ getNetworkURI(chainID) }}"
+                alt=""
+                srcset=""
+              />
+            </div>
+          </div>
+        </div>
+        <div class="ml-4 flex w-48 flex-col">
+          <div class="font-medium">
+            {{ metadata.displayBalance | shorten: 12 : 0 : false }}
+          </div>
+          <div
+            class="-mt-1 w-full overflow-x-hidden overflow-ellipsis whitespace-nowrap text-sm font-medium text-slate-500"
+          >
+            {{ metadata.symbol }}
+          </div>
+        </div>
+      </div>
 
-            <div class="relative">
-                <img class="h-9 w-9 bg-white p-1 rounded-full border" 
-                    [src]="metadata.logo" alt="" srcset="">
-                <div class="absolute -top-1 left-5">
-                    <div class="w-6">
-                        <img class="h-6 w-6 p-1 rounded-full border bg-white" 
-                        src="../../../assets/networks/{{getNetworkURI(chainID)}}" alt=""
-                            srcset="">
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col ml-4 w-48">
-                <div class="font-medium">
-                    {{metadata.displayBalance | shorten:12:0:false}}
-                </div>
-                <div class="text-slate-500 -mt-1 font-medium text-sm
-                    w-full whitespace-nowrap overflow-ellipsis overflow-x-hidden">
-                    {{metadata.symbol}}
-                </div>
-            </div>
-    
+      <div
+        class="col-span-3 flex flex-row items-center justify-start text-xs font-semibold uppercase"
+      >
+        ERC20
+      </div>
+
+      <!-- <div class="col-span-3 flex flex-row items-center justify-start">
+        <div
+          (click)="swapClicked()"
+          *ngIf="(sendFormToggled$ | async) === false"
+          class="flex w-full cursor-pointer flex-row items-center justify-center gap-x-2 rounded-md border border-rose-100 py-2 text-xs font-semibold uppercase text-rose-600 transition-all hover:border-transparent hover:bg-rose-600 hover:text-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-4 w-4"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+            />
+          </svg>
+
+          Cross-Chain Swap
         </div>
-    
-        <div class="col-span-3 text-xs flex uppercase font-semibold flex-row items-center justify-start">
-            ERC20
+      </div> -->
+
+      <div class="col-span-3"></div>
+
+      <div
+        class="col-span-2 flex w-full flex-row items-center justify-end gap-x-2 pl-8"
+      >
+        <div
+          *ngIf="(sendFormToggled$ | async) === false; else close"
+          (click)="toggleSendForm()"
+          class="flex w-full w-full cursor-pointer flex-row items-center justify-center gap-x-2 rounded-md border border-rose-100 py-2 text-xs font-semibold uppercase text-rose-600 transition-all hover:border-transparent hover:bg-rose-600 hover:text-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="-mt-[0.06rem] h-4 w-4"
+          >
+            <path
+              d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"
+            />
+          </svg>
+
+          Send
         </div>
-    
-        <div class="col-span-3 flex flex-row items-center justify-start ">
-            <div (click)="swapClicked()" *ngIf="(sendFormToggled$ | async) === false"
-            class="w-full border py-2 hover:bg-rose-600 hover:text-white gap-x-2 uppercase font-semibold text-xs
-             rounded-md border-rose-100 text-rose-600 cursor-pointer transition-all hover:border-transparent
-              flex flex-row items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-              </svg>
-              
-              
-                Cross-Chain Swap
-            </div>
-        </div>
-        
-        <div class="col-span-2 flex flex-row items-center gap-x-2 justify-end pl-8">
-    
-            <div *ngIf="(sendFormToggled$ | async) === false; else close" (click)="toggleSendForm()" 
-            class="w-full border font-semibold uppercase py-2 hover:bg-rose-600 hover:text-white gap-x-2
-             text-xs rounded-md border-rose-100 text-rose-600 cursor-pointer transition-all hover:border-transparent
-              flex flex-row items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 -mt-[0.06rem]">
-                <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-              </svg>
-              
-                Send
-            </div>
-    
-            <ng-template #close>
-                <div (click)="toggleSendForm()" class="w-full flex text-xs font-semibold uppercase flex-row gap-x-2
-                 items-center border-rose-100 text-rose-600 rounded-md p-2 border cursor-pointer hover:bg-rose-600 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" />
-                      </svg>
-                      <div>
-                        Cancel
-                      </div>
-                </div>
-            </ng-template>
-           
-        </div>
+
+        <ng-template #close>
+          <div
+            (click)="toggleSendForm()"
+            class="flex w-full cursor-pointer flex-row items-center gap-x-2 rounded-md border border-rose-100 p-2 text-xs font-semibold uppercase text-rose-600 hover:bg-rose-600 hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-5 w-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <div>Cancel</div>
+          </div>
+        </ng-template>
+      </div>
+      
     </ng-container>
+  </div>
 
-</div>
+  <ng-template #loading>
+    <div class="my-2 h-8 w-full animate-pulse rounded-md bg-rose-50"></div>
+  </ng-template>
 
-<ng-template #loading>
-    <div class="w-full bg-rose-50 rounded-md animate-pulse h-8 my-2"></div>
-</ng-template>
-
-<div *ngIf="sendFormToggled$ | async" 
+  <div
+    *ngIf="sendFormToggled$ | async"
     [class.mb-4]="sendFormToggled$ | async"
-    class="mx-2 bg-white rounded-md mt-4 gap-x-4 items-center grid grid-cols-10">
-
+    class="mx-2 mt-4 grid grid-cols-10 items-center gap-x-4 rounded-md bg-white"
+  >
     <div class="col-span-5 h-full">
-        <div class="flex flex-row gap-x-2 border items-center h-full px-2 rounded-md">
-            <img class="h-7 w-7 p-[0.35rem] border rounded-full" src="../../../../../assets/networks/{{getNetworkURI(chainID)}}" alt="" srcset="">
-            <input [formControl]="recipientAddressForm" placeholder="Recipient address" 
-                class="w-full !outline-none border-l font-mono text-xs py-3 pr-1 pl-2" type="text">
-        </div>
+      <div
+        class="flex h-full flex-row items-center gap-x-2 rounded-md border px-2"
+      >
+        <img
+          class="h-7 w-7 rounded-full border p-[0.35rem]"
+          src="../../../../../assets/networks/{{ getNetworkURI(chainID) }}"
+          alt=""
+          srcset=""
+        />
+        <input
+          [formControl]="recipientAddressForm"
+          placeholder="Recipient address"
+          class="w-full border-l py-3 pl-2 pr-1 font-mono text-xs !outline-none"
+          type="text"
+        />
+      </div>
     </div>
-    <div class="col-span-4 font-mono h-full">
-        <div class="flex h-full flex-row gap-x-2 rounded-md border pr-3 pl-2 items-center">
-            <input [formControl]="sendAmountForm" placeholder="Amount" class="w-full !outline-none py-3 px-2 text-xs " type="text">
-            <img *ngIf="metadata.logo" class="h-7 w-7 p-[0.35rem] border rounded-full" [src]="metadata.logo" alt="" srcset="">
-            <div class="text-xs font-semibold">
-                {{metadata.symbol}}
-            </div>
+    <div class="col-span-4 h-full font-mono">
+      <div
+        class="flex h-full flex-row items-center gap-x-2 rounded-md border pl-2 pr-3"
+      >
+        <input
+          [formControl]="sendAmountForm"
+          placeholder="Amount"
+          class="w-full px-2 py-3 text-xs !outline-none"
+          type="text"
+        />
+        <img
+          *ngIf="metadata.logo"
+          class="h-7 w-7 rounded-full border p-[0.35rem]"
+          [src]="metadata.logo"
+          alt=""
+          srcset=""
+        />
+        <div class="text-xs font-semibold">
+          {{ metadata.symbol }}
         </div>
+      </div>
     </div>
     <div class="h-full py-[0.08rem]">
-        <button [disabled]="!recipientAddressForm.valid" (click)="openSendModal(metadata, chainID)" class="w-full h-full flex flex-row items-center justify-center transition-all cursor-pointer rounded-md app-button text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-              </svg>              
-        </button>
+      <button
+        [disabled]="!recipientAddressForm.valid"
+        (click)="openSendModal(metadata, chainID)"
+        class="app-button flex h-full w-full cursor-pointer flex-row items-center justify-center rounded-md text-white transition-all"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-4 w-4"
+        >
+          <path
+            d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"
+          />
+        </svg>
+      </button>
     </div>
-
-    
+  </div>
 </div>
-</div>
-
-
